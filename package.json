@@ -1,0 +1,20 @@
+{
+  "name": "doc-qa-rag",
+  "version": "1.0.0",
+  "private": true,
+  "packageManager": "pnpm@9.15.9",
+  "engines": {
+    "node": ">=22.0.0"
+  },
+  "scripts": {
+    "dev": "pnpm --parallel run dev",
+    "build": "pnpm --filter doc-qa-rag-common build && pnpm --filter doc-qa-rag-server build && pnpm --filter doc-qa-rag-worker build && pnpm --filter doc-qa-rag-web build",
+    "lint": "pnpm -r run lint",
+    "format": "pnpm -r run format",
+    "test": "pnpm --filter doc-qa-rag-server run test",
+    "prepare": "git rev-parse --git-dir > /dev/null 2>&1 && lefthook install || true"
+  },
+  "devDependencies": {
+    "lefthook": "^2.1.1"
+  }
+}
