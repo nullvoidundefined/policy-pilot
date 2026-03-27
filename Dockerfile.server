@@ -28,4 +28,4 @@ COPY --from=base /app/server/dist server/dist
 COPY server/migrations server/migrations
 
 EXPOSE 3001
-CMD ["node", "server/dist/index.js"]
+CMD ["node", "--unhandled-rejections=warn", "server/dist/index.js"]
