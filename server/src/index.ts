@@ -1,6 +1,4 @@
 import "dotenv/config";
-import path from "node:path";
-import { fileURLToPath } from "node:url";
 
 import cookieParser from "cookie-parser";
 import express from "express";
@@ -84,39 +82,32 @@ app.use(errorHandler);
 const PORT = Number(process.env.PORT) || 3001;
 const HOST = "0.0.0.0";
 
-const entryPath = process.argv[1];
-const isEntryModule =
-  entryPath !== undefined &&
-  path.resolve(entryPath) === path.resolve(fileURLToPath(import.meta.url));
+validateEnv();
 
-if (isEntryModule) {
-  validateEnv();
+pool.on("error", (err) => {
+  logger.error({ err }, "Unexpected idle-client error in pg pool");
+});
 
-  pool.on("error", (err) => {
-    logger.error({ err }, "Unexpected idle-client error in pg pool");
-  });
+process.on("uncaughtException", (err) => {
+  logger.fatal({ err }, "Uncaught exception – shutting down");
+  logger.flush();
+  process.exit(1);
+});
+process.on("unhandledRejection", (reason) => {
+  logger.fatal({ reason }, "Unhandled rejection – shutting down");
+  logger.flush();
+  process.exit(1);
+});
 
-  process.on("uncaughtException", (err) => {
-    logger.fatal({ err }, "Uncaught exception – shutting down");
-    logger.flush();
-    process.exit(1);
-  });
-  process.on("unhandledRejection", (reason) => {
-    logger.fatal({ reason }, "Unhandled rejection – shutting down");
-    logger.flush();
-    process.exit(1);
-  });
+const server = app.listen(PORT, HOST, () => logger.info({ port: PORT }, "Server running"));
 
-  const server = app.listen(PORT, HOST, () => logger.info({ port: PORT }, "Server running"));
-
-  async function shutdown(signal: string) {
-    logger.info({ signal }, "Shutting down gracefully");
-    await new Promise<void>((resolve) => server.close(() => resolve()));
-    logger.info("HTTP server closed");
-    await pool.end();
-    process.exit(0);
-  }
-
-  process.on("SIGTERM", () => shutdown("SIGTERM"));
-  process.on("SIGINT", () => shutdown("SIGINT"));
+async function shutdown(signal: string) {
+  logger.info({ signal }, "Shutting down gracefully");
+  await new Promise<void>((resolve) => server.close(() => resolve()));
+  logger.info("HTTP server closed");
+  await pool.end();
+  process.exit(0);
 }
+
+process.on("SIGTERM", () => shutdown("SIGTERM"));
+process.on("SIGINT", () => shutdown("SIGINT"));
