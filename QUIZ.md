@@ -228,7 +228,7 @@ The worker runs as a separate process (separate Docker container on Railway). It
 <summary>Answer</summary>
 
 ```
-application/
+document-qa-rag/
 ├── common/      — shared types + chunker (doc-qa-rag-common)
 ├── server/      — Express API (doc-qa-rag-server)
 ├── worker/      — BullMQ processor (doc-qa-rag-worker)

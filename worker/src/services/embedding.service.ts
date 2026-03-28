@@ -10,8 +10,8 @@ interface EmbeddingResponse {
 }
 
 export async function generateEmbeddingsBatch(texts: string[]): Promise<number[][]> {
-  const apiKey = process.env.EMBEDDING_API_KEY;
-  if (!apiKey) throw new Error("EMBEDDING_API_KEY is not set");
+  const apiKey = process.env.OPEN_AI_API_KEY;
+  if (!apiKey) throw new Error("OPEN_AI_API_KEY is not set");
 
   const allEmbeddings: number[][] = [];
 
