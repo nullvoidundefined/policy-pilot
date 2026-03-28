@@ -6,3 +6,6 @@ dist/
 .pnpm-store/
 *.tsbuildinfo
 .vercel
+
+# Claude Code local settings
+.claude/
