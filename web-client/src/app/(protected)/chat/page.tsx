@@ -3,6 +3,8 @@
 import { useCallback, useRef, useState } from 'react';
 import type { FormEvent } from 'react';
 
+import Link from 'next/link';
+
 import { useAuth } from '@/context/AuthContext';
 import { API_BASE } from '@/lib/api';
 
@@ -206,9 +208,17 @@ export default function ChatPage() {
           Documents
         </a>
         <h1 className={styles.title}>Ask a Question</h1>
-        <button className={styles.logoutButton} onClick={() => logout()}>
-          Log Out
-        </button>
+        <div className={styles.headerActions}>
+          <Link href='/docs/summary' className={styles.navLink}>
+            Summary
+          </Link>
+          <Link href='/docs/technical-overview' className={styles.navLink}>
+            Technical Overview
+          </Link>
+          <button className={styles.logoutButton} onClick={() => logout()}>
+            Log Out
+          </button>
+        </div>
       </header>
 
       <div className={styles.chatArea}>

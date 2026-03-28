@@ -27,6 +27,22 @@
   font-weight: 600;
 }
 
+.headerActions {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.navLink {
+  font-size: 13px;
+  color: var(--foreground-muted);
+  text-decoration: none;
+
+  &:hover {
+    color: var(--foreground);
+  }
+}
+
 .logoutButton {
   padding: 6px 12px;
   border: 1px solid var(--border);

@@ -37,6 +37,16 @@
   }
 }
 
+.navLink {
+  font-size: 13px;
+  color: var(--foreground-muted);
+  text-decoration: none;
+
+  &:hover {
+    color: var(--foreground);
+  }
+}
+
 .logoutButton {
   padding: 8px 16px;
   border: 1px solid var(--border);
