@@ -4,34 +4,38 @@
  * @param pgm {import('node-pg-migrate').MigrationBuilder}
  */
 export const up = (pgm) => {
-  pgm.sql("CREATE EXTENSION IF NOT EXISTS vector;");
+  pgm.sql('CREATE EXTENSION IF NOT EXISTS vector;');
 
-  pgm.createTable("chunks", {
-    id: { type: "uuid", primaryKey: true, default: pgm.func("gen_random_uuid()") },
+  pgm.createTable('chunks', {
+    id: {
+      type: 'uuid',
+      primaryKey: true,
+      default: pgm.func('gen_random_uuid()'),
+    },
     document_id: {
-      type: "uuid",
+      type: 'uuid',
       notNull: true,
-      references: "documents",
-      onDelete: "CASCADE",
+      references: 'documents',
+      onDelete: 'CASCADE',
     },
     user_id: {
-      type: "uuid",
+      type: 'uuid',
       notNull: true,
-      references: "users",
-      onDelete: "CASCADE",
+      references: 'users',
+      onDelete: 'CASCADE',
     },
-    chunk_index: { type: "integer", notNull: true },
-    content: { type: "text", notNull: true },
-    token_count: { type: "integer", notNull: true },
-    created_at: { type: "timestamptz", default: pgm.func("NOW()") },
+    chunk_index: { type: 'integer', notNull: true },
+    content: { type: 'text', notNull: true },
+    token_count: { type: 'integer', notNull: true },
+    created_at: { type: 'timestamptz', default: pgm.func('NOW()') },
   });
 
   // Add embedding column (1536 dims for OpenAI text-embedding-3-small)
-  pgm.sql("ALTER TABLE chunks ADD COLUMN embedding vector(1536);");
+  pgm.sql('ALTER TABLE chunks ADD COLUMN embedding vector(1536);');
 
-  pgm.createIndex("chunks", "document_id");
-  pgm.createIndex("chunks", "user_id");
-  pgm.createIndex("chunks", ["document_id", "chunk_index"], { unique: true });
+  pgm.createIndex('chunks', 'document_id');
+  pgm.createIndex('chunks', 'user_id');
+  pgm.createIndex('chunks', ['document_id', 'chunk_index'], { unique: true });
 
   // HNSW index for fast approximate nearest neighbor search
   pgm.sql(`
@@ -43,6 +47,6 @@ export const up = (pgm) => {
 
 /** @param pgm {import('node-pg-migrate').MigrationBuilder} */
 export const down = (pgm) => {
-  pgm.dropTable("chunks");
-  pgm.sql("DROP EXTENSION IF EXISTS vector;");
+  pgm.dropTable('chunks');
+  pgm.sql('DROP EXTENSION IF EXISTS vector;');
 };

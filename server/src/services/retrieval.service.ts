@@ -1,5 +1,5 @@
-import { query } from "app/db/pool/pool.js";
-import type { CitedChunk } from "doc-qa-rag-common";
+import { query } from 'app/db/pool/pool.js';
+import type { CitedChunk } from 'doc-qa-rag-common';
 
 interface ChunkRow {
   id: string;
@@ -16,7 +16,7 @@ export async function searchChunks(
   topK = 6,
   documentIds?: string[],
 ): Promise<CitedChunk[]> {
-  const embeddingStr = `[${embedding.join(",")}]`;
+  const embeddingStr = `[${embedding.join(',')}]`;
 
   let sql = `
     SELECT c.id, c.document_id, c.chunk_index, c.content, d.filename,

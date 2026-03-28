@@ -12,7 +12,7 @@ export interface TextChunk {
 
 const DEFAULT_MAX_TOKENS = 500;
 const DEFAULT_OVERLAP_TOKENS = 50;
-const DEFAULT_SEPARATORS = ["\n\n", "\n", ". ", " "];
+const DEFAULT_SEPARATORS = ['\n\n', '\n', '. ', ' '];
 
 // Rough token count: ~4 chars per token for English text
 function estimateTokens(text: string): number {
@@ -72,7 +72,10 @@ function recursiveSplit(
   return result;
 }
 
-export function chunkText(text: string, options: ChunkOptions = {}): TextChunk[] {
+export function chunkText(
+  text: string,
+  options: ChunkOptions = {},
+): TextChunk[] {
   const maxTokens = options.maxTokens ?? DEFAULT_MAX_TOKENS;
   const overlapTokens = options.overlapTokens ?? DEFAULT_OVERLAP_TOKENS;
   const separators = options.separators ?? DEFAULT_SEPARATORS;
@@ -82,7 +85,7 @@ export function chunkText(text: string, options: ChunkOptions = {}): TextChunk[]
 
   // Merge small segments and apply overlap
   const chunks: TextChunk[] = [];
-  let currentContent = "";
+  let currentContent = '';
 
   for (const segment of rawSegments) {
     const combined = currentContent + segment;

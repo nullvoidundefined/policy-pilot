@@ -1,10 +1,10 @@
 // Document statuses
 export type DocumentStatus =
-  | "uploaded"
-  | "chunking"
-  | "embedding"
-  | "ready"
-  | "failed";
+  | 'uploaded'
+  | 'chunking'
+  | 'embedding'
+  | 'ready'
+  | 'failed';
 
 // Database row types
 export interface User {
@@ -53,7 +53,7 @@ export interface Conversation {
 export interface Message {
   id: string;
   conversation_id: string;
-  role: "user" | "assistant";
+  role: 'user' | 'assistant';
   content: string;
   cited_chunk_ids: string[];
   created_at: string;
@@ -84,23 +84,23 @@ export interface CitedChunk {
 
 // SSE event types
 export interface QATokenEvent {
-  type: "token";
+  type: 'token';
   token: string;
 }
 
 export interface QACitationsEvent {
-  type: "citations";
+  type: 'citations';
   citations: CitedChunk[];
 }
 
 export interface QADoneEvent {
-  type: "done";
+  type: 'done';
   conversation_id: string;
   message_id: string;
 }
 
 export interface QAErrorEvent {
-  type: "error";
+  type: 'error';
   message: string;
 }
 

@@ -1,38 +1,54 @@
-import type { Request, Response } from "express";
-
-import { isProduction } from "app/config/env.js";
-import { SESSION_COOKIE_NAME, SESSION_TTL_MS } from "app/constants/session.js";
-import * as authRepo from "app/repositories/auth/auth.js";
-import { loginSchema, registerSchema } from "app/schemas/auth.js";
-import { logger } from "app/utils/logs/logger.js";
+import { isProduction } from 'app/config/env.js';
+import { SESSION_COOKIE_NAME, SESSION_TTL_MS } from 'app/constants/session.js';
+import * as authRepo from 'app/repositories/auth/auth.js';
+import { loginSchema, registerSchema } from 'app/schemas/auth.js';
+import { logger } from 'app/utils/logs/logger.js';
+import type { Request, Response } from 'express';
 
 const SESSION_COOKIE_OPTIONS = {
   httpOnly: true,
   maxAge: SESSION_TTL_MS,
-  path: "/",
-  sameSite: (isProduction() ? "none" : "lax") as "none" | "lax",
+  path: '/',
+  sameSite: (isProduction() ? 'none' : 'lax') as 'none' | 'lax',
   secure: isProduction(),
 };
 
 export async function register(req: Request, res: Response): Promise<void> {
   const parsed = registerSchema.safeParse(req.body);
   if (!parsed.success) {
-    const message = parsed.error.issues.map((e) => e.message).join("; ");
+    const message = parsed.error.issues.map((e) => e.message).join('; ');
     res.status(400).json({ error: { message } });
     return;
   }
   const { email, password, first_name, last_name } = parsed.data;
   try {
-    const { user, sessionId } = await authRepo.createUserAndSession(email, password, first_name, last_name);
-    logger.info({ event: "register_success", userId: user.id, ip: req.ip }, "User registered");
+    const { user, sessionId } = await authRepo.createUserAndSession(
+      email,
+      password,
+      first_name,
+      last_name,
+    );
+    logger.info(
+      { event: 'register_success', userId: user.id, ip: req.ip },
+      'User registered',
+    );
     res.cookie(SESSION_COOKIE_NAME, sessionId, SESSION_COOKIE_OPTIONS);
     res.status(201).json({
-      user: { id: user.id, email: user.email, first_name: user.first_name, last_name: user.last_name, created_at: user.created_at },
+      user: {
+        id: user.id,
+        email: user.email,
+        first_name: user.first_name,
+        last_name: user.last_name,
+        created_at: user.created_at,
+      },
     });
   } catch (err) {
-    const code = err && typeof err === "object" && "code" in err ? (err as { code: string }).code : undefined;
-    if (code === "23505") {
-      res.status(409).json({ error: { message: "Email already registered" } });
+    const code =
+      err && typeof err === 'object' && 'code' in err
+        ? (err as { code: string }).code
+        : undefined;
+    if (code === '23505') {
+      res.status(409).json({ error: { message: 'Email already registered' } });
       return;
     }
     throw err;
@@ -42,39 +58,48 @@ export async function register(req: Request, res: Response): Promise<void> {
 export async function login(req: Request, res: Response): Promise<void> {
   const parsed = loginSchema.safeParse(req.body);
   if (!parsed.success) {
-    const message = parsed.error.issues.map((e) => e.message).join("; ");
+    const message = parsed.error.issues.map((e) => e.message).join('; ');
     res.status(400).json({ error: { message } });
     return;
   }
   const { email, password } = parsed.data;
   const user = await authRepo.findUserByEmail(email);
   if (!user) {
-    res.status(401).json({ error: { message: "Invalid email or password" } });
+    res.status(401).json({ error: { message: 'Invalid email or password' } });
     return;
   }
   const valid = await authRepo.verifyPassword(password, user.password_hash);
   if (!valid) {
-    res.status(401).json({ error: { message: "Invalid email or password" } });
+    res.status(401).json({ error: { message: 'Invalid email or password' } });
     return;
   }
   const sessionId = await authRepo.loginUser(user.id);
-  logger.info({ event: "login_success", userId: user.id, ip: req.ip }, "User logged in");
+  logger.info(
+    { event: 'login_success', userId: user.id, ip: req.ip },
+    'User logged in',
+  );
   res.cookie(SESSION_COOKIE_NAME, sessionId, SESSION_COOKIE_OPTIONS);
   res.json({
-    user: { id: user.id, email: user.email, first_name: user.first_name, last_name: user.last_name, created_at: user.created_at },
+    user: {
+      id: user.id,
+      email: user.email,
+      first_name: user.first_name,
+      last_name: user.last_name,
+      created_at: user.created_at,
+    },
   });
 }
 
 export async function logout(req: Request, res: Response): Promise<void> {
   const token = req.cookies?.[SESSION_COOKIE_NAME];
-  if (token && typeof token === "string") {
+  if (token && typeof token === 'string') {
     try {
       await authRepo.deleteSession(token);
     } catch (err) {
-      logger.error({ err }, "Failed to delete session on logout");
+      logger.error({ err }, 'Failed to delete session on logout');
     }
   }
-  res.clearCookie(SESSION_COOKIE_NAME, { path: "/" });
+  res.clearCookie(SESSION_COOKIE_NAME, { path: '/' });
   res.status(204).send();
 }
 

@@ -1,210 +1,214 @@
 .page {
-    max-width: 800px;
-    margin: 0 auto;
-    padding: 40px 24px;
+  max-width: 800px;
+  margin: 0 auto;
+  padding: 40px 24px;
 }
 
 .header {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    margin-bottom: 32px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 32px;
 }
 
 .title {
-    font-size: 28px;
-    font-weight: 700;
-    letter-spacing: -0.02em;
+  font-size: 28px;
+  font-weight: 700;
+  letter-spacing: -0.02em;
 }
 
 .headerActions {
-    display: flex;
-    gap: 12px;
-    align-items: center;
+  display: flex;
+  gap: 12px;
+  align-items: center;
 }
 
 .chatLink {
-    padding: 8px 16px;
-    border: 1px solid var(--border);
-    border-radius: 8px;
-    font-size: 13px;
-    font-weight: 500;
-    color: var(--foreground);
-    transition: background 0.15s;
+  padding: 8px 16px;
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  font-size: 13px;
+  font-weight: 500;
+  color: var(--foreground);
+  transition: background 0.15s;
 
-    &:hover {
-        background: var(--surface-hover);
-    }
+  &:hover {
+    background: var(--surface-hover);
+  }
 }
 
 .logoutButton {
-    padding: 8px 16px;
-    border: 1px solid var(--border);
-    border-radius: 8px;
-    background: none;
-    font-size: 13px;
-    font-family: inherit;
-    color: var(--foreground-muted);
-    cursor: pointer;
-    transition: background 0.15s;
+  padding: 8px 16px;
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  background: none;
+  font-size: 13px;
+  font-family: inherit;
+  color: var(--foreground-muted);
+  cursor: pointer;
+  transition: background 0.15s;
 
-    &:hover {
-        background: var(--surface-hover);
-    }
+  &:hover {
+    background: var(--surface-hover);
+  }
 }
 
 /* ---- Dropzone ---- */
 
 .dropzone {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    padding: 40px 24px;
-    border: 2px dashed var(--border);
-    border-radius: 12px;
-    cursor: pointer;
-    transition: border-color 0.15s, background 0.15s;
-    margin-bottom: 24px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 40px 24px;
+  border: 2px dashed var(--border);
+  border-radius: 12px;
+  cursor: pointer;
+  transition:
+    border-color 0.15s,
+    background 0.15s;
+  margin-bottom: 24px;
 
-    &:hover {
-        border-color: var(--accent);
-        background: var(--accent-light);
-    }
+  &:hover {
+    border-color: var(--accent);
+    background: var(--accent-light);
+  }
 }
 
 .dropzoneActive {
-    border-color: var(--accent);
-    background: var(--accent-light);
+  border-color: var(--accent);
+  background: var(--accent-light);
 }
 
 .dropzoneText {
-    font-size: 15px;
-    font-weight: 500;
-    margin-bottom: 4px;
+  font-size: 15px;
+  font-weight: 500;
+  margin-bottom: 4px;
 }
 
 .dropzoneHint {
-    font-size: 13px;
-    color: var(--foreground-muted);
+  font-size: 13px;
+  color: var(--foreground-muted);
 }
 
 .error {
-    padding: 10px 14px;
-    border-radius: 8px;
-    background: #fef2f2;
-    color: #ef4444;
-    font-size: 13px;
-    margin-bottom: 16px;
+  padding: 10px 14px;
+  border-radius: 8px;
+  background: #fef2f2;
+  color: #ef4444;
+  font-size: 13px;
+  margin-bottom: 16px;
 }
 
 .emptyState {
-    text-align: center;
-    color: var(--foreground-muted);
-    font-size: 14px;
-    padding: 40px 0;
+  text-align: center;
+  color: var(--foreground-muted);
+  font-size: 14px;
+  padding: 40px 0;
 }
 
 /* ---- Document List ---- */
 
 .documentList {
-    display: flex;
-    flex-direction: column;
-    gap: 8px;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
 }
 
 .documentCard {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    padding: 16px;
-    border: 1px solid var(--border);
-    border-radius: 10px;
-    transition: background 0.15s;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 16px;
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  transition: background 0.15s;
 
-    &:hover {
-        background: var(--surface);
-    }
+  &:hover {
+    background: var(--surface);
+  }
 }
 
 .documentInfo {
-    display: flex;
-    flex-direction: column;
-    gap: 4px;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
 }
 
 .filename {
-    font-size: 14px;
-    font-weight: 500;
+  font-size: 14px;
+  font-weight: 500;
 }
 
 .meta {
-    font-size: 12px;
-    color: var(--foreground-muted);
+  font-size: 12px;
+  color: var(--foreground-muted);
 }
 
 .documentActions {
-    display: flex;
-    align-items: center;
-    gap: 12px;
+  display: flex;
+  align-items: center;
+  gap: 12px;
 }
 
 .status {
-    padding: 4px 10px;
-    border-radius: 20px;
-    font-size: 11px;
-    font-weight: 600;
-    text-transform: uppercase;
-    letter-spacing: 0.05em;
+  padding: 4px 10px;
+  border-radius: 20px;
+  font-size: 11px;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
 }
 
 .statusReady {
-    background: #f0fdf4;
-    color: #16a34a;
+  background: #f0fdf4;
+  color: #16a34a;
 }
 
 .statusFailed {
-    background: #fef2f2;
-    color: #ef4444;
+  background: #fef2f2;
+  color: #ef4444;
 }
 
 .statusProcessing {
-    background: #fffbeb;
-    color: #d97706;
+  background: #fffbeb;
+  color: #d97706;
 }
 
 .deleteButton {
-    padding: 6px 12px;
-    border: 1px solid var(--border);
-    border-radius: 6px;
-    background: none;
-    font-size: 12px;
-    font-family: inherit;
-    color: var(--foreground-muted);
-    cursor: pointer;
-    transition: background 0.15s, color 0.15s;
+  padding: 6px 12px;
+  border: 1px solid var(--border);
+  border-radius: 6px;
+  background: none;
+  font-size: 12px;
+  font-family: inherit;
+  color: var(--foreground-muted);
+  cursor: pointer;
+  transition:
+    background 0.15s,
+    color 0.15s;
 
-    &:hover {
-        background: #fef2f2;
-        color: #ef4444;
-        border-color: #fecaca;
-    }
+  &:hover {
+    background: #fef2f2;
+    color: #ef4444;
+    border-color: #fecaca;
+  }
 }
 
 @media (max-width: 480px) {
-    .page {
-        padding: 24px 16px;
-    }
+  .page {
+    padding: 24px 16px;
+  }
 
-    .header {
-        flex-direction: column;
-        align-items: flex-start;
-        gap: 12px;
-    }
+  .header {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 12px;
+  }
 
-    .documentCard {
-        flex-direction: column;
-        align-items: flex-start;
-        gap: 12px;
-    }
+  .documentCard {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 12px;
+  }
 }

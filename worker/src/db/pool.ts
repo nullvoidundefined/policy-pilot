@@ -1,6 +1,5 @@
-import pg from "pg";
-
-import { logger } from "app/utils/logger.js";
+import { logger } from 'app/utils/logger.js';
+import pg from 'pg';
 
 const { Pool } = pg;
 
@@ -10,9 +9,15 @@ const pool = new Pool({
   idleTimeoutMillis: 30_000,
   connectionTimeoutMillis: 5_000,
   ssl:
-    process.env.NODE_ENV === "production"
-      ? { rejectUnauthorized: process.env.DATABASE_SSL_REJECT_UNAUTHORIZED !== "false" }
-      : { rejectUnauthorized: process.env.DATABASE_SSL_REJECT_UNAUTHORIZED === "true" },
+    process.env.NODE_ENV === 'production'
+      ? {
+          rejectUnauthorized:
+            process.env.DATABASE_SSL_REJECT_UNAUTHORIZED !== 'false',
+        }
+      : {
+          rejectUnauthorized:
+            process.env.DATABASE_SSL_REJECT_UNAUTHORIZED === 'true',
+        },
 });
 
 export async function query<T extends pg.QueryResultRow>(
@@ -21,10 +26,12 @@ export async function query<T extends pg.QueryResultRow>(
 ): Promise<pg.QueryResult<T>> {
   const start = Date.now();
   const result =
-    values !== undefined ? await pool.query<T>(text, values) : await pool.query<T>(text);
+    values !== undefined
+      ? await pool.query<T>(text, values)
+      : await pool.query<T>(text);
   const duration = Date.now() - start;
-  if (process.env.NODE_ENV !== "production") {
-    logger.debug({ query: text, duration_ms: duration }, "db query");
+  if (process.env.NODE_ENV !== 'production') {
+    logger.debug({ query: text, duration_ms: duration }, 'db query');
   }
   return result;
 }

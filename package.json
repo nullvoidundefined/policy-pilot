@@ -10,7 +10,9 @@
     "dev": "pnpm --parallel run dev",
     "build": "pnpm --filter doc-qa-rag-common build && pnpm --filter doc-qa-rag-server build && pnpm --filter doc-qa-rag-worker build && pnpm --filter doc-qa-rag-web build",
     "lint": "pnpm -r run lint",
+    "lint:fix": "pnpm -r run lint:fix",
     "format": "pnpm -r run format",
+    "format:check": "pnpm -r run format:check",
     "test": "pnpm --filter doc-qa-rag-server run test",
     "prepare": "git rev-parse --git-dir > /dev/null 2>&1 && lefthook install || true"
   },

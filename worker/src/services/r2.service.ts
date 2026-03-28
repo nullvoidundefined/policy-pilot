@@ -1,22 +1,22 @@
-import { S3Client, GetObjectCommand } from "@aws-sdk/client-s3";
+import { GetObjectCommand, S3Client } from '@aws-sdk/client-s3';
 
 const s3 = new S3Client({
-  region: "auto",
+  region: 'auto',
   endpoint: process.env.R2_ENDPOINT,
   credentials: {
-    accessKeyId: process.env.R2_ACCESS_KEY_ID ?? "",
-    secretAccessKey: process.env.R2_SECRET_ACCESS_KEY ?? "",
+    accessKeyId: process.env.R2_ACCESS_KEY_ID ?? '',
+    secretAccessKey: process.env.R2_SECRET_ACCESS_KEY ?? '',
   },
 });
 
-const BUCKET = process.env.R2_BUCKET_NAME ?? "doc-qa-rag";
+const BUCKET = process.env.R2_BUCKET_NAME ?? 'doc-qa-rag';
 
 export async function downloadFile(key: string): Promise<Buffer> {
   const response = await s3.send(
     new GetObjectCommand({ Bucket: BUCKET, Key: key }),
   );
   const stream = response.Body;
-  if (!stream) throw new Error("Empty response body from R2");
+  if (!stream) throw new Error('Empty response body from R2');
 
   const chunks: Uint8Array[] = [];
   for await (const chunk of stream as AsyncIterable<Uint8Array>) {

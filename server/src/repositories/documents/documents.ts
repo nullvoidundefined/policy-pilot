@@ -1,6 +1,6 @@
-import { query } from "app/db/pool/pool.js";
-import type { PoolClient } from "app/db/pool/pool.js";
-import type { Document, DocumentStatus } from "doc-qa-rag-common";
+import { query } from 'app/db/pool/pool.js';
+import type { PoolClient } from 'app/db/pool/pool.js';
+import type { Document, DocumentStatus } from 'doc-qa-rag-common';
 
 export async function createDocument(
   userId: string,
@@ -18,7 +18,7 @@ export async function createDocument(
     client,
   );
   const row = result.rows[0];
-  if (!row) throw new Error("Insert returned no row");
+  if (!row) throw new Error('Insert returned no row');
   return row;
 }
 
@@ -27,7 +27,7 @@ export async function getDocumentById(
   userId: string,
 ): Promise<Document | null> {
   const result = await query<Document>(
-    "SELECT * FROM documents WHERE id = $1 AND user_id = $2",
+    'SELECT * FROM documents WHERE id = $1 AND user_id = $2',
     [documentId, userId],
   );
   return result.rows[0] ?? null;
@@ -35,7 +35,7 @@ export async function getDocumentById(
 
 export async function listDocuments(userId: string): Promise<Document[]> {
   const result = await query<Document>(
-    "SELECT * FROM documents WHERE user_id = $1 ORDER BY created_at DESC",
+    'SELECT * FROM documents WHERE user_id = $1 ORDER BY created_at DESC',
     [userId],
   );
   return result.rows;
@@ -46,7 +46,7 @@ export async function updateDocumentStatus(
   status: DocumentStatus,
   extra?: { total_chunks?: number; error?: string },
 ): Promise<void> {
-  const sets = ["status = $2"];
+  const sets = ['status = $2'];
   const values: unknown[] = [documentId, status];
   let idx = 3;
 
@@ -61,15 +61,15 @@ export async function updateDocumentStatus(
     idx++;
   }
 
-  await query(
-    `UPDATE documents SET ${sets.join(", ")} WHERE id = $1`,
-    values,
-  );
+  await query(`UPDATE documents SET ${sets.join(', ')} WHERE id = $1`, values);
 }
 
-export async function deleteDocument(documentId: string, userId: string): Promise<boolean> {
+export async function deleteDocument(
+  documentId: string,
+  userId: string,
+): Promise<boolean> {
   const result = await query(
-    "DELETE FROM documents WHERE id = $1 AND user_id = $2 RETURNING id",
+    'DELETE FROM documents WHERE id = $1 AND user_id = $2 RETURNING id',
     [documentId, userId],
   );
   return (result.rowCount ?? 0) > 0;

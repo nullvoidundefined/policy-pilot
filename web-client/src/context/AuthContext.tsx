@@ -1,9 +1,9 @@
 'use client';
 
-import { useQuery, useQueryClient } from '@tanstack/react-query';
 import { createContext, useCallback, useContext, useMemo } from 'react';
 
 import { ApiError, get, post } from '@/lib/api';
+import { useQuery, useQueryClient } from '@tanstack/react-query';
 
 export interface User {
   id: string;
@@ -17,7 +17,12 @@ interface AuthContextValue {
   user: User | null;
   isLoading: boolean;
   login: (email: string, password: string) => Promise<void>;
-  signup: (email: string, password: string, firstName: string, lastName: string) => Promise<void>;
+  signup: (
+    email: string,
+    password: string,
+    firstName: string,
+    lastName: string,
+  ) => Promise<void>;
   logout: () => void;
 }
 
@@ -43,14 +48,22 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
 
   const login = useCallback(
     async (email: string, password: string) => {
-      const res = await post<{ user: User }>('/auth/login', { email, password });
+      const res = await post<{ user: User }>('/auth/login', {
+        email,
+        password,
+      });
       queryClient.setQueryData(['auth', 'me'], res.user);
     },
     [queryClient],
   );
 
   const signup = useCallback(
-    async (email: string, password: string, firstName: string, lastName: string) => {
+    async (
+      email: string,
+      password: string,
+      firstName: string,
+      lastName: string,
+    ) => {
       const res = await post<{ user: User }>('/auth/register', {
         email,
         password,
