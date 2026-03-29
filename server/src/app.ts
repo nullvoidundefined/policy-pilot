@@ -1,5 +1,6 @@
 import { corsConfig } from 'app/config/corsConfig.js';
 import { isProduction } from 'app/config/env.js';
+import { redisConnection } from 'app/config/queue.js';
 import pool, { query } from 'app/db/pool/pool.js';
 import {
   csrfGuard,
@@ -31,7 +32,8 @@ function validateEnv(): void {
 }
 
 const app = express();
-const REQUEST_TIMEOUT_MS = 60_000; // 60s for streaming responses
+const REQUEST_TIMEOUT_MS = 30_000; // 30s for regular requests
+const STREAMING_TIMEOUT_MS = 120_000; // 120s for SSE/streaming endpoints
 
 app.set('trust proxy', 1);
 
@@ -51,12 +53,27 @@ app.get('/api/csrf-token', (req, res) => {
 app.use(csrfGuard);
 app.use(loadSession);
 
-app.use((_req, res, next) => {
-  res.setTimeout(REQUEST_TIMEOUT_MS, () => {
+app.use((req, res, next) => {
+  const isStreaming =
+    req.path.includes('/qa') ||
+    req.path.includes('/stream') ||
+    req.headers.accept === 'text/event-stream';
+
+  const timeout = isStreaming ? STREAMING_TIMEOUT_MS : REQUEST_TIMEOUT_MS;
+
+  req.setTimeout(timeout);
+  res.setTimeout(timeout, () => {
     if (!res.headersSent) {
       res.status(408).json({ error: { message: 'Request timeout' } });
     }
   });
+
+  if (isStreaming) {
+    res.on('close', () => {
+      res.setTimeout(0);
+    });
+  }
+
   next();
 });
 
@@ -117,6 +134,9 @@ export function startServer(): void {
     await new Promise<void>((resolve) => server.close(() => resolve()));
     logger.info('HTTP server closed');
     await pool.end();
+    logger.info('Database pool drained');
+    await redisConnection.quit();
+    logger.info('Redis connection closed');
     process.exit(0);
   }
 
