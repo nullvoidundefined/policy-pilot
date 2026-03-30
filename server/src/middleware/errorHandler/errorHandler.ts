@@ -2,6 +2,12 @@ import { ApiError } from 'app/utils/ApiError.js';
 import { logger } from 'app/utils/logs/logger.js';
 import type { NextFunction, Request, Response } from 'express';
 
+interface HttpError extends Error {
+  status?: number;
+  statusCode?: number;
+  code?: string;
+}
+
 export function errorHandler(
   err: unknown,
   req: Request,
@@ -23,6 +29,14 @@ export function errorHandler(
     }
 
     res.status(err.statusCode).json(body);
+    return;
+  }
+
+  if (err instanceof Error && (err as HttpError).code === 'EBADCSRFTOKEN') {
+    logger.warn({ reqId: req.id }, 'Invalid CSRF token');
+    res
+      .status(403)
+      .json({ error: 'CSRF_ERROR', message: 'Invalid CSRF token' });
     return;
   }
 

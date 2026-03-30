@@ -27,35 +27,40 @@ const STATE_CHANGING_METHODS = new Set(['POST', 'PUT', 'PATCH', 'DELETE']);
 
 async function request<T>(path: string, options: RequestInit = {}): Promise<T> {
   const method = options.method ?? 'GET';
-  const headers: Record<string, string> = {
-    'Content-Type': 'application/json',
-    'X-Requested-With': 'XMLHttpRequest',
-    ...(options.headers as Record<string, string>),
-  };
 
-  if (STATE_CHANGING_METHODS.has(method)) {
-    headers['X-CSRF-Token'] = await ensureCsrfToken();
-  }
+  for (let attempt = 0; attempt < 2; attempt++) {
+    const headers: Record<string, string> = {
+      'Content-Type': 'application/json',
+      'X-Requested-With': 'XMLHttpRequest',
+      ...(options.headers as Record<string, string>),
+    };
 
-  const res = await fetch(`${API_BASE}${path}`, {
-    ...options,
-    credentials: 'include',
-    headers,
-  });
-
-  if (!res.ok) {
-    if (res.status === 403) {
-      csrfToken = null;
+    if (STATE_CHANGING_METHODS.has(method)) {
+      headers['X-CSRF-Token'] = await ensureCsrfToken();
     }
-    const body = await res.json().catch(() => ({}));
-    throw new ApiError(
-      res.status,
-      body?.error?.message ?? `Request failed (${res.status})`,
-    );
-  }
 
-  if (res.status === 204) return undefined as T;
-  return res.json();
+    const res = await fetch(`${API_BASE}${path}`, {
+      ...options,
+      credentials: 'include',
+      headers,
+    });
+
+    if (!res.ok) {
+      if (res.status === 403) {
+        csrfToken = null;
+        if (attempt === 0) continue;
+      }
+      const body = await res.json().catch(() => ({}));
+      throw new ApiError(
+        res.status,
+        body?.error?.message ?? `Request failed (${res.status})`,
+      );
+    }
+
+    if (res.status === 204) return undefined as T;
+    return res.json();
+  }
+  throw new ApiError(403, 'CSRF validation failed');
 }
 
 export function get<T>(path: string): Promise<T> {
@@ -77,28 +82,32 @@ export async function uploadFile<T>(
   path: string,
   formData: FormData,
 ): Promise<T> {
-  const token = await ensureCsrfToken();
-  const res = await fetch(`${API_BASE}${path}`, {
-    method: 'POST',
-    credentials: 'include',
-    headers: {
-      'X-Requested-With': 'XMLHttpRequest',
-      'X-CSRF-Token': token,
-    },
-    body: formData,
-  });
+  for (let attempt = 0; attempt < 2; attempt++) {
+    const token = await ensureCsrfToken();
+    const res = await fetch(`${API_BASE}${path}`, {
+      method: 'POST',
+      credentials: 'include',
+      headers: {
+        'X-Requested-With': 'XMLHttpRequest',
+        'X-CSRF-Token': token,
+      },
+      body: formData,
+    });
 
-  if (!res.ok) {
-    if (res.status === 403) {
-      csrfToken = null;
+    if (!res.ok) {
+      if (res.status === 403) {
+        csrfToken = null;
+        if (attempt === 0) continue;
+      }
+      const body = await res.json().catch(() => ({}));
+      throw new ApiError(
+        res.status,
+        body?.error?.message ?? `Upload failed (${res.status})`,
+      );
     }
-    const body = await res.json().catch(() => ({}));
-    throw new ApiError(
-      res.status,
-      body?.error?.message ?? `Upload failed (${res.status})`,
-    );
+    return res.json();
   }
-  return res.json();
+  throw new ApiError(403, 'CSRF validation failed');
 }
 
 export async function streamPost(
