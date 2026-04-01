@@ -16,7 +16,6 @@
   },
   "dependencies": {
     "@aws-sdk/client-s3": "^3.800.0",
-    "@google-cloud/secret-manager": "^6.1.1",
     "bullmq": "^5.52.0",
     "doc-qa-rag-common": "workspace:*",
     "dotenv": "^17.3.1",
