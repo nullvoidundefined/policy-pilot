@@ -1,3 +1,4 @@
+import * as collectionsRepo from 'app/repositories/collections/collections.js';
 import * as convRepo from 'app/repositories/conversations/conversations.js';
 import * as embeddingService from 'app/services/embedding.service.js';
 import * as retrievalService from 'app/services/retrieval.service.js';
@@ -28,6 +29,10 @@ vi.mock('app/repositories/conversations/conversations.js', () => ({
   updateConversationTitle: vi.fn(),
 }));
 
+vi.mock('app/repositories/collections/collections.js', () => ({
+  getCollectionById: vi.fn(),
+}));
+
 vi.mock('app/services/embedding.service.js', () => ({
   generateEmbedding: vi.fn(),
 }));
@@ -47,6 +52,7 @@ vi.mock('app/utils/logs/logger.js', () => ({
   },
 }));
 
+const mockCollections = vi.mocked(collectionsRepo);
 const mockConvRepo = vi.mocked(convRepo);
 const mockEmbedding = vi.mocked(embeddingService);
 const mockRetrieval = vi.mocked(retrievalService);
@@ -82,6 +88,15 @@ function mockRes(): any {
 describe('qa handler', () => {
   beforeEach(() => {
     vi.clearAllMocks();
+    // Default: non-demo collection (user_id filter applied)
+    mockCollections.getCollectionById.mockResolvedValue({
+      id: 'col-1',
+      user_id: 'user-1',
+      name: 'Test Collection',
+      description: null,
+      is_demo: false,
+      created_at: new Date().toISOString(),
+    });
   });
 
   describe('streamQA', () => {
@@ -154,7 +169,7 @@ describe('qa handler', () => {
       );
 
       const written = res._written.join('');
-      expect(written).toContain("don't have any documents");
+      expect(written).toContain("couldn't find any relevant information");
       expect(written).toContain('"type":"done"');
       expect(res._ended).toBe(true);
     });
