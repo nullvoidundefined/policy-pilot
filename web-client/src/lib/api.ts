@@ -12,7 +12,7 @@ export class ApiError extends Error {
 
 let csrfToken: string | null = null;
 
-async function ensureCsrfToken(): Promise<string> {
+export async function ensureCsrfToken(): Promise<string> {
   if (csrfToken) return csrfToken;
   const res = await fetch(`${API_BASE}/api/csrf-token`, {
     credentials: 'include',
