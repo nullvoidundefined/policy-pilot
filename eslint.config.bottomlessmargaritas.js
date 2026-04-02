@@ -22,6 +22,8 @@ export default tseslint.config([
       '**/vitest.config.ts',
       '**/*.config.ts',
       '**/dist/**',
+      'scripts/',
+      'e2e/',
       '**/build/**',
     ],
   },

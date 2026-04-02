@@ -17,7 +17,8 @@
     "format": "prettier --config ../prettier.config.bottomlessmargaritas.mjs --write .",
     "format:check": "prettier --config ../prettier.config.bottomlessmargaritas.mjs --check .",
     "test": "vitest run",
-    "test:watch": "vitest"
+    "test:watch": "vitest",
+    "test:integration": "vitest run --config vitest.integration.config.ts"
   },
   "dependencies": {
     "@anthropic-ai/sdk": "^0.80.0",

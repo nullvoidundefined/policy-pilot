@@ -14,10 +14,15 @@
     "format": "prettier --config prettier.config.bottomlessmargaritas.mjs --write \"**/*.{js,jsx,ts,tsx,json,css,scss,md}\"",
     "format:check": "prettier --config prettier.config.bottomlessmargaritas.mjs --check \"**/*.{js,jsx,ts,tsx,json,css,scss,md}\"",
     "test": "pnpm --filter doc-qa-rag-common run test && pnpm --filter doc-qa-rag-server run test",
+    "smoke": "bash scripts/smoke-test.sh",
+    "test:integration": "pnpm --filter doc-qa-rag-server run test:integration",
+    "test:e2e": "npx playwright test",
+    "test:e2e:headed": "npx playwright test --headed",
     "prepare": "git rev-parse --git-dir > /dev/null 2>&1 && lefthook install || true"
   },
   "devDependencies": {
     "@babel/eslint-parser": "^7.28.6",
+    "@playwright/test": "^1.52.0",
     "@trivago/prettier-plugin-sort-imports": "^5.2.2",
     "@typescript-eslint/parser": "^8.56.1",
     "eslint": "^9.39.4",
@@ -30,6 +35,7 @@
     "globals": "^17.4.0",
     "lefthook": "^2.1.1",
     "prettier": "^3.8.1",
+    "tsx": "^4.21.0",
     "typescript-eslint": "^8.56.1"
   },
   "dependencies": {
