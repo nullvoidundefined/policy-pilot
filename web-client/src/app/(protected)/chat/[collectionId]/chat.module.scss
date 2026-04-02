@@ -1,0 +1,423 @@
+@use 'sass:color';
+@use '../../../../styles/variables' as *;
+
+.page {
+  display: flex;
+  height: 100vh;
+  overflow: hidden;
+}
+
+// ---- Sidebar ----
+
+.sidebar {
+  display: none;
+  flex-direction: column;
+  width: 260px;
+  min-width: 260px;
+  background: $bg-secondary;
+  border-right: 2px solid $border;
+  overflow: hidden;
+}
+
+.sidebarOpen {
+  display: flex;
+}
+
+.sidebarHeader {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 16px 16px 12px;
+  border-bottom: 1px solid $border;
+}
+
+.sidebarTitle {
+  font-family: var(--font-display), $font-display;
+  font-size: 14px;
+  font-weight: 700;
+  color: $navy;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+}
+
+.newChatButton {
+  padding: 5px 12px;
+  background: $amber;
+  color: $white;
+  font-size: 12px;
+  font-weight: 700;
+  font-family: var(--font-display), $font-display;
+  letter-spacing: 0.03em;
+  text-transform: uppercase;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  transition: background 0.15s;
+
+  &:hover {
+    background: color.adjust($amber, $lightness: -6%);
+  }
+}
+
+.conversationList {
+  flex: 1;
+  overflow-y: auto;
+  padding: 8px;
+}
+
+.noConversations {
+  padding: 16px 8px;
+  font-size: 13px;
+  color: $text-muted;
+  text-align: center;
+}
+
+.conversationItem {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  width: 100%;
+  padding: 10px 12px;
+  border: none;
+  border-radius: $radius-sm;
+  background: transparent;
+  text-align: left;
+  cursor: pointer;
+  transition:
+    background 0.15s,
+    border-color 0.15s;
+
+  &:hover {
+    background: rgba($amber, 0.06);
+  }
+}
+
+.conversationActive {
+  background: rgba($amber, 0.1);
+  border-left: 3px solid $amber;
+}
+
+.conversationTitle {
+  font-size: 13px;
+  font-weight: 600;
+  color: $navy;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.conversationDate {
+  font-size: 11px;
+  color: $text-muted;
+}
+
+// ---- Main Area ----
+
+.main {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+}
+
+.header {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 14px 24px;
+  border-bottom: 2px solid $border;
+  background: $bg-card;
+}
+
+.sidebarToggle {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 32px;
+  height: 32px;
+  border: 1px solid $border;
+  border-radius: $radius-sm;
+  background: $bg-secondary;
+  color: $text-secondary;
+  font-size: 16px;
+  cursor: pointer;
+  transition:
+    background 0.15s,
+    color 0.15s;
+
+  &:hover {
+    background: rgba($amber, 0.08);
+    color: $amber;
+  }
+}
+
+.backLink {
+  font-size: 13px;
+  font-weight: 600;
+  color: $amber;
+  text-decoration: none;
+
+  &:hover {
+    text-decoration: underline;
+  }
+
+  &::before {
+    content: '\2190 ';
+  }
+}
+
+.title {
+  font-family: var(--font-display), $font-display;
+  font-size: 18px;
+  font-weight: 700;
+  color: $navy;
+  letter-spacing: -0.01em;
+  flex: 1;
+}
+
+.headerActions {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.logoutButton {
+  padding: 6px 14px;
+  background: transparent;
+  color: $text-secondary;
+  font-size: 12px;
+  font-weight: 600;
+  border: 1px solid $border;
+  border-radius: $radius-sm;
+  cursor: pointer;
+  transition:
+    background 0.15s,
+    color 0.15s;
+
+  &:hover {
+    background: $bg-secondary;
+    color: $navy;
+  }
+}
+
+// ---- Chat Area ----
+
+.chatArea {
+  flex: 1;
+  overflow-y: auto;
+  padding: 24px;
+  max-width: 800px;
+  margin: 0 auto;
+  width: 100%;
+}
+
+.emptyState {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  padding: 60px 24px;
+  gap: 16px;
+}
+
+.emptyTitle {
+  font-family: var(--font-display), $font-display;
+  font-size: 24px;
+  font-weight: 700;
+  color: $navy;
+  letter-spacing: -0.01em;
+}
+
+.emptyHint {
+  font-size: 14px;
+  color: $text-secondary;
+  max-width: 400px;
+  line-height: 1.6;
+}
+
+// ---- Messages ----
+
+.message {
+  margin-bottom: 20px;
+}
+
+.user {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+}
+
+.assistant {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+}
+
+.bubble {
+  padding: 12px 16px;
+  border-radius: $radius-md;
+  font-size: 14px;
+  line-height: 1.7;
+  max-width: 85%;
+  white-space: pre-wrap;
+
+  p {
+    margin: 0;
+  }
+}
+
+.user .bubble {
+  background: $navy;
+  color: $white;
+  border-bottom-right-radius: 4px;
+}
+
+.assistant .bubble {
+  background: $bg-card;
+  color: $text-primary;
+  border: 1px solid $border;
+  border-bottom-left-radius: 4px;
+  box-shadow: $shadow-card;
+}
+
+// ---- Citations ----
+
+.citationBadge {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 22px;
+  height: 22px;
+  padding: 0 6px;
+  border: 2px solid $amber;
+  border-radius: 4px;
+  background: rgba($amber, 0.1);
+  color: $amber;
+  font-size: 11px;
+  font-weight: 700;
+  font-family: var(--font-display), $font-display;
+  cursor: pointer;
+  vertical-align: super;
+  margin: 0 2px;
+  transition:
+    background 0.15s,
+    color 0.15s;
+
+  &:hover {
+    background: $amber;
+    color: $white;
+  }
+}
+
+// ---- Loading / Streaming ----
+
+.loading {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 16px 0;
+}
+
+.loadingText {
+  font-size: 14px;
+  color: $text-secondary;
+  font-style: italic;
+}
+
+// ---- Input Area ----
+
+.inputArea {
+  display: flex;
+  gap: 12px;
+  padding: 16px 24px;
+  border-top: 2px solid $border;
+  background: $bg-card;
+  max-width: 800px;
+  margin: 0 auto;
+  width: 100%;
+}
+
+.chatInput {
+  flex: 1;
+  padding: 12px 16px;
+  border: 2px solid $border;
+  border-radius: $radius-sm;
+  background: $cream;
+  color: $navy;
+  font-size: 14px;
+  font-family: var(--font-body), $font-body;
+  outline: none;
+  transition:
+    border-color 0.2s,
+    box-shadow 0.2s;
+
+  &::placeholder {
+    color: $text-muted;
+    opacity: 0.7;
+  }
+
+  &:focus {
+    border-color: $amber;
+    box-shadow: 0 0 0 3px rgba($amber, 0.15);
+  }
+}
+
+.sendButton {
+  padding: 12px 24px;
+  border: none;
+  border-radius: $radius-sm;
+  background: $amber;
+  color: $white;
+  font-size: 14px;
+  font-weight: 700;
+  font-family: var(--font-display), $font-display;
+  letter-spacing: 0.03em;
+  text-transform: uppercase;
+  cursor: pointer;
+  transition:
+    background 0.2s,
+    transform 0.1s;
+
+  &:hover:not(:disabled) {
+    background: color.adjust($amber, $lightness: -6%);
+    transform: translateY(-1px);
+  }
+
+  &:disabled {
+    opacity: 0.45;
+    cursor: not-allowed;
+  }
+}
+
+// ---- Responsive ----
+
+@media (max-width: 768px) {
+  .sidebar {
+    position: fixed;
+    top: 0;
+    left: 0;
+    z-index: 50;
+    height: 100vh;
+    box-shadow: 4px 0 24px rgba($navy, 0.15);
+  }
+
+  .chatArea {
+    padding: 16px;
+  }
+
+  .inputArea {
+    padding: 12px 16px;
+  }
+
+  .bubble {
+    max-width: 95%;
+  }
+
+  .header {
+    padding: 12px 16px;
+  }
+
+  .title {
+    font-size: 15px;
+  }
+}
