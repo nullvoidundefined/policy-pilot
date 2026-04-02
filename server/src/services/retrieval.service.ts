@@ -1,4 +1,5 @@
 import { query } from 'app/db/pool/pool.js';
+import { logger } from 'app/utils/logs/logger.js';
 import type { CitedChunk } from 'policy-pilot-common';
 
 interface ChunkRow {
@@ -41,7 +42,14 @@ export async function searchChunks(
   values.push(topK);
   sql += ` ORDER BY c.embedding <=> $1::vector LIMIT $${values.length}`;
 
+  logger.info(
+    { collectionId, userId, topK, valueCount: values.length },
+    'Vector search params',
+  );
+
   const result = await query<ChunkRow>(sql, values);
+
+  logger.info({ resultCount: result.rowCount }, 'Vector search results');
 
   return result.rows.map((row) => ({
     id: row.id,
