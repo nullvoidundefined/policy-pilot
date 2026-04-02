@@ -4,7 +4,7 @@ import { useCallback, useRef, useState } from 'react';
 import type { FormEvent } from 'react';
 
 import { useAuth } from '@/context/AuthContext';
-import { API_BASE, ensureCsrfToken } from '@/lib/api';
+import { API_BASE } from '@/lib/api';
 
 import styles from './chat.module.scss';
 
@@ -49,7 +49,12 @@ export default function ChatPage() {
       let assistantContent = '';
 
       try {
-        const csrfToken = await ensureCsrfToken();
+        // Fetch a fresh CSRF token for the streaming request
+        const tokenRes = await fetch(`${API_BASE}/api/csrf-token`, {
+          credentials: 'include',
+        });
+        const { token: csrfToken } = await tokenRes.json();
+
         const response = await fetch(`${API_BASE}/qa`, {
           method: 'POST',
           credentials: 'include',
