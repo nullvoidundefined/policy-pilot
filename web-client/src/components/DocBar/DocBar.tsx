@@ -9,7 +9,7 @@ export default function DocBar() {
     <AppDocBar
       appName='Document Q&A RAG'
       position='bottom'
-      fixed={true}
+      fixed={false}
       theme='dark'
     />
   );
