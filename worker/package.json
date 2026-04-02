@@ -17,12 +17,13 @@
   "dependencies": {
     "@aws-sdk/client-s3": "^3.800.0",
     "bullmq": "^5.52.0",
-    "policy-pilot-common": "workspace:*",
     "dotenv": "^17.3.1",
     "ioredis": "^5.10.1",
+    "mammoth": "^1.12.0",
     "pdf-parse": "^1.1.1",
     "pg": "^8.18.0",
-    "pino": "^10.3.1"
+    "pino": "^10.3.1",
+    "policy-pilot-common": "workspace:*"
   },
   "devDependencies": {
     "@trivago/prettier-plugin-sort-imports": "^5.2.2",

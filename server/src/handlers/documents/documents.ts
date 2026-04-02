@@ -24,13 +24,15 @@ export async function uploadDocument(
 
   const allowedMimes = [
     'application/pdf',
+    'application/vnd.openxmlformats-officedocument.wordprocessingml.document',
     'text/plain',
     'text/markdown',
     'text/x-markdown',
+    'text/html',
   ];
   if (!allowedMimes.includes(file.mimetype)) {
     throw ApiError.badRequest(
-      'Unsupported file type. Upload PDF, TXT, or MD files.',
+      'Unsupported file type. Upload PDF, DOCX, TXT, MD, or HTML files.',
     );
   }
 

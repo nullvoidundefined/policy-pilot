@@ -155,7 +155,8 @@ describe('documents handler', () => {
       await expect(uploadDocument(req, res)).rejects.toThrow(ApiError);
       await expect(uploadDocument(req, res)).rejects.toMatchObject({
         statusCode: 400,
-        message: 'Unsupported file type. Upload PDF, TXT, or MD files.',
+        message:
+          'Unsupported file type. Upload PDF, DOCX, TXT, MD, or HTML files.',
       });
     });
 
