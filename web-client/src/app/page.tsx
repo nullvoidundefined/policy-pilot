@@ -1,4 +1,5 @@
 import Captain from '@/components/Captain/Captain';
+import Image from 'next/image';
 import Link from 'next/link';
 
 import styles from './page.module.scss';
@@ -9,10 +10,18 @@ export default function LandingPage() {
       {/* ───── Hero ───── */}
       <section className={styles.hero}>
         <div className={styles.heroInner}>
-          <div className={styles.heroBadge}>PolicyPilot</div>
+          <div className={styles.heroBadge}>
+            <Image
+              src='/logo.svg'
+              alt='PolicyPilot'
+              width={240}
+              height={54}
+              priority
+            />
+          </div>
 
           <Captain
-            pose='hero'
+            diverse
             size='lg'
             alt='Captain PolicyPilot — your co-pilot for company policy'
             className={styles.heroCaptain}
@@ -137,7 +146,7 @@ export default function LandingPage() {
       <section className={styles.cta}>
         <div className={styles.ctaInner}>
           <Captain
-            pose='thumbsup'
+            diverse
             size='md'
             alt='Captain PolicyPilot giving a thumbs up'
             className={styles.ctaCaptain}

@@ -1,0 +1,14 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32" fill="none">
+  <!-- Left wing -->
+  <path d="M16 10 Q2 10 3 16 Q4 22 16 21 Z" fill="#1B2A4A"/>
+  <path d="M16 12 Q5 12 6 16 Q7 20 16 19 Z" fill="#D4940A"/>
+  <!-- Right wing -->
+  <path d="M16 10 Q30 10 29 16 Q28 22 16 21 Z" fill="#1B2A4A"/>
+  <path d="M16 12 Q27 12 26 16 Q25 20 16 19 Z" fill="#D4940A"/>
+  <!-- Center circle -->
+  <circle cx="16" cy="15.5" r="5" fill="#1B2A4A"/>
+  <circle cx="16" cy="15.5" r="3" fill="#D4940A"/>
+  <circle cx="16" cy="15.5" r="1.5" fill="#1B2A4A"/>
+  <!-- Compass needle -->
+  <line x1="16" y1="11" x2="16" y2="13" stroke="#FFFFFF" stroke-width="1.2" stroke-linecap="round"/>
+</svg>

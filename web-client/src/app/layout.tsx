@@ -24,6 +24,9 @@ export const metadata: Metadata = {
   title: 'PolicyPilot \u2014 Ask your company handbook anything',
   description:
     'AI-powered employee policy assistant. Upload your company handbook and get instant, cited answers.',
+  icons: {
+    icon: '/favicon.svg',
+  },
 };
 
 export default function RootLayout({

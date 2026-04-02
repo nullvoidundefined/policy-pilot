@@ -41,11 +41,7 @@ export default function RegisterPage() {
     <div className={styles.container}>
       <div className={styles.card}>
         <div className={styles.mascot}>
-          <Captain
-            pose='welcome'
-            size='md'
-            alt='Captain PolicyPilot welcomes you'
-          />
+          <Captain diverse size='md' alt='Captain PolicyPilot welcomes you' />
         </div>
         <h1 className={styles.heading}>Join the crew!</h1>
         <p className={styles.subheading}>Create your account to get started</p>

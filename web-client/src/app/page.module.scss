@@ -118,16 +118,8 @@
 }
 
 .heroBadge {
-  display: inline-block;
-  font-family: var(--font-display), $font-display;
-  font-size: 0.85rem;
-  font-weight: 600;
-  letter-spacing: 0.15em;
-  text-transform: uppercase;
-  color: $amber;
-  border: 2px solid $amber;
-  border-radius: 100px;
-  padding: 6px 20px;
+  display: flex;
+  justify-content: center;
   margin-bottom: 2rem;
 }
 

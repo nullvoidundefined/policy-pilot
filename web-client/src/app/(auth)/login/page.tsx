@@ -39,11 +39,7 @@ export default function LoginPage() {
     <div className={styles.container}>
       <div className={styles.card}>
         <div className={styles.mascot}>
-          <Captain
-            pose='welcome'
-            size='md'
-            alt='Captain PolicyPilot welcomes you'
-          />
+          <Captain diverse size='md' alt='Captain PolicyPilot welcomes you' />
         </div>
         <h1 className={styles.heading}>Welcome aboard, co-pilot!</h1>
         <p className={styles.subheading}>Sign in to access your flight plans</p>
