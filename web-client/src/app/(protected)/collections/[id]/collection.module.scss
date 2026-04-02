@@ -1,0 +1,339 @@
+@use 'sass:color';
+@use '../../../../styles/variables' as *;
+
+.page {
+  min-height: 100vh;
+  padding: 32px 24px 48px;
+  max-width: 860px;
+  margin: 0 auto;
+}
+
+.header {
+  margin-bottom: 32px;
+}
+
+.backLink {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 13px;
+  font-weight: 600;
+  color: $text-secondary;
+  text-decoration: none;
+  margin-bottom: 12px;
+  transition: color 0.15s;
+
+  &:hover {
+    color: $amber;
+    text-decoration: none;
+  }
+
+  &::before {
+    content: '\2190';
+  }
+}
+
+.title {
+  font-family: var(--font-display), $font-display;
+  font-size: 30px;
+  font-weight: 700;
+  color: $navy;
+  letter-spacing: -0.01em;
+  margin-bottom: 4px;
+}
+
+.description {
+  font-size: 15px;
+  color: $text-secondary;
+  margin-bottom: 0;
+}
+
+.demoBanner {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 10px 16px;
+  background: rgba($sky, 0.12);
+  border: 1px solid rgba($sky, 0.3);
+  border-radius: $radius-sm;
+  color: $navy-light;
+  font-size: 13px;
+  font-weight: 600;
+  margin-top: 12px;
+}
+
+// ---- Actions Bar ----
+
+.actions {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-bottom: 24px;
+  flex-wrap: wrap;
+}
+
+.uploadButton {
+  padding: 10px 20px;
+  background: $amber;
+  color: $white;
+  font-family: var(--font-display), $font-display;
+  font-size: 14px;
+  font-weight: 700;
+  letter-spacing: 0.03em;
+  text-transform: uppercase;
+  border: none;
+  border-radius: $radius-sm;
+  cursor: pointer;
+  transition:
+    background 0.2s,
+    transform 0.1s;
+
+  &:hover:not(:disabled) {
+    background: color.adjust($amber, $lightness: -6%);
+    transform: translateY(-1px);
+  }
+
+  &:active:not(:disabled) {
+    transform: translateY(0);
+  }
+
+  &:disabled {
+    opacity: 0.45;
+    cursor: not-allowed;
+  }
+}
+
+.chatButton {
+  padding: 10px 20px;
+  background: $navy;
+  color: $white;
+  font-family: var(--font-display), $font-display;
+  font-size: 14px;
+  font-weight: 700;
+  letter-spacing: 0.03em;
+  text-transform: uppercase;
+  border: none;
+  border-radius: $radius-sm;
+  cursor: pointer;
+  transition:
+    background 0.2s,
+    transform 0.1s;
+
+  &:hover {
+    background: $navy-light;
+    transform: translateY(-1px);
+  }
+
+  &:active {
+    transform: translateY(0);
+  }
+}
+
+.uploadError {
+  font-size: 13px;
+  color: $coral;
+  font-weight: 500;
+}
+
+// ---- Document List ----
+
+.documentList {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.documentCard {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  padding: 16px 20px;
+  background: $bg-card;
+  border: 1px solid $border;
+  border-radius: $radius-md;
+  box-shadow: $shadow-card;
+  transition: box-shadow 0.2s;
+
+  &:hover {
+    box-shadow: $shadow-hover;
+  }
+}
+
+.documentInfo {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  min-width: 0;
+  flex: 1;
+}
+
+.filename {
+  font-weight: 600;
+  font-size: 15px;
+  color: $navy;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.meta {
+  font-size: 12px;
+  color: $text-muted;
+}
+
+.documentActions {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  flex-shrink: 0;
+}
+
+// ---- Status Badges ----
+
+.status {
+  display: inline-flex;
+  align-items: center;
+  padding: 4px 10px;
+  font-size: 11px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  border-radius: 4px;
+  white-space: nowrap;
+}
+
+.statusReady {
+  background: rgba($success, 0.1);
+  color: $success;
+  border: 1px solid rgba($success, 0.25);
+}
+
+.statusProcessing {
+  background: rgba($amber, 0.1);
+  color: $amber;
+  border: 1px solid rgba($amber, 0.25);
+}
+
+.statusFailed {
+  background: rgba($coral, 0.1);
+  color: $coral;
+  border: 1px solid rgba($coral, 0.25);
+}
+
+.statusRejected {
+  background: rgba($coral, 0.1);
+  color: $coral;
+  border: 1px solid rgba($coral, 0.25);
+}
+
+.errorMessage {
+  font-size: 12px;
+  color: $coral;
+  max-width: 200px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.overrideButton {
+  padding: 4px 10px;
+  font-size: 11px;
+  font-weight: 700;
+  color: $amber;
+  background: rgba($amber, 0.08);
+  border: 1px solid rgba($amber, 0.25);
+  border-radius: 4px;
+  cursor: pointer;
+  text-transform: uppercase;
+  letter-spacing: 0.03em;
+  transition:
+    background 0.15s,
+    color 0.15s;
+
+  &:hover {
+    background: $amber;
+    color: $white;
+  }
+}
+
+.deleteButton {
+  padding: 6px 12px;
+  font-size: 12px;
+  color: $text-muted;
+  background: transparent;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  transition:
+    color 0.15s,
+    background 0.15s;
+
+  &:hover {
+    color: $coral;
+    background: rgba($coral, 0.08);
+  }
+}
+
+// ---- Empty State ----
+
+.emptyState {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  padding: 48px 24px;
+  gap: 16px;
+}
+
+.emptyText {
+  font-family: var(--font-display), $font-display;
+  font-size: 20px;
+  font-weight: 600;
+  color: $navy;
+  max-width: 360px;
+  line-height: 1.4;
+}
+
+// ---- Loading ----
+
+.loading {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 48px;
+  font-size: 15px;
+  color: $text-secondary;
+}
+
+// ---- Responsive ----
+
+@media (max-width: 600px) {
+  .page {
+    padding: 20px 16px 32px;
+  }
+
+  .title {
+    font-size: 24px;
+  }
+
+  .documentCard {
+    flex-direction: column;
+    align-items: stretch;
+    gap: 10px;
+  }
+
+  .documentActions {
+    justify-content: space-between;
+  }
+
+  .actions {
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+  .uploadButton,
+  .chatButton {
+    text-align: center;
+  }
+}
