@@ -2,13 +2,6 @@ import 'dotenv/config';
 import path from 'path';
 import { defineConfig } from 'vitest/config';
 
-// Set env BEFORE any imports that create DB connections
-// CI Postgres doesn't support SSL; Neon requires it
-if (!process.env.DATABASE_URL?.includes('neon.tech')) {
-  process.env.DATABASE_SSL_REJECT_UNAUTHORIZED = 'disable';
-}
-process.env.REDIS_URL = '';
-
 export default defineConfig({
   test: {
     globals: true,
@@ -17,6 +10,14 @@ export default defineConfig({
     testTimeout: 30_000,
     hookTimeout: 30_000,
     setupFiles: ['src/__integration__/setup.ts'],
+    env: {
+      // Disable Redis in integration tests
+      REDIS_URL: '',
+      // Disable SSL for CI Postgres (set before pool.ts loads)
+      ...(process.env.CI
+        ? { DATABASE_SSL_REJECT_UNAUTHORIZED: 'disable' }
+        : {}),
+    },
   },
   resolve: {
     alias: {
