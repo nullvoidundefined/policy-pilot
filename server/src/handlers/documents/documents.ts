@@ -3,8 +3,8 @@ import * as docsRepo from 'app/repositories/documents/documents.js';
 import * as r2Service from 'app/services/r2.service.js';
 import { ApiError } from 'app/utils/ApiError.js';
 import { logger } from 'app/utils/logs/logger.js';
-import type { DocumentProcessJob } from 'doc-qa-rag-common';
 import type { Request, Response } from 'express';
+import type { DocumentProcessJob } from 'policy-pilot-common';
 
 export async function uploadDocument(
   req: Request,

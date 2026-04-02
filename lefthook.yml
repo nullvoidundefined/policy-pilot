@@ -13,4 +13,4 @@ pre-push:
     lint:
       run: pnpm lint
     build:
-      run: pnpm --filter doc-qa-rag-common build && pnpm --filter doc-qa-rag-server build && pnpm --filter doc-qa-rag-worker build
+      run: pnpm --filter policy-pilot-common build && pnpm --filter policy-pilot-server build && pnpm --filter policy-pilot-worker build

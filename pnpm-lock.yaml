@@ -123,9 +123,6 @@ importers:
       csrf-csrf:
         specifier: ^4.0.3
         version: 4.0.3
-      doc-qa-rag-common:
-        specifier: workspace:*
-        version: link:../common
       dotenv:
         specifier: ^17.3.1
         version: 17.3.1
@@ -156,6 +153,9 @@ importers:
       pino-http:
         specifier: ^11.0.0
         version: 11.0.0
+      policy-pilot-common:
+        specifier: workspace:*
+        version: link:../common
       zod:
         specifier: ^4.3.6
         version: 4.3.6
@@ -320,9 +320,6 @@ importers:
       bullmq:
         specifier: ^5.52.0
         version: 5.71.1
-      doc-qa-rag-common:
-        specifier: workspace:*
-        version: link:../common
       dotenv:
         specifier: ^17.3.1
         version: 17.3.1
@@ -338,6 +335,9 @@ importers:
       pino:
         specifier: ^10.3.1
         version: 10.3.1
+      policy-pilot-common:
+        specifier: workspace:*
+        version: link:../common
     devDependencies:
       '@trivago/prettier-plugin-sort-imports':
         specifier: ^5.2.2

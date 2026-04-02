@@ -20,9 +20,9 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
-  title: 'DocQA — Document Q&A with RAG',
+  title: 'PolicyPilot — Ask your company handbook anything',
   description:
-    'Upload documents, ask questions, get grounded answers with source citations.',
+    'AI-powered employee policy assistant. Upload your company handbook and get instant, cited answers.',
 };
 
 export default function RootLayout({

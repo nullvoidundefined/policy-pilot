@@ -1,9 +1,9 @@
 import { processDocument } from 'app/processors/document-processor.js';
 import { logger } from 'app/utils/logger.js';
 import { Worker } from 'bullmq';
-import type { DocumentProcessJob } from 'doc-qa-rag-common/types';
 import IORedis from 'ioredis';
 import http from 'node:http';
+import type { DocumentProcessJob } from 'policy-pilot-common/types';
 
 const redisUrl = process.env.REDIS_URL ?? 'redis://localhost:6379';
 

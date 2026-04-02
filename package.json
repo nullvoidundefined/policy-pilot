@@ -1,5 +1,5 @@
 {
-  "name": "doc-qa-rag",
+  "name": "policy-pilot",
   "version": "1.0.0",
   "private": true,
   "packageManager": "pnpm@9.15.9",
@@ -8,14 +8,14 @@
   },
   "scripts": {
     "dev": "pnpm --parallel run dev",
-    "build": "pnpm --filter doc-qa-rag-common build && pnpm --filter doc-qa-rag-server build && pnpm --filter doc-qa-rag-worker build && pnpm --filter doc-qa-rag-web build",
+    "build": "pnpm --filter policy-pilot-common build && pnpm --filter policy-pilot-server build && pnpm --filter policy-pilot-worker build && pnpm --filter policy-pilot-web build",
     "lint": "eslint --config eslint.config.bottomlessmargaritas.js .",
     "lint:fix": "eslint --config eslint.config.bottomlessmargaritas.js . --fix",
     "format": "prettier --config prettier.config.bottomlessmargaritas.mjs --write \"**/*.{js,jsx,ts,tsx,json,css,scss,md}\"",
     "format:check": "prettier --config prettier.config.bottomlessmargaritas.mjs --check \"**/*.{js,jsx,ts,tsx,json,css,scss,md}\"",
-    "test": "pnpm --filter doc-qa-rag-common run test && pnpm --filter doc-qa-rag-server run test",
+    "test": "pnpm --filter policy-pilot-common run test && pnpm --filter policy-pilot-server run test",
     "smoke": "bash scripts/smoke-test.sh",
-    "test:integration": "pnpm --filter doc-qa-rag-server run test:integration",
+    "test:integration": "pnpm --filter policy-pilot-server run test:integration",
     "test:e2e": "npx playwright test",
     "test:e2e:headed": "npx playwright test --headed",
     "prepare": "git rev-parse --git-dir > /dev/null 2>&1 && lefthook install || true"

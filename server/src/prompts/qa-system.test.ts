@@ -1,4 +1,4 @@
-import type { CitedChunk } from 'doc-qa-rag-common';
+import type { CitedChunk } from 'policy-pilot-common';
 import { describe, expect, it } from 'vitest';
 
 import { QA_SYSTEM_PROMPT, buildContextPrompt } from './qa-system.js';

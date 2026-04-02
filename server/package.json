@@ -1,5 +1,5 @@
 {
-  "name": "doc-qa-rag-server",
+  "name": "policy-pilot-server",
   "version": "1.0.0",
   "type": "module",
   "engines": {
@@ -29,7 +29,7 @@
     "cookie-parser": "^1.4.7",
     "cors": "^2.8.6",
     "csrf-csrf": "^4.0.3",
-    "doc-qa-rag-common": "workspace:*",
+    "policy-pilot-common": "workspace:*",
     "dotenv": "^17.3.1",
     "express": "^5.2.1",
     "express-rate-limit": "^8.2.1",

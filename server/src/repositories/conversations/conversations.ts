@@ -1,5 +1,5 @@
 import { query } from 'app/db/pool/pool.js';
-import type { Conversation, Message } from 'doc-qa-rag-common';
+import type { Conversation, Message } from 'policy-pilot-common';
 
 export async function createConversation(
   userId: string,

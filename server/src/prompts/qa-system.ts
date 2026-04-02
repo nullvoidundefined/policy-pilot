@@ -1,4 +1,4 @@
-import type { CitedChunk } from 'doc-qa-rag-common';
+import type { CitedChunk } from 'policy-pilot-common';
 
 export const QA_SYSTEM_PROMPT = `You are a helpful document Q&A assistant. Answer questions based ONLY on the provided context from the user's documents.
 

@@ -4,8 +4,8 @@ import * as r2Service from 'app/services/r2.service.js';
 import * as textExtractor from 'app/services/text-extractor.service.js';
 import { logger } from 'app/utils/logger.js';
 import type { Job } from 'bullmq';
-import { chunkText } from 'doc-qa-rag-common/chunker';
-import type { DocumentProcessJob } from 'doc-qa-rag-common/types';
+import { chunkText } from 'policy-pilot-common/chunker';
+import type { DocumentProcessJob } from 'policy-pilot-common/types';
 
 async function updateStatus(
   documentId: string,

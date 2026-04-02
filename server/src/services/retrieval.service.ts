@@ -1,5 +1,5 @@
 import { query } from 'app/db/pool/pool.js';
-import type { CitedChunk } from 'doc-qa-rag-common';
+import type { CitedChunk } from 'policy-pilot-common';
 
 interface ChunkRow {
   id: string;

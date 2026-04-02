@@ -1,6 +1,6 @@
 import { query } from 'app/db/pool/pool.js';
 import type { PoolClient } from 'app/db/pool/pool.js';
-import type { Document, DocumentStatus } from 'doc-qa-rag-common';
+import type { Document, DocumentStatus } from 'policy-pilot-common';
 
 export async function createDocument(
   userId: string,
