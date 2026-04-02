@@ -111,7 +111,7 @@ export async function streamQA(req: Request, res: Response): Promise<void> {
 
     if (chunks.length === 0) {
       const noContextMsg =
-        "I don't have any documents to search through. Please upload some documents first.";
+        "I couldn't find any relevant information for your question in the available documents. Try rephrasing your question or uploading additional policy documents.";
       res.write(
         `data: ${JSON.stringify({ type: 'token', token: noContextMsg })}\n\n`,
       );

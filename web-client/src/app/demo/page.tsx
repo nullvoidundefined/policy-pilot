@@ -30,6 +30,31 @@ interface DemoCollection {
   description: string | null;
 }
 
+const EXAMPLE_QUESTIONS: Record<string, string[]> = {
+  Valve: [
+    'How do employees choose what to work on at Valve?',
+    'What is the hiring process like at Valve?',
+    'What benefits does Valve offer?',
+  ],
+  GitLab: [
+    'What are GitLabs core values?',
+    'How does GitLab handle remote work?',
+    'What is the handbook-first approach?',
+  ],
+  Basecamp: [
+    'What is Basecamps vacation policy?',
+    'How does Shape Up work at Basecamp?',
+    'What are the working hours at Basecamp?',
+  ],
+};
+
+function getExampleQuestions(collectionName: string): string[] {
+  for (const [key, questions] of Object.entries(EXAMPLE_QUESTIONS)) {
+    if (collectionName.includes(key)) return questions;
+  }
+  return [];
+}
+
 export default function DemoPage() {
   const [messages, setMessages] = useState<Message[]>([]);
   const [input, setInput] = useState('');
@@ -59,6 +84,15 @@ export default function DemoPage() {
         }
       })
       .catch(() => setLoadError('Demo collections are currently unavailable.'));
+  }, []);
+
+  const askQuestion = useCallback((question: string) => {
+    setInput(question);
+    // Trigger submit on next tick after input updates
+    setTimeout(() => {
+      const form = document.querySelector('form');
+      if (form) form.requestSubmit();
+    }, 0);
   }, []);
 
   const handleSubmit = useCallback(
@@ -317,6 +351,21 @@ export default function DemoPage() {
               Ask anything about the demo handbook. Every answer comes
               flight-tested with source citations.
             </p>
+            {selectedCollection && (
+              <div className={styles.exampleQuestions}>
+                <p className={styles.exampleLabel}>Try one of these:</p>
+                {getExampleQuestions(selectedCollection.name).map((q) => (
+                  <button
+                    key={q}
+                    className={styles.exampleButton}
+                    onClick={() => askQuestion(q)}
+                    disabled={streaming}
+                  >
+                    {q}
+                  </button>
+                ))}
+              </div>
+            )}
           </div>
         )}
 

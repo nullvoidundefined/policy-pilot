@@ -408,3 +408,48 @@
     justify-content: space-between;
   }
 }
+
+.exampleQuestions {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  margin-top: 16px;
+  width: 100%;
+  max-width: 400px;
+}
+
+.exampleLabel {
+  font-size: 13px;
+  color: $text-secondary;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  margin-bottom: 4px;
+}
+
+.exampleButton {
+  padding: 10px 16px;
+  background: $bg-card;
+  color: $navy;
+  font-size: 14px;
+  font-family: var(--font-body), $font-body;
+  text-align: left;
+  border: 1px solid $border;
+  border-radius: $radius-sm;
+  cursor: pointer;
+  transition:
+    border-color 0.15s,
+    background 0.15s,
+    transform 0.1s;
+
+  &:hover:not(:disabled) {
+    border-color: $amber;
+    background: $bg-secondary;
+    transform: translateX(4px);
+  }
+
+  &:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+  }
+}

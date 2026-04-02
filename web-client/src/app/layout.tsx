@@ -1,4 +1,5 @@
 import { ErrorBoundary } from '@/components/ErrorBoundary/ErrorBoundary';
+import Header from '@/components/Header/Header';
 import { AuthProvider } from '@/context/AuthContext';
 import { QueryProvider } from '@/providers/QueryProvider';
 import { Analytics } from '@vercel/analytics/next';
@@ -39,6 +40,7 @@ export default function RootLayout({
       <body className={`${playfair.variable} ${inter.variable}`}>
         <QueryProvider>
           <AuthProvider>
+            <Header />
             <ErrorBoundary>{children}</ErrorBoundary>
           </AuthProvider>
         </QueryProvider>
