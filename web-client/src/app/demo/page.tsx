@@ -86,21 +86,11 @@ export default function DemoPage() {
       .catch(() => setLoadError('Demo collections are currently unavailable.'));
   }, []);
 
-  const askQuestion = useCallback((question: string) => {
-    setInput(question);
-    // Trigger submit on next tick after input updates
-    setTimeout(() => {
-      const form = document.querySelector('form');
-      if (form) form.requestSubmit();
-    }, 0);
-  }, []);
+  const sendQuestion = useCallback(
+    async (questionText: string) => {
+      if (!questionText.trim() || streaming || !selectedCollection) return;
 
-  const handleSubmit = useCallback(
-    async (e: FormEvent) => {
-      e.preventDefault();
-      if (!input.trim() || streaming || !selectedCollection) return;
-
-      const question = input.trim();
+      const question = questionText.trim();
       setInput('');
       setMessages((prev) => [...prev, { role: 'user', content: question }]);
       setStreaming(true);
@@ -228,7 +218,22 @@ export default function DemoPage() {
         scrollToBottom();
       }
     },
-    [input, streaming, selectedCollection, scrollToBottom],
+    [streaming, selectedCollection, scrollToBottom],
+  );
+
+  const handleSubmit = useCallback(
+    (e: FormEvent) => {
+      e.preventDefault();
+      if (input.trim()) sendQuestion(input);
+    },
+    [input, sendQuestion],
+  );
+
+  const askQuestion = useCallback(
+    (question: string) => {
+      sendQuestion(question);
+    },
+    [sendQuestion],
   );
 
   const handleCitationClick = useCallback(
