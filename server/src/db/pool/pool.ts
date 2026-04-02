@@ -12,15 +12,17 @@ const pool = new Pool({
   connectionTimeoutMillis: 5_000,
   statement_timeout: 10_000,
   ssl:
-    process.env.NODE_ENV === 'production'
-      ? {
-          rejectUnauthorized:
-            process.env.DATABASE_SSL_REJECT_UNAUTHORIZED !== 'false',
-        }
-      : {
-          rejectUnauthorized:
-            process.env.DATABASE_SSL_REJECT_UNAUTHORIZED === 'true',
-        },
+    process.env.DATABASE_SSL_REJECT_UNAUTHORIZED === 'disable'
+      ? false
+      : process.env.NODE_ENV === 'production'
+        ? {
+            rejectUnauthorized:
+              process.env.DATABASE_SSL_REJECT_UNAUTHORIZED !== 'false',
+          }
+        : {
+            rejectUnauthorized:
+              process.env.DATABASE_SSL_REJECT_UNAUTHORIZED === 'true',
+          },
 });
 
 export async function query<T extends pg.QueryResultRow>(

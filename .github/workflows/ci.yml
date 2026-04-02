@@ -57,11 +57,13 @@ jobs:
         run: cd server && npx node-pg-migrate up
         env:
           DATABASE_URL: postgres://test:test@localhost:5432/test
+          DATABASE_SSL_REJECT_UNAUTHORIZED: disable
 
       - name: Unit tests
         run: pnpm test
         env:
           DATABASE_URL: postgres://test:test@localhost:5432/test
+          DATABASE_SSL_REJECT_UNAUTHORIZED: disable
           REDIS_URL: redis://localhost:6379
           NODE_ENV: test
           SESSION_SECRET: test-secret
@@ -72,6 +74,7 @@ jobs:
         run: pnpm test:integration
         env:
           DATABASE_URL: postgres://test:test@localhost:5432/test
+          DATABASE_SSL_REJECT_UNAUTHORIZED: disable
           REDIS_URL: redis://localhost:6379
           NODE_ENV: test
           CSRF_SECRET: test-csrf-secret
@@ -84,11 +87,13 @@ jobs:
         run: npx tsx scripts/seed-test-db.ts
         env:
           DATABASE_URL: postgres://test:test@localhost:5432/test
+          DATABASE_SSL_REJECT_UNAUTHORIZED: disable
 
       - name: E2E tests
         run: npx playwright test
         env:
           DATABASE_URL: postgres://test:test@localhost:5432/test
+          DATABASE_SSL_REJECT_UNAUTHORIZED: disable
           REDIS_URL: redis://localhost:6379
           NODE_ENV: test
           CSRF_SECRET: test-csrf-secret
