@@ -6,16 +6,16 @@ COPY package.json pnpm-workspace.yaml pnpm-lock.yaml .npmrc ./
 COPY common/package.json common/
 COPY server/package.json server/
 COPY worker/package.json worker/
-RUN pnpm install --frozen-lockfile --filter doc-qa-rag-common --filter doc-qa-rag-server --filter doc-qa-rag-worker --ignore-scripts
+RUN pnpm install --frozen-lockfile --filter policy-pilot-common --filter policy-pilot-server --filter policy-pilot-worker --ignore-scripts
 
 COPY common/ common/
-RUN pnpm --filter doc-qa-rag-common run build
+RUN pnpm --filter policy-pilot-common run build
 
 COPY server/ server/
-RUN pnpm --filter doc-qa-rag-server run build
+RUN pnpm --filter policy-pilot-server run build
 
 COPY worker/ worker/
-RUN pnpm --filter doc-qa-rag-worker run build
+RUN pnpm --filter policy-pilot-worker run build
 
 # Production stage
 FROM node:22-slim AS production
@@ -26,7 +26,7 @@ COPY package.json pnpm-workspace.yaml pnpm-lock.yaml .npmrc ./
 COPY common/package.json common/
 COPY server/package.json server/
 COPY worker/package.json worker/
-RUN pnpm install --frozen-lockfile --filter doc-qa-rag-common --filter doc-qa-rag-server --filter doc-qa-rag-worker --prod --ignore-scripts
+RUN pnpm install --frozen-lockfile --filter policy-pilot-common --filter policy-pilot-server --filter policy-pilot-worker --prod --ignore-scripts
 
 COPY --from=base /app/common/dist common/dist
 COPY --from=base /app/server/dist server/dist
