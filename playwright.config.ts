@@ -11,7 +11,7 @@ export default defineConfig({
   },
   webServer: [
     {
-      command: 'cd server && npx tsx src/index.ts',
+      command: 'cd apps/server && npx tsx src/index.ts',
       port: 3001,
       timeout: 15_000,
       reuseExistingServer: !process.env.CI,
@@ -21,7 +21,7 @@ export default defineConfig({
       },
     },
     {
-      command: 'cd web-client && npx next dev --port 3000',
+      command: 'cd apps/client/web && npx next dev --port 3000',
       port: 3000,
       timeout: 30_000,
       reuseExistingServer: !process.env.CI,

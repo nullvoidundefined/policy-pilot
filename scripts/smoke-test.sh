@@ -17,17 +17,17 @@ trap cleanup EXIT
 echo "=== Smoke Test: document-qa-rag ==="
 
 # Start server
-cd "$PROJECT_DIR/server"
+cd "$PROJECT_DIR/apps/server"
 PORT=3001 npx tsx src/index.ts &>/dev/null &
 PIDS+=($!)
 
 # Start worker
-cd "$PROJECT_DIR/worker"
+cd "$PROJECT_DIR/apps/worker"
 WORKER_PORT=3002 npx tsx src/index.ts &>/dev/null &
 PIDS+=($!)
 
 # Start web-client
-cd "$PROJECT_DIR/web-client"
+cd "$PROJECT_DIR/apps/client/web"
 npx next dev --port 3000 &>/dev/null &
 PIDS+=($!)
 

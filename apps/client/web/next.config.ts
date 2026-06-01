@@ -3,11 +3,12 @@ import path from 'path';
 import { fileURLToPath } from 'url';
 
 const projectRoot = path.dirname(fileURLToPath(import.meta.url));
+const repoRoot = path.resolve(projectRoot, '../../../');
 
 const nextConfig: NextConfig = {
-  outputFileTracingRoot: projectRoot,
+  outputFileTracingRoot: repoRoot,
   outputFileTracingIncludes: {
-    '/docs/[id]': ['../docs/*.md'],
+    '/docs/[id]': ['../../../docs/*.md'],
   },
 };
 

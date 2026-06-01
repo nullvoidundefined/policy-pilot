@@ -1,5 +1,5 @@
 packages:
-  - 'server'
-  - 'worker'
-  - 'web-client'
-  - 'common'
+  - 'apps/server'
+  - 'apps/worker'
+  - 'apps/client/web'
+  - 'packages/common'

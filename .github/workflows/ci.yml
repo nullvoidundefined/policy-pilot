@@ -54,7 +54,7 @@ jobs:
         run: pnpm format:check
 
       - name: Run migrations
-        run: cd server && npx node-pg-migrate up
+        run: cd apps/server && npx node-pg-migrate up
         env:
           DATABASE_URL: postgres://test:test@localhost:5432/test
           DATABASE_SSL_REJECT_UNAUTHORIZED: disable

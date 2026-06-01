@@ -5,7 +5,7 @@ import pg from 'pg';
 import { fileURLToPath } from 'url';
 
 const __dirname = dirname(fileURLToPath(import.meta.url));
-config({ path: resolve(__dirname, '../server/.env') });
+config({ path: resolve(__dirname, '../apps/server/.env') });
 
 const pool = new pg.Pool({
   connectionString: process.env.DATABASE_URL,

@@ -10,10 +10,10 @@
     "dev": "next dev",
     "build": "next build",
     "start": "next start",
-    "lint": "eslint --config ../eslint.config.bottomlessmargaritas.js .",
-    "lint:fix": "eslint --config ../eslint.config.bottomlessmargaritas.js . --fix",
-    "format": "prettier --config ../prettier.config.bottomlessmargaritas.mjs --write .",
-    "format:check": "prettier --config ../prettier.config.bottomlessmargaritas.mjs --check ."
+    "lint": "eslint --config ../../../eslint.config.bottomlessmargaritas.js .",
+    "lint:fix": "eslint --config ../../../eslint.config.bottomlessmargaritas.js . --fix",
+    "format": "prettier --config ../../../prettier.config.bottomlessmargaritas.mjs --write .",
+    "format:check": "prettier --config ../../../prettier.config.bottomlessmargaritas.mjs --check ."
   },
   "dependencies": {
     "@bottomlessmargaritas/doc-bar": "1.0.1",

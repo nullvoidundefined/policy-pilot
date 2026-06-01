@@ -3,10 +3,10 @@ import { dirname, resolve } from 'path';
 import pg from 'pg';
 import { fileURLToPath } from 'url';
 
-import { chunkText } from '../common/src/chunker/index.js';
+import { chunkText } from '../packages/common/src/chunker/index.js';
 
 const __dirname = dirname(fileURLToPath(import.meta.url));
-config({ path: resolve(__dirname, '../server/.env') });
+config({ path: resolve(__dirname, '../apps/server/.env') });
 
 const EMBEDDING_MODEL = 'text-embedding-3-small';
 const EMBEDDING_DIMENSIONS = 1536;

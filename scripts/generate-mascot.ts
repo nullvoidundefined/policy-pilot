@@ -5,11 +5,11 @@ import { dirname, resolve } from 'path';
 import { fileURLToPath } from 'url';
 
 const __dirname = dirname(fileURLToPath(import.meta.url));
-config({ path: resolve(__dirname, '../server/.env') });
+config({ path: resolve(__dirname, '../apps/server/.env') });
 
 const openai = new OpenAI({ apiKey: process.env.OPEN_AI_API_KEY });
 
-const MASCOT_DIR = resolve(__dirname, '../web-client/public/mascot');
+const MASCOT_DIR = resolve(__dirname, '../apps/client/web/public/mascot');
 const PILOTS_DIR = resolve(MASCOT_DIR, 'pilots');
 
 const BASE_PROMPT = `1950s retro airline poster illustration style, Fallout Vault-Tec aesthetic. A warm, enthusiastic airline captain character. South Asian or Pacific Islander man with a big confident smile, wearing a classic navy airline captain uniform with gold epaulets and captain's hat. Mid-century illustration style with warm cream and navy tones. Clean vector-like illustration, not photorealistic. White/cream background.`;

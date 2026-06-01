@@ -64,25 +64,27 @@ flowchart TB
 ## Monorepo Structure
 
 ```
-document-qa-rag/
-├── web-client/          # Next.js frontend
-│   └── src/
-│       ├── app/         # App router pages
-│       ├── components/  # Shared components
-│       ├── context/     # Auth context
-│       └── lib/         # API client utilities
-├── server/              # Express API
-│   └── src/
-│       ├── routes/      # Route handlers
-│       ├── services/    # Business logic
-│       ├── repos/       # Database access
-│       └── middleware/  # Auth, error handling
-├── worker/              # BullMQ worker
-│   └── src/
-│       ├── processors/  # Job processors
-│       └── services/    # Chunking, embedding
-├── common/              # Shared utilities
-│   └── chunker/         # Reusable text chunking
+policy-pilot/
+├── apps/
+│   ├── client/web/      # Next.js frontend (policy-pilot-web)
+│   │   └── src/
+│   │       ├── app/         # App router pages
+│   │       ├── components/  # Shared components
+│   │       ├── context/     # Auth context
+│   │       └── lib/         # API client utilities
+│   ├── server/          # Express API (policy-pilot-server)
+│   │   └── src/
+│   │       ├── routes/      # Route handlers
+│   │       ├── services/    # Business logic
+│   │       ├── repos/       # Database access
+│   │       └── middleware/  # Auth, error handling
+│   └── worker/          # BullMQ worker (policy-pilot-worker)
+│       └── src/
+│           ├── processors/  # Job processors
+│           └── services/    # Chunking, embedding
+├── packages/
+│   └── common/          # Shared utilities (policy-pilot-common)
+│       └── chunker/         # Reusable text chunking
 └── docs/                # Documentation
 ```
 

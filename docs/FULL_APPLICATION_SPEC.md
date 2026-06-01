@@ -29,7 +29,7 @@ Upload PDFs and documents. A background pipeline chunks them, generates embeddin
 
 Start from **Next.js + Express template** pattern (see app-8 `agentic-travel-agent` for reference). Monorepo with pnpm workspaces.
 
-Workspace packages: `server/`, `worker/`, `web-client/`, `common/`
+Workspace packages: `apps/server/`, `apps/worker/`, `apps/client/web/`, `packages/common/`
 
 ## Core User Stories
 
