@@ -6,6 +6,7 @@ const projectRoot = path.dirname(fileURLToPath(import.meta.url));
 const repoRoot = path.resolve(projectRoot, '../../../');
 
 const nextConfig: NextConfig = {
+  output: 'standalone',
   outputFileTracingRoot: repoRoot,
   outputFileTracingIncludes: {
     '/docs/[id]': ['../../../docs/*.md'],

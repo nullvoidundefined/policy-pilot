@@ -54,9 +54,9 @@ jobs:
         run: |
           CORS=$(curl -s -D - -o /dev/null \
             "${{ vars.RAILWAY_URL }}/health" \
-            -H "Origin: ${{ vars.VERCEL_URL }}" \
+            -H "Origin: ${{ vars.WEB_URL }}" \
             --max-time 15 | grep -i "access-control-allow-origin" || echo "MISSING")
-          if ! echo "$CORS" | grep -q "${{ vars.VERCEL_URL }}"; then
+          if ! echo "$CORS" | grep -q "${{ vars.WEB_URL }}"; then
             echo "CORS check failed: $CORS"
             exit 1
           fi
@@ -65,7 +65,7 @@ jobs:
       - name: Check frontend
         run: |
           STATUS=$(curl -s -o /dev/null -w "%{http_code}" \
-            "${{ vars.VERCEL_URL }}" \
+            "${{ vars.WEB_URL }}" \
             --max-time 15)
           if [ "$STATUS" != "200" ]; then
             echo "Frontend check failed: $STATUS"
@@ -76,7 +76,7 @@ jobs:
       - name: Check frontend login page
         run: |
           STATUS=$(curl -s -o /dev/null -w "%{http_code}" \
-            "${{ vars.VERCEL_URL }}/login" \
+            "${{ vars.WEB_URL }}/login" \
             --max-time 15)
           if [ "$STATUS" != "200" ]; then
             echo "Frontend login page failed: $STATUS"

@@ -1,0 +1,33 @@
+FROM node:22-slim AS base
+RUN corepack enable && corepack prepare pnpm@9.15.9 --activate
+WORKDIR /app
+
+COPY package.json pnpm-workspace.yaml pnpm-lock.yaml .npmrc ./
+COPY packages/common/package.json packages/common/
+COPY apps/server/package.json apps/server/
+COPY apps/worker/package.json apps/worker/
+COPY apps/client/web/package.json apps/client/web/
+RUN pnpm install --frozen-lockfile --filter policy-pilot-web --ignore-scripts
+
+COPY apps/client/web/ apps/client/web/
+
+# NEXT_PUBLIC_* vars are baked into the bundle at build time. Railway passes
+# the service variable through as a build arg.
+ARG NEXT_PUBLIC_API_URL
+ENV NEXT_PUBLIC_API_URL=$NEXT_PUBLIC_API_URL
+ENV NEXT_TELEMETRY_DISABLED=1
+RUN pnpm --filter policy-pilot-web run build
+
+# Production stage: Next standalone output (outputFileTracingRoot = repo root)
+FROM node:22-slim AS production
+WORKDIR /app
+ENV NODE_ENV=production
+ENV NEXT_TELEMETRY_DISABLED=1
+ENV HOSTNAME=0.0.0.0
+
+COPY --from=base /app/apps/client/web/.next/standalone ./
+COPY --from=base /app/apps/client/web/.next/static apps/client/web/.next/static
+COPY --from=base /app/apps/client/web/public apps/client/web/public
+
+EXPOSE 3000
+CMD ["node", "apps/client/web/server.js"]
