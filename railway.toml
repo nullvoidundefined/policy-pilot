@@ -1,8 +1,7 @@
-[build]
-dockerfilePath = "Dockerfile.server"
-
+# Dockerfile path and healthcheck are configured per service (server, worker,
+# web) in Railway service settings, since each service uses a different
+# Dockerfile. Fields set here would override those per-service settings, so only
+# project-wide defaults belong in this file.
 [deploy]
-healthcheckPath = "/health"
-healthcheckTimeout = 30
 restartPolicyType = "ON_FAILURE"
 restartPolicyMaxRetries = 3
