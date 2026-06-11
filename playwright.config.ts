@@ -21,6 +21,15 @@ export default defineConfig({
       },
     },
     {
+      command: 'cd apps/worker && npx tsx src/index.ts',
+      port: 3002,
+      timeout: 15_000,
+      reuseExistingServer: !process.env.CI,
+      env: {
+        NODE_ENV: 'test',
+      },
+    },
+    {
       command: 'cd apps/client/web && npx next dev --port 3000',
       port: 3000,
       timeout: 30_000,
