@@ -63,7 +63,7 @@ export async function listCollectionDocuments(
   res: Response,
 ): Promise<void> {
   const user = req.user!;
-  const collectionId = req.params.id;
+  const collectionId = req.params.id as string;
 
   const collection = await collectionsRepo.getCollectionById(
     collectionId,
