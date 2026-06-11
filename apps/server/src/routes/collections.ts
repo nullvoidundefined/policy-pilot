@@ -1,4 +1,5 @@
 import * as collectionHandlers from 'app/handlers/collections/collections.js';
+import * as documentHandlers from 'app/handlers/documents/documents.js';
 import { requireAuth } from 'app/middleware/requireAuth/requireAuth.js';
 import * as collectionsRepo from 'app/repositories/collections/collections.js';
 import express from 'express';
@@ -19,6 +20,10 @@ collectionRouter.get('/demo', async (_req, res) => {
 collectionRouter.use(requireAuth);
 collectionRouter.get('/', collectionHandlers.listCollections);
 collectionRouter.post('/', collectionHandlers.createCollection);
+collectionRouter.get(
+  '/:id/documents',
+  documentHandlers.listCollectionDocuments,
+);
 collectionRouter.get('/:id', collectionHandlers.getCollection);
 collectionRouter.delete('/:id', collectionHandlers.deleteCollection);
 

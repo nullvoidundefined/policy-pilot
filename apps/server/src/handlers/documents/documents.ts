@@ -130,3 +130,13 @@ export async function deleteDocument(
   await docsRepo.deleteDocument(id, user.id);
   res.status(204).send();
 }
+
+export async function listCollectionDocuments(
+  req: Request,
+  res: Response,
+): Promise<void> {
+  const user = req.user!;
+  const collectionId = req.params.id as string;
+  const documents = await docsRepo.listDocuments(user.id, collectionId);
+  res.json({ documents });
+}
