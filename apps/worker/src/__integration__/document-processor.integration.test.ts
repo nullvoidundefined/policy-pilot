@@ -8,15 +8,7 @@ import { readFileSync } from 'fs';
 import path from 'path';
 import type { DocumentProcessJob } from 'policy-pilot-common';
 import { fileURLToPath } from 'url';
-import {
-  type MockInstance,
-  afterEach,
-  beforeEach,
-  describe,
-  expect,
-  it,
-  vi,
-} from 'vitest';
+import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 
@@ -33,21 +25,13 @@ vi.mock('app/services/embedding.service.js', () => ({
   generateEmbeddingsBatch: vi.fn(),
 }));
 
-vi.mock('@anthropic-ai/sdk', () => {
-  const mockCreate = vi.fn().mockResolvedValue({
-    content: [
-      {
-        type: 'text',
-        text: '{"score": 0.9, "reason": "HR policy document about remote work"}',
-      },
-    ],
-  });
-  return {
-    default: vi.fn().mockImplementation(() => ({
-      messages: { create: mockCreate },
-    })),
-  };
-});
+const mockAnthropicCreate = vi.hoisted(() => vi.fn());
+
+vi.mock('@anthropic-ai/sdk', () => ({
+  default: vi.fn().mockImplementation(() => ({
+    messages: { create: mockAnthropicCreate },
+  })),
+}));
 
 async function seedUser(): Promise<string> {
   const result = await pool.query<{ id: string }>(
@@ -100,6 +84,15 @@ describe('processDocument', () => {
   beforeEach(async () => {
     vi.clearAllMocks();
 
+    mockAnthropicCreate.mockResolvedValue({
+      content: [
+        {
+          type: 'text',
+          text: '{"score": 0.9, "reason": "HR policy document about remote work"}',
+        },
+      ],
+    });
+
     vi.mocked(r2Service.downloadFile).mockResolvedValue(
       readFileSync(POLICY_FIXTURE),
     );
@@ -146,7 +139,7 @@ describe('processDocument', () => {
   });
 
   it('calls r2Service.downloadFile with the r2Key', async () => {
-    const downloadSpy = vi.mocked(r2Service.downloadFile) as MockInstance;
+    const downloadSpy = vi.mocked(r2Service.downloadFile);
 
     await processDocument(
       makeJob({
@@ -162,9 +155,7 @@ describe('processDocument', () => {
   });
 
   it('calls generateEmbeddingsBatch with the chunk texts', async () => {
-    const embedSpy = vi.mocked(
-      embeddingService.generateEmbeddingsBatch,
-    ) as MockInstance;
+    const embedSpy = vi.mocked(embeddingService.generateEmbeddingsBatch);
 
     await processDocument(
       makeJob({
@@ -180,5 +171,53 @@ describe('processDocument', () => {
     const [chunkTexts] = embedSpy.mock.calls[0] as [string[]];
     expect(chunkTexts.length).toBeGreaterThanOrEqual(1);
     expect(typeof chunkTexts[0]).toBe('string');
+  });
+
+  it('sets status to failed when the document contains no extractable text', async () => {
+    vi.mocked(r2Service.downloadFile).mockResolvedValue(Buffer.from('   '));
+
+    await processDocument(
+      makeJob({
+        documentId,
+        userId,
+        r2Key: TEST_R2_KEY,
+        mimeType: 'text/plain',
+        collectionId,
+      }),
+    );
+
+    const docRow = await pool.query<{ status: string; error: string | null }>(
+      'SELECT status, error FROM documents WHERE id = $1',
+      [documentId],
+    );
+    expect(docRow.rows[0]!.status).toBe('failed');
+    expect(docRow.rows[0]!.error).toMatch(/No text content/);
+  });
+
+  it('sets status to rejected when the Anthropic relevance score is below 0.5', async () => {
+    mockAnthropicCreate.mockResolvedValueOnce({
+      content: [
+        {
+          type: 'text',
+          text: '{"score": 0.2, "reason": "This is not a policy document"}',
+        },
+      ],
+    });
+
+    await processDocument(
+      makeJob({
+        documentId,
+        userId,
+        r2Key: TEST_R2_KEY,
+        mimeType: 'text/plain',
+        collectionId,
+      }),
+    );
+
+    const docRow = await pool.query<{ status: string }>(
+      'SELECT status FROM documents WHERE id = $1',
+      [documentId],
+    );
+    expect(docRow.rows[0]!.status).toBe('rejected');
   });
 });
