@@ -15,7 +15,7 @@
     "format:check": "prettier --config prettier.config.mjs --check \"**/*.{js,jsx,ts,tsx,json,css,scss,md}\"",
     "test": "pnpm --filter policy-pilot-common run test && pnpm --filter policy-pilot-server run test",
     "smoke": "bash scripts/smoke-test.sh",
-    "test:integration": "pnpm --filter policy-pilot-server run test:integration",
+    "test:integration": "pnpm --filter policy-pilot-server run test:integration && pnpm --filter policy-pilot-worker run test:integration",
     "test:e2e": "npx playwright test",
     "test:e2e:headed": "npx playwright test --headed",
     "prepare": "git rev-parse --git-dir > /dev/null 2>&1 && lefthook install || true"

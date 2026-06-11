@@ -1,0 +1,13 @@
+Remote Work Policy
+
+Section 1: Eligibility
+All full-time employees who have completed a 90-day probationary period are eligible for remote work arrangements. Employees must maintain satisfactory performance ratings to retain remote work privileges. Part-time employees and contractors require explicit department head approval before starting remote work.
+
+Section 2: Equipment and Security
+Remote employees must maintain a secure home workspace. Company laptops require full-disk encryption and strong password protection. All access to company systems requires the approved VPN solution. Personal devices may not access confidential company data without prior IT department approval and enrollment in device management.
+
+Section 3: Working Hours and Availability
+Remote employees must be available during core hours of 9 AM to 3 PM in their local time zone. All meetings scheduled during these hours are mandatory unless prior approval for absence is obtained. Employees must respond to communications within two hours during business hours and maintain accurate timekeeping records.
+
+Section 4: Performance Reviews
+Remote employees are evaluated using the same criteria as office-based staff, with additional focus on communication quality and self-management. Quarterly performance reviews apply to all remote staff. Repeated failure to meet availability or communication standards may result in revocation of remote work privileges and a required return to office.
