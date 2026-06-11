@@ -47,6 +47,9 @@ jobs:
 
       - run: pnpm install --frozen-lockfile
 
+      - name: Build common package
+        run: pnpm --filter policy-pilot-common build
+
       - name: Lint
         run: pnpm lint
 
