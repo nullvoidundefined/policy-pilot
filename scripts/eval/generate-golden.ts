@@ -12,7 +12,7 @@ import type { Collection, GoldenCase, GoldenFile } from './lib/types.js';
 const __dirname = dirname(fileURLToPath(import.meta.url));
 config({ path: resolve(__dirname, '../../apps/server/.env') });
 
-const HAIKU_MODEL = 'claude-haiku-4-5-20251001';
+export const HAIKU_MODEL = 'claude-haiku-4-5-20251001';
 const SONNET_MODEL = 'claude-sonnet-4-6';
 const MIN_TOKEN_COUNT = 80;
 const QUALITY_THRESHOLD = 3;
@@ -20,6 +20,11 @@ const DEDUP_THRESHOLD = 0.85;
 const BATCH_SIZE = 5;
 const COLLECTIONS: Collection[] = ['valve', 'gitlab'];
 const OUTPUT_PATH = resolve(__dirname, 'fixtures/golden.json');
+
+const MODEL_SHORT_NAMES: Record<string, string> = {
+  [HAIKU_MODEL]: 'haiku',
+  [SONNET_MODEL]: 'sonnet',
+};
 
 interface RawPair {
   question: string;
@@ -204,8 +209,9 @@ export async function generateGoldenSet(): Promise<void> {
         const batch = chunks.slice(i, i + BATCH_SIZE);
         const cases = await processBatch(client, batch, collection, model);
         allCases.push(...cases);
+        const shortName = MODEL_SHORT_NAMES[model] ?? model;
         console.log(
-          `  [${collection}/${model.split('-')[1]}] batch ${Math.floor(i / BATCH_SIZE) + 1}: +${cases.length} cases (total: ${allCases.length})`,
+          `  [${collection}/${shortName}] batch ${Math.floor(i / BATCH_SIZE) + 1}: +${cases.length} cases (total: ${allCases.length})`,
         );
       }
     }

@@ -1,6 +1,10 @@
 import { describe, expect, it } from 'vitest';
 
-import { deduplicateQuestions, jaccardSimilarity } from '../generate-golden.js';
+import {
+  HAIKU_MODEL,
+  deduplicateQuestions,
+  jaccardSimilarity,
+} from '../generate-golden.js';
 import type { GoldenCase } from '../lib/types.js';
 
 describe('jaccardSimilarity', () => {
@@ -14,13 +18,11 @@ describe('jaccardSimilarity', () => {
     expect(jaccardSimilarity('apple orange', 'banana grape')).toBe(0);
   });
 
-  it('returns a value between 0 and 1 for partial overlap', () => {
-    const score = jaccardSimilarity(
-      'the quick brown fox',
-      'the slow brown dog',
-    );
-    expect(score).toBeGreaterThan(0);
-    expect(score).toBeLessThan(1);
+  it('returns correct score for partial overlap', () => {
+    // intersection: {the, brown}, union: {the, quick, brown, fox, slow, dog}
+    expect(
+      jaccardSimilarity('the quick brown fox', 'the slow brown dog'),
+    ).toBeCloseTo(1 / 3, 5);
   });
 
   it('is case-insensitive', () => {
@@ -34,7 +36,7 @@ describe('deduplicateQuestions', () => {
     collection: 'valve',
     question,
     referenceAnswer: 'ref',
-    generatorModel: 'claude-haiku-4-5-20251001',
+    generatorModel: HAIKU_MODEL,
   });
 
   it('keeps all cases when none are similar', () => {
