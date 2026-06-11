@@ -1,4 +1,4 @@
-import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
+import { afterEach, describe, expect, it, vi } from 'vitest';
 
 const OPEN_AI_API_KEY_ENV = 'OPEN_AI_API_KEY';
 
