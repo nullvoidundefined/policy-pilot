@@ -1,14 +1,11 @@
 import { expect, test } from '@playwright/test';
 import path from 'path';
-import { fileURLToPath } from 'url';
-
-const __dirname = path.dirname(fileURLToPath(import.meta.url));
 
 const TEST_EMAIL = 'e2e-user@integration-test.invalid';
 const TEST_PASSWORD = 'testpassword123';
 const POLICY_FIXTURE = path.resolve(
-  __dirname,
-  '../apps/worker/src/__integration__/fixtures/policy.txt',
+  process.cwd(),
+  'apps/worker/src/__integration__/fixtures/policy.txt',
 );
 const READY_STATUS_LABEL = 'Cleared for takeoff';
 const PROCESSING_TIMEOUT_MS = 120_000;
