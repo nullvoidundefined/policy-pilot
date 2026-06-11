@@ -2,16 +2,18 @@
 
 const EMBEDDING_MODEL = 'text-embedding-3-small';
 const EMBEDDING_DIMENSIONS = 1536;
+const OPENAI_EMBEDDINGS_URL = 'https://api.openai.com/v1/embeddings';
+const OPEN_AI_API_KEY_ENV = 'OPEN_AI_API_KEY';
 
 interface EmbeddingResponse {
   data: Array<{ embedding: number[] }>;
 }
 
 export async function generateEmbedding(text: string): Promise<number[]> {
-  const apiKey = process.env.OPEN_AI_API_KEY;
-  if (!apiKey) throw new Error('OPEN_AI_API_KEY is not set');
+  const apiKey = process.env[OPEN_AI_API_KEY_ENV];
+  if (!apiKey) throw new Error(`${OPEN_AI_API_KEY_ENV} is not set`);
 
-  const response = await fetch('https://api.openai.com/v1/embeddings', {
+  const response = await fetch(OPENAI_EMBEDDINGS_URL, {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json',

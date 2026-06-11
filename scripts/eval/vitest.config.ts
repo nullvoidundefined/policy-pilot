@@ -1,3 +1,4 @@
+/** Vitest configuration for scripts/eval standalone test suite. */
 import { defineConfig } from 'vitest/config';
 
 export default defineConfig({
