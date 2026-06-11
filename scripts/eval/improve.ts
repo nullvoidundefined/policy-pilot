@@ -236,11 +236,12 @@ export async function runImprovementLoop(): Promise<void> {
         currentPrompt,
       );
       if (bestMean > currentMean) {
+        const prevTopK = currentTopK;
         currentTopK = bestTopK;
         currentMean = bestMean;
         changeLog.push({
           round,
-          change: `topK ${currentTopK}->${bestTopK}`,
+          change: `topK ${prevTopK}->${bestTopK}`,
           scoreDelta: bestMean - prevMean,
         });
       } else {
