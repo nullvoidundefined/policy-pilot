@@ -13,6 +13,11 @@ const PROCESSING_TIMEOUT_MS = 120_000;
 test('upload a policy document and receive a cited answer', async ({
   page,
 }) => {
+  test.skip(
+    !process.env.R2_ACCESS_KEY_ID,
+    'Requires live external services (R2, OpenAI, Anthropic); run against staging, not CI',
+  );
+
   // Login
   await page.goto('/login');
   await page.fill('input[type="email"]', TEST_EMAIL);
