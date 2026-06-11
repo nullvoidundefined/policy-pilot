@@ -45,6 +45,7 @@ test('upload a policy document and receive a cited answer', async ({
     collection: { id: string };
   };
   const collectionId = collection.id;
+  expect(collectionId).toBeTruthy();
 
   // Navigate to the collection page and upload the policy document
   await page.goto(`/collections/${collectionId}`);

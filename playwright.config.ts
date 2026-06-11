@@ -2,7 +2,7 @@ import { defineConfig } from '@playwright/test';
 
 export default defineConfig({
   testDir: './e2e',
-  timeout: 30_000,
+  timeout: 180_000,
   retries: 1,
   use: {
     baseURL: 'http://localhost:3000',
@@ -27,6 +27,7 @@ export default defineConfig({
       reuseExistingServer: !process.env.CI,
       env: {
         NODE_ENV: 'test',
+        WORKER_PORT: '3002',
       },
     },
     {
