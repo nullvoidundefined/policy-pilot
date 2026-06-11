@@ -20,6 +20,9 @@ importers:
       '@trivago/prettier-plugin-sort-imports':
         specifier: ^5.2.2
         version: 5.2.2(prettier@3.8.1)
+      '@types/pg':
+        specifier: ^8.16.0
+        version: 8.20.0
       '@typescript-eslint/parser':
         specifier: ^8.56.1
         version: 8.57.2(eslint@9.39.4)(typescript@5.9.3)
