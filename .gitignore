@@ -14,3 +14,8 @@ playwright-report/
 # Claude Code local settings
 .claude/*
 .DS_Store
+
+# eval fixtures (generated outputs -- golden.json is committed, outputs are not)
+scripts/eval/fixtures/results-latest.json
+scripts/eval/fixtures/scores-latest.json
+scripts/eval/fixtures/recommendations.json
