@@ -1,4 +1,5 @@
 import { app } from 'app/app.js';
+import pool from 'app/db/pool/pool.js';
 import type { Server } from 'http';
 import request from 'supertest';
 import { afterAll, beforeAll, describe, expect, it } from 'vitest';
@@ -36,6 +37,7 @@ describe('GET /collections/:id/documents', () => {
         last_name: 'T',
       });
     expect(registerRes.status).toBe(201);
+    const userId = registerRes.body.user.id as string;
 
     const sessionCookie =
       (registerRes.headers['set-cookie'] as unknown as string[])?.find((c) =>
@@ -60,12 +62,27 @@ describe('GET /collections/:id/documents', () => {
     expect(colRes.status).toBe(201);
     const collectionId = colRes.body.collection.id as string;
 
+    await pool.query(
+      `INSERT INTO documents (user_id, filename, r2_key, mime_type, size_bytes, collection_id)
+       VALUES ($1, 'test.txt', 'test/key.txt', 'text/plain', 100, $2)`,
+      [userId, collectionId],
+    );
+
     const docsRes = await request(server)
       .get(`/collections/${collectionId}/documents`)
       .set('Cookie', [colCsrfCookie, sessionCookie].join('; '))
       .set('X-Requested-With', 'XMLHttpRequest');
 
     expect(docsRes.status).toBe(200);
-    expect(Array.isArray(docsRes.body.documents)).toBe(true);
+    expect(docsRes.body.documents).toHaveLength(1);
+    expect(docsRes.body.documents[0].filename).toBe('test.txt');
+  });
+
+  it('returns 401 without authentication', async () => {
+    const res = await request(app)
+      .get('/collections/00000000-0000-0000-0000-000000000000/documents')
+      .set('X-Requested-With', 'XMLHttpRequest')
+      .expect(401);
+    expect(res.status).toBe(401);
   });
 });

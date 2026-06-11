@@ -9,6 +9,7 @@ export default defineConfig({
     include: ['src/__integration__/**/*.test.ts'],
     testTimeout: 30_000,
     hookTimeout: 30_000,
+    fileParallelism: false,
     setupFiles: ['src/__integration__/setup.ts'],
     env: {
       // Disable Redis in integration tests

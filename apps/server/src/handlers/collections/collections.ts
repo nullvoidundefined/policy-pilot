@@ -1,4 +1,5 @@
 import * as collectionsRepo from 'app/repositories/collections/collections.js';
+import * as docsRepo from 'app/repositories/documents/documents.js';
 import { ApiError } from 'app/utils/ApiError.js';
 import type { Request, Response } from 'express';
 
@@ -55,6 +56,25 @@ export async function getCollection(
 
   const document_count = await collectionsRepo.getCollectionDocumentCount(id);
   res.json({ collection: { ...collection, document_count } });
+}
+
+export async function listCollectionDocuments(
+  req: Request,
+  res: Response,
+): Promise<void> {
+  const user = req.user!;
+  const collectionId = req.params.id;
+
+  const collection = await collectionsRepo.getCollectionById(
+    collectionId,
+    user.id,
+  );
+  if (!collection) {
+    throw ApiError.notFound('Collection not found');
+  }
+
+  const documents = await docsRepo.listDocuments(user.id, collectionId);
+  res.json({ documents });
 }
 
 export async function deleteCollection(
