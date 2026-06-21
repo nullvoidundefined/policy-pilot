@@ -22,17 +22,27 @@
 
 ## Unit sequence
 
-| Order | Unit                         | Repo         | Plan file                                                    | Status   |
-| ----- | ---------------------------- | ------------ | ------------------------------------------------------------ | -------- |
-| 1     | Track B: rules re-derivation | `~/.claude`  | this file, section "Track B"                                 | Detailed |
-| 2     | A1: package split + rescope  | policy-pilot | `2026-06-21-trackA1-package-split.md` (written when reached) | Pending  |
-| 3     | A2: shared clients de-dup    | policy-pilot | `2026-06-21-trackA2-shared-clients.md`                       | Pending  |
-| 4     | A3: server internals         | policy-pilot | `2026-06-21-trackA3-server-internals.md`                     | Pending  |
-| 5     | A4: worker internals         | policy-pilot | `2026-06-21-trackA4-worker-internals.md`                     | Pending  |
-| 6     | A5: web client + tests       | policy-pilot | `2026-06-21-trackA5-web-client.md`                           | Pending  |
-| 7     | A6: enforcement + sweep      | policy-pilot | `2026-06-21-trackA6-enforcement.md`                          | Pending  |
+| Order | Unit                          | Repo         | Plan file                                                    | Status                     |
+| ----- | ----------------------------- | ------------ | ------------------------------------------------------------ | -------------------------- |
+| 1     | Track B: rules re-derivation  | `~/.claude`  | this file, section "Track B"                                 | Committed, pending push/PR |
+| 2     | A1: package split + rescope   | policy-pilot | `2026-06-21-trackA1-package-split.md` (written when reached) | Pending                    |
+| 3     | A2: shared clients de-dup     | policy-pilot | `2026-06-21-trackA2-shared-clients.md`                       | Pending                    |
+| 4     | A3: server internals          | policy-pilot | `2026-06-21-trackA3-server-internals.md`                     | Pending                    |
+| 5     | A4: worker internals          | policy-pilot | `2026-06-21-trackA4-worker-internals.md`                     | Pending                    |
+| 6     | A5: web client + tests        | policy-pilot | `2026-06-21-trackA5-web-client.md`                           | Pending                    |
+| 7     | A6: enforcement + sweep       | policy-pilot | `2026-06-21-trackA6-enforcement.md`                          | Pending                    |
+| 8     | Track C: Doppelscript cleanup | doppelscript | `2026-06-21-trackC-doppelscript.md`                          | Pending (scope expansion)  |
+| 9     | Track D: Voyager cleanup      | voyager      | `2026-06-21-trackD-voyager.md`                               | Pending (scope expansion)  |
 
-A3/A4/A5 are path-disjoint and order-independent among themselves.
+A3/A4/A5 are path-disjoint and order-independent among themselves. Tracks C and D are independent repos and can proceed in parallel with the A-phases once the rules (Track B) are final.
+
+## Locked decisions (2026-06-21/22)
+
+- **errors/ + resilience/:** sanctioned as domain-named top-level dirs (R-238 amended). policy-pilot `ApiError` lands in `errors/` in A3.
+- **R-235 client pattern:** held strict. Factory, singleton, and each lifecycle function get separate files. Applies to policy-pilot AND forces client splits in Doppelscript and Voyager (Tracks C/D).
+- **Reference cleanup:** folded in. Doppelscript (Track C) and Voyager (Track D) are refactored to full compliance so the rules describe all three repos.
+- **Track C scope (Doppelscript):** finish the abandoned `teardown-lib-utils` work, remove 4 single-file folders (R-223), rename `features/document-type/` to camelCase (R-237), regroup `repositories/` (34), `routes/` (24), `handlers/` (22) under the R-241 threshold, split client singletons (R-235).
+- **Track D scope (Voyager):** split `handlers/chat/helpers.ts` (8 exports) into named files (R-217/R-226), split `clients/redis.ts` (R-235), delete the stale `packages/shared-types/` dir (R-236).
 
 Each A-phase plan is authored just before execution, so it incorporates the finalized rule text from Track B and the resolutions to the spec's section 10 open items.
 
