@@ -22,17 +22,17 @@
 
 ## Unit sequence
 
-| Order | Unit                          | Repo         | Plan file                                                    | Status                     |
-| ----- | ----------------------------- | ------------ | ------------------------------------------------------------ | -------------------------- |
-| 1     | Track B: rules re-derivation  | `~/.claude`  | this file, section "Track B"                                 | Committed, pending push/PR |
-| 2     | A1: package split + rescope   | policy-pilot | `2026-06-21-trackA1-package-split.md` (written when reached) | Pending                    |
-| 3     | A2: shared clients de-dup     | policy-pilot | `2026-06-21-trackA2-shared-clients.md`                       | Pending                    |
-| 4     | A3: server internals          | policy-pilot | `2026-06-21-trackA3-server-internals.md`                     | Pending                    |
-| 5     | A4: worker internals          | policy-pilot | `2026-06-21-trackA4-worker-internals.md`                     | Pending                    |
-| 6     | A5: web client + tests        | policy-pilot | `2026-06-21-trackA5-web-client.md`                           | Pending                    |
-| 7     | A6: enforcement + sweep       | policy-pilot | `2026-06-21-trackA6-enforcement.md`                          | Pending                    |
-| 8     | Track C: Doppelscript cleanup | doppelscript | `2026-06-21-trackC-doppelscript.md`                          | Pending (scope expansion)  |
-| 9     | Track D: Voyager cleanup      | voyager      | `2026-06-21-trackD-voyager.md`                               | Pending (scope expansion)  |
+| Order | Unit                          | Repo         | Plan file                                | Status                     |
+| ----- | ----------------------------- | ------------ | ---------------------------------------- | -------------------------- |
+| 1     | Track B: rules re-derivation  | `~/.claude`  | this file, section "Track B"             | Committed, pending push/PR |
+| 2     | A1: package split + rescope   | policy-pilot | `2026-06-21-trackA1-package-split.md`    | Plan written, pending exec |
+| 3     | A2: shared clients de-dup     | policy-pilot | `2026-06-21-trackA2-shared-clients.md`   | Pending                    |
+| 4     | A3: server internals          | policy-pilot | `2026-06-21-trackA3-server-internals.md` | Pending                    |
+| 5     | A4: worker internals          | policy-pilot | `2026-06-21-trackA4-worker-internals.md` | Pending                    |
+| 6     | A5: web client + tests        | policy-pilot | `2026-06-21-trackA5-web-client.md`       | Pending                    |
+| 7     | A6: enforcement + sweep       | policy-pilot | `2026-06-21-trackA6-enforcement.md`      | Pending                    |
+| 8     | Track C: Doppelscript cleanup | doppelscript | `2026-06-21-trackC-doppelscript.md`      | Pending (scope expansion)  |
+| 9     | Track D: Voyager cleanup      | voyager      | `2026-06-21-trackD-voyager.md`           | Pending (scope expansion)  |
 
 A3/A4/A5 are path-disjoint and order-independent among themselves. Tracks C and D are independent repos and can proceed in parallel with the A-phases once the rules (Track B) are final.
 
