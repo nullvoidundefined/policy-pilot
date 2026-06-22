@@ -145,6 +145,7 @@ describe('streamPost', () => {
     const { streamPost } = await importApi();
 
     const stream = await streamPost('/qa/stream', { question: 'hi' });
+    expect(stream).not.toBeNull();
     const reader = stream!.getReader();
     const { value } = await reader.read();
 
