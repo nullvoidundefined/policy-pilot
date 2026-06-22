@@ -1,4 +1,4 @@
-import type { CitedChunk } from 'policy-pilot-common';
+import type { CitedChunk } from '@repo/types';
 
 export const QA_SYSTEM_PROMPT = `You are a helpful document Q&A assistant. Answer questions based ONLY on the provided context from the user's documents.
 

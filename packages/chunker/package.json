@@ -1,13 +1,11 @@
 {
-  "name": "policy-pilot-common",
+  "name": "@repo/chunker",
   "version": "1.0.0",
   "type": "module",
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
   "exports": {
-    ".": "./dist/index.js",
-    "./types": "./dist/types/index.js",
-    "./chunker": "./dist/chunker/index.js"
+    ".": "./dist/index.js"
   },
   "scripts": {
     "build": "tsc",

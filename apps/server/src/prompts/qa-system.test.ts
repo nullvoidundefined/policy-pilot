@@ -1,4 +1,4 @@
-import type { CitedChunk } from 'policy-pilot-common';
+import type { CitedChunk } from '@repo/types';
 import { describe, expect, it } from 'vitest';
 
 import { QA_SYSTEM_PROMPT, buildContextPrompt } from './qa-system.js';
