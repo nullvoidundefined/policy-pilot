@@ -52,8 +52,8 @@ describe('ProtectedLayout', () => {
     expect(screen.queryByText('Protected content')).not.toBeInTheDocument();
   });
 
-  it('renders the loading placeholder when signed out and still loading', () => {
-    mockUseAuth.mockReturnValue({ user: null, isLoading: true });
+  it('renders the loading placeholder while refetching a known user', () => {
+    mockUseAuth.mockReturnValue({ user: STUB_USER, isLoading: true });
 
     render(
       <ProtectedLayout>
@@ -62,6 +62,7 @@ describe('ProtectedLayout', () => {
     );
 
     expect(screen.getByText(/preparing for takeoff/i)).toBeInTheDocument();
+    expect(screen.queryByText('Protected content')).not.toBeInTheDocument();
   });
 
   it('hides children and redirects to /login when signed out and not loading', async () => {

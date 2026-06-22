@@ -53,9 +53,10 @@ describe('LandingPage', () => {
   it('renders the primary Try the Demo CTA link', () => {
     render(<LandingPage />);
 
-    const demoLinks = screen.getAllByRole('link', { name: /try the demo/i });
-    expect(demoLinks.length).toBeGreaterThan(0);
-    expect(demoLinks[0]).toHaveAttribute('href', '/demo');
+    expect(screen.getByRole('link', { name: /try the demo/i })).toHaveAttribute(
+      'href',
+      '/demo',
+    );
   });
 
   it('renders the Get Started CTA link', () => {
