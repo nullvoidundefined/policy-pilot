@@ -1,5 +1,5 @@
+import { ApiError } from 'app/errors/ApiError.js';
 import * as authRepo from 'app/repositories/auth/auth.js';
-import { ApiError } from 'app/utils/ApiError.js';
 import { beforeEach, describe, expect, it, vi } from 'vitest';
 
 import { login, logout, me, register } from './auth.js';

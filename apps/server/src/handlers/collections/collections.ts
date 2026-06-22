@@ -1,6 +1,6 @@
+import { ApiError } from 'app/errors/ApiError.js';
 import * as collectionsRepo from 'app/repositories/collections/collections.js';
 import * as docsRepo from 'app/repositories/documents/documents.js';
-import { ApiError } from 'app/utils/ApiError.js';
 import type { Request, Response } from 'express';
 
 export async function createCollection(

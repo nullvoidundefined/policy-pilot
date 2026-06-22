@@ -1,8 +1,8 @@
 import * as embeddingClient from '@repo/clients/openai';
+import { ApiError } from 'app/errors/ApiError.js';
 import * as collectionsRepo from 'app/repositories/collections/collections.js';
 import * as convRepo from 'app/repositories/conversations/conversations.js';
 import * as retrievalService from 'app/services/retrieval.service.js';
-import { ApiError } from 'app/utils/ApiError.js';
 import { beforeEach, describe, expect, it, vi } from 'vitest';
 
 import { generateConversationTitle, streamQA } from './qa.js';

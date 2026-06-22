@@ -1,6 +1,6 @@
+import { ApiError } from 'app/errors/ApiError.js';
 import { requireAuth } from 'app/middleware/requireAuth/requireAuth.js';
 import * as convRepo from 'app/repositories/conversations/conversations.js';
-import { ApiError } from 'app/utils/ApiError.js';
 import express from 'express';
 import type { Request, Response } from 'express';
 

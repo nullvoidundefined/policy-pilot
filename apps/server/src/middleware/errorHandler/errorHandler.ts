@@ -1,4 +1,4 @@
-import { ApiError } from 'app/utils/ApiError.js';
+import { ApiError } from 'app/errors/ApiError.js';
 import { logger } from 'app/utils/logs/logger.js';
 import type { NextFunction, Request, Response } from 'express';
 

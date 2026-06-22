@@ -1,4 +1,4 @@
-import { ApiError } from 'app/utils/ApiError.js';
+import { ApiError } from 'app/errors/ApiError.js';
 import express from 'express';
 import request from 'supertest';
 import { beforeEach, describe, expect, it, vi } from 'vitest';
