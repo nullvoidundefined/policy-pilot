@@ -1,7 +1,6 @@
 import type { CitedChunk } from '@repo/types';
+import { buildContextPrompt } from 'app/prompts/buildContextPrompt.js';
 import { describe, expect, it } from 'vitest';
-
-import { buildContextPrompt } from './buildContextPrompt.js';
 
 describe('buildContextPrompt', () => {
   it('formats chunks with numbered citations', () => {

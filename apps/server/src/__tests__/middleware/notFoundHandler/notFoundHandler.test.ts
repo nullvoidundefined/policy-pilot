@@ -1,8 +1,7 @@
+import { notFoundHandler } from 'app/middleware/notFoundHandler/notFoundHandler.js';
 import express from 'express';
 import request from 'supertest';
 import { describe, expect, it } from 'vitest';
-
-import { notFoundHandler } from './notFoundHandler.js';
 
 function createApp() {
   const app = express();

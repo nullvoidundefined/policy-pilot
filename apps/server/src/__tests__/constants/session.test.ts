@@ -1,6 +1,5 @@
+import { SESSION_COOKIE_NAME, SESSION_TTL_MS } from 'app/constants/session.js';
 import { describe, expect, it } from 'vitest';
-
-import { SESSION_COOKIE_NAME, SESSION_TTL_MS } from './session.js';
 
 describe('session constants', () => {
   it('uses "sid" as cookie name', () => {

@@ -1,6 +1,5 @@
+import { QA_SYSTEM_PROMPT } from 'app/prompts/qaSystemPrompt.js';
 import { describe, expect, it } from 'vitest';
-
-import { QA_SYSTEM_PROMPT } from './qaSystemPrompt.js';
 
 describe('QA_SYSTEM_PROMPT', () => {
   it('instructs the model to use only provided context', () => {

@@ -1,11 +1,10 @@
 import * as embeddingClient from '@repo/clients/openai';
 import { ApiError } from 'app/errors/ApiError.js';
+import { streamQA } from 'app/handlers/qa/qa.js';
 import * as collectionsRepo from 'app/repositories/collections/index.js';
 import * as convRepo from 'app/repositories/conversations/index.js';
 import * as retrievalService from 'app/services/searchChunks.js';
 import { beforeEach, describe, expect, it, vi } from 'vitest';
-
-import { streamQA } from './qa.js';
 
 const { mockMessagesCreate, mockMessagesStream } = vi.hoisted(() => ({
   mockMessagesCreate: vi.fn().mockResolvedValue({

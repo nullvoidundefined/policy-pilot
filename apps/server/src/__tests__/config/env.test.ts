@@ -1,6 +1,5 @@
+import { isProduction } from 'app/config/env.js';
 import { afterEach, describe, expect, it } from 'vitest';
-
-import { isProduction } from './env.js';
 
 describe('env config', () => {
   const originalEnv = process.env.NODE_ENV;

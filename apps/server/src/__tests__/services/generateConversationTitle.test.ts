@@ -1,6 +1,5 @@
+import { generateConversationTitle } from 'app/services/generateConversationTitle.js';
 import { beforeEach, describe, expect, it, vi } from 'vitest';
-
-import { generateConversationTitle } from './generateConversationTitle.js';
 
 const { mockMessagesCreate } = vi.hoisted(() => ({
   mockMessagesCreate: vi.fn().mockResolvedValue({

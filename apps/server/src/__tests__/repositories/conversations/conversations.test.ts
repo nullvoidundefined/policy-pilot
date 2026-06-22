@@ -1,5 +1,3 @@
-import { beforeEach, describe, expect, it, vi } from 'vitest';
-
 import {
   createConversation,
   createMessage,
@@ -7,7 +5,8 @@ import {
   getMessages,
   listConversations,
   updateConversationTitle,
-} from './index.js';
+} from 'app/repositories/conversations/index.js';
+import { beforeEach, describe, expect, it, vi } from 'vitest';
 
 const mockQuery = vi.fn();
 

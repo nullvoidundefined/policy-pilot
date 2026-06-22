@@ -1,13 +1,12 @@
-import bcrypt from 'bcrypt';
-import { beforeEach, describe, expect, it, vi } from 'vitest';
-
 import {
   createUser,
   deleteSession,
   findUserByEmail,
   getSessionWithUser,
   verifyPassword,
-} from './index.js';
+} from 'app/repositories/auth/index.js';
+import bcrypt from 'bcrypt';
+import { beforeEach, describe, expect, it, vi } from 'vitest';
 
 const mockQuery = vi.fn();
 const mockWithTransaction = vi.fn();

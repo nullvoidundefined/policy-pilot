@@ -1,9 +1,8 @@
 import { ApiError } from 'app/errors/ApiError.js';
+import { errorHandler } from 'app/middleware/errorHandler/errorHandler.js';
 import express from 'express';
 import request from 'supertest';
 import { beforeEach, describe, expect, it, vi } from 'vitest';
-
-import { errorHandler } from './errorHandler.js';
 
 vi.mock('@repo/logger', () => ({
   logger: {

@@ -1,11 +1,13 @@
 import { errorHandler } from 'app/middleware/errorHandler/errorHandler.js';
+import {
+  loadSession,
+  requireAuth,
+} from 'app/middleware/requireAuth/requireAuth.js';
 import * as authRepo from 'app/repositories/auth/index.js';
 import cookieParser from 'cookie-parser';
 import express from 'express';
 import request from 'supertest';
 import { beforeEach, describe, expect, it, vi } from 'vitest';
-
-import { loadSession, requireAuth } from './requireAuth.js';
 
 vi.mock('app/repositories/auth/index.js', () => ({
   getSessionWithUser: vi.fn(),

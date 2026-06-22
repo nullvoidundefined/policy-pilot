@@ -1,15 +1,14 @@
 import * as r2Client from '@repo/clients/r2';
 import { documentProcessQueue } from 'app/config/queue.js';
 import { ApiError } from 'app/errors/ApiError.js';
-import * as docsRepo from 'app/repositories/documents/index.js';
-import { beforeEach, describe, expect, it, vi } from 'vitest';
-
 import {
   deleteDocument,
   getDocument,
   listDocuments,
   uploadDocument,
-} from './documents.js';
+} from 'app/handlers/documents/documents.js';
+import * as docsRepo from 'app/repositories/documents/index.js';
+import { beforeEach, describe, expect, it, vi } from 'vitest';
 
 vi.mock('app/repositories/documents/index.js', () => ({
   createDocument: vi.fn(),

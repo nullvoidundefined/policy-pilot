@@ -1,6 +1,5 @@
+import { searchChunks } from 'app/services/searchChunks.js';
 import { beforeEach, describe, expect, it, vi } from 'vitest';
-
-import { searchChunks } from './searchChunks.js';
 
 const mockQuery = vi.fn();
 
@@ -18,7 +17,7 @@ vi.mock('@repo/logger', () => ({
   },
 }));
 
-describe('retrieval service', () => {
+describe('searchChunks', () => {
   beforeEach(() => {
     vi.clearAllMocks();
   });

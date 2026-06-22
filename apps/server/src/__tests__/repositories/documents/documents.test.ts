@@ -1,12 +1,11 @@
-import { beforeEach, describe, expect, it, vi } from 'vitest';
-
 import {
   createDocument,
   deleteDocument,
   getDocumentById,
   listDocuments,
   updateDocumentStatus,
-} from './index.js';
+} from 'app/repositories/documents/index.js';
+import { beforeEach, describe, expect, it, vi } from 'vitest';
 
 const mockQuery = vi.fn();
 
