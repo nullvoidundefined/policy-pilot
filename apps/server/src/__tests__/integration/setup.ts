@@ -4,7 +4,7 @@ import { afterAll, beforeAll } from 'vitest';
 
 beforeAll(async () => {
   if (!process.env.DATABASE_URL) {
-    console.warn('DATABASE_URL not set — skipping integration tests');
+    console.warn('DATABASE_URL not set - skipping integration tests');
     return;
   }
 

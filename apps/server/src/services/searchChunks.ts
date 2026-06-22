@@ -1,3 +1,4 @@
+/** Vector similarity search over document chunks, returning cited chunks for the QA prompt. */
 import type { CitedChunk } from '@repo/types';
 import { query } from 'app/database/pool.js';
 

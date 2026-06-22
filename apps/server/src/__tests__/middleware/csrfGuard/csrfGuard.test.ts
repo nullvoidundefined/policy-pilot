@@ -22,7 +22,7 @@ function createApp() {
   app.use(express.json());
   app.use(cookieParser());
 
-  // Token endpoint — placed BEFORE the CSRF middleware
+  // Token endpoint: placed BEFORE the CSRF middleware
   app.get('/api/csrf-token', (req, res) => {
     const token = generateCsrfToken(req, res);
     res.json({ token });

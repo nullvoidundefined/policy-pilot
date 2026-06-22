@@ -5,7 +5,7 @@ import express from 'express';
 
 const collectionRouter = express.Router();
 
-// Public route — no auth required
+// Public route: no auth required
 collectionRouter.get('/demo', async (_req, res) => {
   const collections = await collectionsRepo.getDemoCollections();
   if (collections.length === 0) {
