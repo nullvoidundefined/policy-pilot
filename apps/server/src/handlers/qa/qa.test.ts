@@ -5,7 +5,7 @@ import * as convRepo from 'app/repositories/conversations/index.js';
 import * as retrievalService from 'app/services/retrieval.service.js';
 import { beforeEach, describe, expect, it, vi } from 'vitest';
 
-import { generateConversationTitle, streamQA } from './qa.js';
+import { streamQA } from './qa.js';
 
 const { mockMessagesCreate, mockMessagesStream } = vi.hoisted(() => ({
   mockMessagesCreate: vi.fn().mockResolvedValue({
@@ -14,13 +14,13 @@ const { mockMessagesCreate, mockMessagesStream } = vi.hoisted(() => ({
   mockMessagesStream: vi.fn(),
 }));
 
-vi.mock('@anthropic-ai/sdk', () => ({
-  default: vi.fn().mockImplementation(() => ({
+vi.mock('app/clients/anthropic.js', () => ({
+  anthropic: {
     messages: {
       create: mockMessagesCreate,
       stream: mockMessagesStream,
     },
-  })),
+  },
 }));
 
 vi.mock('app/repositories/conversations/index.js', () => ({
@@ -344,49 +344,6 @@ describe('qa handler', () => {
       const written = res._written.join('');
       expect(written).toContain('"type":"error"');
       expect(res._ended).toBe(true);
-    });
-  });
-
-  describe('generateConversationTitle', () => {
-    it('calls Anthropic with haiku model and returns generated title', async () => {
-      mockMessagesCreate.mockResolvedValueOnce({
-        content: [
-          { type: 'text', text: 'Understanding Machine Learning Basics' },
-        ],
-      });
-
-      const title = await generateConversationTitle(
-        'What is machine learning?',
-      );
-
-      expect(title).toBe('Understanding Machine Learning Basics');
-      expect(mockMessagesCreate).toHaveBeenCalledWith(
-        expect.objectContaining({
-          model: 'claude-haiku-4-5-20251001',
-          max_tokens: 30,
-        }),
-      );
-    });
-
-    it('falls back to truncated question when API call fails', async () => {
-      mockMessagesCreate.mockRejectedValueOnce(new Error('API rate limit'));
-
-      const title = await generateConversationTitle(
-        'What is the meaning of life?',
-      );
-
-      expect(title).toBe('What is the meaning of life?');
-    });
-
-    it('falls back to truncated question when response has no text', async () => {
-      mockMessagesCreate.mockResolvedValueOnce({
-        content: [{ type: 'text', text: '' }],
-      });
-
-      const longQuestion = 'A'.repeat(150);
-      const title = await generateConversationTitle(longQuestion);
-
-      expect(title).toBe(longQuestion.slice(0, 100));
     });
   });
 
