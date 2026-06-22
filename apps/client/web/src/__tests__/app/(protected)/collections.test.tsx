@@ -119,9 +119,29 @@ const DOCUMENT_REJECTED = {
   created_at: '2024-01-18T00:00:00Z',
 };
 
+type TestCollection = {
+  id: string;
+  name: string;
+  description: string | null;
+  is_demo: boolean;
+  created_at: string;
+};
+
+type TestDocument = {
+  id: string;
+  filename: string;
+  mime_type: string;
+  size_bytes: number;
+  status: string;
+  total_chunks: number | null;
+  error: string | null;
+  rejection_reason: string | null;
+  created_at: string;
+};
+
 function setupCollectionAndDocs(
-  collection = COLLECTION_DETAIL,
-  documents: (typeof DOCUMENT_READY)[] = [],
+  collection: TestCollection = COLLECTION_DETAIL,
+  documents: TestDocument[] = [],
 ) {
   mockGet.mockImplementation((path: string) => {
     if (path === `/collections/col-1`) return Promise.resolve({ collection });
