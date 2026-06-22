@@ -13,6 +13,7 @@
     "lint:fix": "eslint --config ../../eslint.config.js . --fix",
     "format": "prettier --config ../../prettier.config.mjs --write .",
     "format:check": "prettier --config ../../prettier.config.mjs --check .",
+    "test": "vitest run",
     "test:integration": "vitest run --config vitest.integration.config.ts"
   },
   "dependencies": {

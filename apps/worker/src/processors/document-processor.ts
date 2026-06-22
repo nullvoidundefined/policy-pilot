@@ -4,7 +4,7 @@ import { generateEmbeddings } from '@repo/clients/openai';
 import { downloadFile } from '@repo/clients/r2';
 import type { DocumentProcessJob } from '@repo/types';
 import { query } from 'app/database/pool.js';
-import * as textExtractor from 'app/services/text-extractor.service.js';
+import { extractText } from 'app/services/extractText.js';
 import { logger } from 'app/utils/logger.js';
 import type { Job } from 'bullmq';
 
@@ -47,7 +47,7 @@ export async function processDocument(
     // 2. Extract text
     log.info('Extracting text');
     await updateStatus(documentId, 'chunking');
-    const text = await textExtractor.extractText(fileBuffer, mimeType);
+    const text = await extractText(fileBuffer, mimeType);
 
     if (text.trim().length === 0) {
       await updateStatus(documentId, 'failed', {
