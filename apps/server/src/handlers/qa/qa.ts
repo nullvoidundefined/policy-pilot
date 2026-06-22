@@ -7,7 +7,7 @@ import { QA_SYSTEM_PROMPT, buildContextPrompt } from 'app/prompts/qa-system.js';
 import * as collectionsRepo from 'app/repositories/collections/index.js';
 import * as convRepo from 'app/repositories/conversations/index.js';
 import { generateConversationTitle } from 'app/services/generateConversationTitle.js';
-import * as retrievalService from 'app/services/retrieval.service.js';
+import { searchChunks } from 'app/services/searchChunks.js';
 import type { Request, Response } from 'express';
 
 const QA_MODEL = 'claude-sonnet-4-20250514';
@@ -87,7 +87,7 @@ export async function streamQA(req: Request, res: Response): Promise<void> {
     }
     const searchUserId = isDemoCollection ? null : (user?.id ?? null);
 
-    const chunks = await retrievalService.searchChunks(
+    const chunks = await searchChunks(
       questionEmbedding,
       searchUserId,
       6,
