@@ -47,8 +47,8 @@ jobs:
 
       - run: pnpm install --frozen-lockfile
 
-      - name: Build common package
-        run: pnpm --filter policy-pilot-common build
+      - name: Build shared packages
+        run: pnpm --filter @repo/types build && pnpm --filter @repo/chunker build
 
       - name: Lint
         run: pnpm lint

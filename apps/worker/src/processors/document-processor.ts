@@ -1,12 +1,12 @@
 import Anthropic from '@anthropic-ai/sdk';
+import { chunkText } from '@repo/chunker';
+import type { DocumentProcessJob } from '@repo/types';
 import { query } from 'app/db/pool.js';
 import * as embeddingService from 'app/services/embedding.service.js';
 import * as r2Service from 'app/services/r2.service.js';
 import * as textExtractor from 'app/services/text-extractor.service.js';
 import { logger } from 'app/utils/logger.js';
 import type { Job } from 'bullmq';
-import { chunkText } from 'policy-pilot-common/chunker';
-import type { DocumentProcessJob } from 'policy-pilot-common/types';
 
 const anthropic = new Anthropic({
   apiKey: process.env.ANTHROPIC_API_KEY,

@@ -159,6 +159,9 @@ importers:
       '@aws-sdk/s3-request-presigner':
         specifier: ^3.800.0
         version: 3.1018.0
+      '@repo/types':
+        specifier: workspace:*
+        version: link:../../packages/types
       bcrypt:
         specifier: ^6.0.0
         version: 6.0.0
@@ -204,9 +207,6 @@ importers:
       pino-http:
         specifier: ^11.0.0
         version: 11.0.0
-      policy-pilot-common:
-        specifier: workspace:*
-        version: link:../../packages/common
       zod:
         specifier: ^4.3.6
         version: 4.3.6
@@ -289,6 +289,12 @@ importers:
       '@aws-sdk/client-s3':
         specifier: ^3.800.0
         version: 3.1018.0
+      '@repo/chunker':
+        specifier: workspace:*
+        version: link:../../packages/chunker
+      '@repo/types':
+        specifier: workspace:*
+        version: link:../../packages/types
       bullmq:
         specifier: ^5.52.0
         version: 5.71.1
@@ -310,9 +316,6 @@ importers:
       pino:
         specifier: ^10.3.1
         version: 10.3.1
-      policy-pilot-common:
-        specifier: workspace:*
-        version: link:../../packages/common
     devDependencies:
       '@trivago/prettier-plugin-sort-imports':
         specifier: ^5.2.2
@@ -363,7 +366,7 @@ importers:
         specifier: ^3.2.4
         version: 3.2.4(@types/debug@4.1.13)(@types/node@25.5.0)(sass@1.98.0)(tsx@4.21.0)
 
-  packages/common:
+  packages/chunker:
     devDependencies:
       '@trivago/prettier-plugin-sort-imports':
         specifier: ^5.2.2
@@ -398,6 +401,39 @@ importers:
       vitest:
         specifier: ^3.2.4
         version: 3.2.4(@types/debug@4.1.13)(@types/node@25.5.0)(sass@1.98.0)(tsx@4.21.0)
+
+  packages/types:
+    devDependencies:
+      '@trivago/prettier-plugin-sort-imports':
+        specifier: ^5.2.2
+        version: 5.2.2(prettier@3.8.1)
+      '@typescript-eslint/parser':
+        specifier: ^8.56.1
+        version: 8.57.2(eslint@9.39.4)(typescript@5.9.3)
+      eslint:
+        specifier: ^9.39.3
+        version: 9.39.4
+      eslint-config-prettier:
+        specifier: ^10.1.8
+        version: 10.1.8(eslint@9.39.4)
+      eslint-plugin-security:
+        specifier: ^3.0.0
+        version: 3.0.1
+      eslint-plugin-unused-imports:
+        specifier: ^4.1.4
+        version: 4.4.1(@typescript-eslint/eslint-plugin@8.57.2(@typescript-eslint/parser@8.57.2(eslint@9.39.4)(typescript@5.9.3))(eslint@9.39.4)(typescript@5.9.3))(eslint@9.39.4)
+      globals:
+        specifier: ^17.3.0
+        version: 17.4.0
+      prettier:
+        specifier: ^3.8.1
+        version: 3.8.1
+      typescript:
+        specifier: ^5.9.3
+        version: 5.9.3
+      typescript-eslint:
+        specifier: ^8.56.1
+        version: 8.57.2(eslint@9.39.4)(typescript@5.9.3)
 
 packages:
 

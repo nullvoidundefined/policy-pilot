@@ -1,4 +1,5 @@
 /** Integration test for the document processing pipeline. Real DB, mocked R2/embeddings/Anthropic. */
+import type { DocumentProcessJob } from '@repo/types';
 import pool from 'app/db/pool.js';
 import { processDocument } from 'app/processors/document-processor.js';
 import * as embeddingService from 'app/services/embedding.service.js';
@@ -6,7 +7,6 @@ import * as r2Service from 'app/services/r2.service.js';
 import type { Job } from 'bullmq';
 import { readFileSync } from 'fs';
 import path from 'path';
-import type { DocumentProcessJob } from 'policy-pilot-common';
 import { fileURLToPath } from 'url';
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 

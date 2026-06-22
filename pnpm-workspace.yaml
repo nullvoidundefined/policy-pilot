@@ -2,4 +2,5 @@ packages:
   - 'apps/server'
   - 'apps/worker'
   - 'apps/client/web'
-  - 'packages/common'
+  - 'packages/types'
+  - 'packages/chunker'
