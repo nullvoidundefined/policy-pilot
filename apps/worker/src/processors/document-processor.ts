@@ -1,16 +1,12 @@
-import Anthropic from '@anthropic-ai/sdk';
 import { chunkText } from '@repo/chunker';
 import { generateEmbeddings } from '@repo/clients/openai';
 import { downloadFile } from '@repo/clients/r2';
 import type { DocumentProcessJob } from '@repo/types';
 import { query } from 'app/database/pool.js';
+import { checkDocumentRelevance } from 'app/services/checkDocumentRelevance.js';
 import { extractText } from 'app/services/extractText.js';
 import { logger } from 'app/utils/logger.js';
 import type { Job } from 'bullmq';
-
-const anthropic = new Anthropic({
-  apiKey: process.env.ANTHROPIC_API_KEY,
-});
 
 async function updateStatus(
   documentId: string,
@@ -58,50 +54,21 @@ export async function processDocument(
 
     // 2b. Relevance check
     log.info('Running relevance check');
-    const preview = text.slice(0, 2000);
-    try {
-      const relevanceResponse = await anthropic.messages.create({
-        model: 'claude-haiku-4-5-20251001',
-        max_tokens: 100,
-        messages: [
-          {
-            role: 'user',
-            content: `Classify this document. Is it an employee policy document, company handbook, HR document, compliance manual, or standard operating procedure? Respond with JSON only: {"score": 0.0-1.0, "reason": "brief explanation"}\n\nDocument preview:\n${preview}`,
-          },
-        ],
+    const relevance = await checkDocumentRelevance(text, log);
+    if (!relevance.isRelevant) {
+      log.info(
+        { relevanceScore: relevance.score, relevanceReason: relevance.reason },
+        'Document rejected as not policy-related',
+      );
+      await updateStatus(documentId, 'rejected', {
+        error: `This doesn't appear to be a policy document: ${relevance.reason}`,
       });
-
-      const relevanceText =
-        relevanceResponse.content[0]?.type === 'text'
-          ? relevanceResponse.content[0].text
-          : '';
-
-      let relevanceScore = 1;
-      let relevanceReason = '';
-      try {
-        const parsed = JSON.parse(relevanceText);
-        relevanceScore = typeof parsed.score === 'number' ? parsed.score : 1;
-        relevanceReason =
-          typeof parsed.reason === 'string' ? parsed.reason : '';
-      } catch {
-        log.warn('Could not parse relevance response, proceeding anyway');
-      }
-
-      if (relevanceScore < 0.5) {
-        log.info(
-          { relevanceScore, relevanceReason },
-          'Document rejected as not policy-related',
-        );
-        await updateStatus(documentId, 'rejected', {
-          error: `This doesn't appear to be a policy document: ${relevanceReason}`,
-        });
-        return;
-      }
-
-      log.info({ relevanceScore }, 'Document passed relevance check');
-    } catch (err) {
-      log.warn({ err }, 'Relevance check failed, proceeding with processing');
+      return;
     }
+    log.info(
+      { relevanceScore: relevance.score },
+      'Document passed relevance check',
+    );
 
     // 3. Chunk text
     log.info({ textLength: text.length }, 'Chunking text');
