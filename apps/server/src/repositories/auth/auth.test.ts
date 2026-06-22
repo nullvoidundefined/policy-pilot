@@ -7,7 +7,7 @@ import {
   findUserByEmail,
   getSessionWithUser,
   verifyPassword,
-} from './auth.js';
+} from './index.js';
 
 const mockQuery = vi.fn();
 const mockWithTransaction = vi.fn();

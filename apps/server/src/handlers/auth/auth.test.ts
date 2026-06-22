@@ -1,10 +1,10 @@
 import { ApiError } from 'app/errors/ApiError.js';
-import * as authRepo from 'app/repositories/auth/auth.js';
+import * as authRepo from 'app/repositories/auth/index.js';
 import { beforeEach, describe, expect, it, vi } from 'vitest';
 
 import { login, logout, me, register } from './auth.js';
 
-vi.mock('app/repositories/auth/auth.js', () => ({
+vi.mock('app/repositories/auth/index.js', () => ({
   createUserAndSession: vi.fn(),
   findUserByEmail: vi.fn(),
   verifyPassword: vi.fn(),

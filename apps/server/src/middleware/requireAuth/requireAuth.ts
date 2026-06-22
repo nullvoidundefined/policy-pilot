@@ -1,6 +1,6 @@
 import { SESSION_COOKIE_NAME } from 'app/constants/session.js';
 import { ApiError } from 'app/errors/ApiError.js';
-import * as authRepo from 'app/repositories/auth/auth.js';
+import * as authRepo from 'app/repositories/auth/index.js';
 import type { NextFunction, Request, Response } from 'express';
 
 export async function loadSession(
