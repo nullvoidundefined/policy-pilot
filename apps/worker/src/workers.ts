@@ -1,5 +1,5 @@
 import type { DocumentProcessJob } from '@repo/types';
-import { processDocument } from 'app/processors/document-processor.js';
+import { processDocument } from 'app/processors/processDocument.js';
 import { logger } from 'app/utils/logger.js';
 import { Worker } from 'bullmq';
 import IORedis from 'ioredis';

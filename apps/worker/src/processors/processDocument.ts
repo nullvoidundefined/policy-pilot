@@ -1,14 +1,16 @@
-/** Orchestrates the full document processing pipeline: download, extract, chunk, embed, and store. */
+/** BullMQ job orchestrator for the document RAG pipeline: download, extract, relevance-check, chunk, embed, store, sequencing the worker's atomic services and repositories (R-227). */
 import { chunkText } from '@repo/chunker';
 import { generateEmbeddings } from '@repo/clients/openai';
 import { downloadFile } from '@repo/clients/r2';
+import { logger } from '@repo/logger';
 import type { DocumentProcessJob } from '@repo/types';
 import { insertChunk } from 'app/repositories/chunks.js';
 import { updateDocumentStatus } from 'app/repositories/documents.js';
 import { checkDocumentRelevance } from 'app/services/checkDocumentRelevance.js';
 import { extractText } from 'app/services/extractText.js';
-import { logger } from 'app/utils/logger.js';
 import type { Job } from 'bullmq';
+
+const NO_TEXT_ERROR = 'No text content found in document';
 
 export async function processDocument(
   job: Job<DocumentProcessJob>,
@@ -28,7 +30,7 @@ export async function processDocument(
 
     if (text.trim().length === 0) {
       await updateDocumentStatus(documentId, 'failed', {
-        error: 'No text content found in document',
+        error: NO_TEXT_ERROR,
       });
       return;
     }
