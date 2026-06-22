@@ -11,7 +11,11 @@ function jsonResponse(body: unknown, status = 200): Response {
 
 async function importApi() {
   vi.resetModules();
-  return import('@/lib/api');
+  const [request, errors] = await Promise.all([
+    import('@/api/request'),
+    import('@/errors/ApiError'),
+  ]);
+  return { ...request, ApiError: errors.ApiError };
 }
 
 beforeEach(() => {

@@ -2,7 +2,8 @@
 
 import { createContext, useCallback, useContext, useMemo } from 'react';
 
-import { ApiError, get, post } from '@/lib/api';
+import { get, post } from '@/api/request';
+import { ApiError } from '@/errors/ApiError';
 import { useQuery, useQueryClient } from '@tanstack/react-query';
 
 export interface User {
