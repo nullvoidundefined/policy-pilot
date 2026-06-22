@@ -7,7 +7,7 @@ import { createCollection } from '@/api/createCollection';
 import { deleteCollection } from '@/api/deleteCollection';
 import { getCollections } from '@/api/getCollections';
 import Captain from '@/components/Captain/Captain';
-import { useAuth } from '@/context/AuthContext';
+import { useAuth } from '@/state/AuthContext';
 import { useQuery, useQueryClient } from '@tanstack/react-query';
 import Link from 'next/link';
 
