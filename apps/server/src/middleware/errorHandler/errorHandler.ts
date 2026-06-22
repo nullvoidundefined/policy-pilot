@@ -1,5 +1,5 @@
-import { ApiError } from 'app/utils/ApiError.js';
-import { logger } from 'app/utils/logs/logger.js';
+import { logger } from '@repo/logger';
+import { ApiError } from 'app/errors/ApiError.js';
 import type { NextFunction, Request, Response } from 'express';
 
 interface HttpError extends Error {

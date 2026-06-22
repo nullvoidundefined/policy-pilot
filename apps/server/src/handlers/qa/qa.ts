@@ -1,41 +1,18 @@
-import Anthropic from '@anthropic-ai/sdk';
+/** SSE handler for the Q&A endpoint: embeds the user question, retrieves relevant chunks via vector search, streams a grounded Anthropic completion, and persists the resulting conversation message. */
 import { generateEmbedding } from '@repo/clients/openai';
-import { QA_SYSTEM_PROMPT, buildContextPrompt } from 'app/prompts/qa-system.js';
-import * as collectionsRepo from 'app/repositories/collections/collections.js';
-import * as convRepo from 'app/repositories/conversations/conversations.js';
-import * as retrievalService from 'app/services/retrieval.service.js';
-import { ApiError } from 'app/utils/ApiError.js';
-import { logger } from 'app/utils/logs/logger.js';
+import { logger } from '@repo/logger';
+import { anthropic } from 'app/clients/anthropic.js';
+import { ApiError } from 'app/errors/ApiError.js';
+import { buildContextPrompt } from 'app/prompts/buildContextPrompt.js';
+import { QA_SYSTEM_PROMPT } from 'app/prompts/qaSystemPrompt.js';
+import * as collectionsRepo from 'app/repositories/collections/index.js';
+import * as convRepo from 'app/repositories/conversations/index.js';
+import { generateConversationTitle } from 'app/services/generateConversationTitle.js';
+import { searchChunks } from 'app/services/searchChunks.js';
 import type { Request, Response } from 'express';
 
-const anthropic = new Anthropic({
-  apiKey: process.env.ANTHROPIC_API_KEY,
-});
-
-export async function generateConversationTitle(
-  question: string,
-): Promise<string> {
-  try {
-    const response = await anthropic.messages.create({
-      model: 'claude-haiku-4-5-20251001',
-      max_tokens: 30,
-      messages: [
-        {
-          role: 'user',
-          content: `Generate a 3-6 word title for a conversation that started with this question: ${question}. Reply with just the title, no quotes.`,
-        },
-      ],
-    });
-    const block = response.content[0];
-    if (block?.type === 'text' && block.text.trim().length > 0) {
-      return block.text.trim();
-    }
-    return question.slice(0, 100);
-  } catch (err) {
-    logger.warn({ err }, 'Title generation failed, using fallback');
-    return question.slice(0, 100);
-  }
-}
+const QA_MODEL = 'claude-sonnet-4-20250514';
+const QA_MAX_TOKENS = 2048;
 
 export async function streamQA(req: Request, res: Response): Promise<void> {
   const user = req.user;
@@ -45,7 +22,7 @@ export async function streamQA(req: Request, res: Response): Promise<void> {
     collection_id?: string;
   };
 
-  // Pre-stream validation — throw ApiError (handled by global error handler)
+  // Pre-stream validation (handled by global error handler)
   if (
     !question ||
     typeof question !== 'string' ||
@@ -97,7 +74,6 @@ export async function streamQA(req: Request, res: Response): Promise<void> {
     const questionEmbedding = await generateEmbedding(question);
 
     // 4. Vector similarity search
-    // For demo collections, don't filter by user_id (demo chunks belong to sentinel user)
     // For demo collections, skip user_id filter (demo chunks belong to sentinel user)
     let isDemoCollection = false;
     if (user) {
@@ -112,7 +88,7 @@ export async function streamQA(req: Request, res: Response): Promise<void> {
     }
     const searchUserId = isDemoCollection ? null : (user?.id ?? null);
 
-    const chunks = await retrievalService.searchChunks(
+    const chunks = await searchChunks(
       questionEmbedding,
       searchUserId,
       6,
@@ -153,8 +129,8 @@ export async function streamQA(req: Request, res: Response): Promise<void> {
 
     const stream = anthropic.messages.stream(
       {
-        model: 'claude-sonnet-4-20250514',
-        max_tokens: 2048,
+        model: QA_MODEL,
+        max_tokens: QA_MAX_TOKENS,
         system: QA_SYSTEM_PROMPT,
         messages: [{ role: 'user', content: contextPrompt }],
       },
