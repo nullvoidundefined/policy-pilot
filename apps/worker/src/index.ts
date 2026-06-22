@@ -1,3 +1,4 @@
 import 'dotenv/config';
 
-await import('app/workers.js');
+const { startWorker } = await import('app/workers/startWorker.js');
+startWorker();
