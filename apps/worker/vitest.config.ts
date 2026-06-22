@@ -1,4 +1,4 @@
-/** Vitest configuration for worker integration tests. */
+/** Vitest configuration for worker unit tests (excludes the live-DB integration suite). */
 import path from 'path';
 import { fileURLToPath } from 'url';
 import { defineConfig } from 'vitest/config';
@@ -14,9 +14,7 @@ export default defineConfig({
   test: {
     globals: true,
     environment: 'node',
-    include: ['src/__tests__/integration/**/*.test.ts'],
-    testTimeout: 30_000,
-    setupFiles: ['src/__tests__/integration/setup.ts'],
-    fileParallelism: false,
+    include: ['src/__tests__/**/*.test.ts'],
+    exclude: ['src/__tests__/integration/**'],
   },
 });

@@ -9,10 +9,10 @@ import { fileURLToPath } from 'url';
 import { afterAll, beforeAll } from 'vitest';
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
-config({ path: path.resolve(__dirname, '../../../../apps/server/.env') });
+config({ path: path.resolve(__dirname, '../../../../../apps/server/.env') });
 
 // Dynamic import runs after config() so DATABASE_URL is set before the pool constructor fires.
-const { default: pool } = await import('app/db/pool.js');
+const { default: pool } = await import('app/database/pool.js');
 
 const CLEANUP = [
   "DELETE FROM chunks WHERE document_id IN (SELECT id FROM documents WHERE user_id IN (SELECT id FROM users WHERE email LIKE '%@integration-test.invalid'))",

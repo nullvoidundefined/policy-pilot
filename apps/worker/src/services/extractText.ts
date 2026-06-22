@@ -1,3 +1,4 @@
+/** Extracts plain text from an uploaded document buffer, dispatching by MIME type (PDF, DOCX, HTML, plain text, markdown). */
 import mammoth from 'mammoth';
 import pdf from 'pdf-parse';
 

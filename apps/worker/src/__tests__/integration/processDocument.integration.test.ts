@@ -2,8 +2,8 @@
 import * as embeddingClient from '@repo/clients/openai';
 import * as r2Client from '@repo/clients/r2';
 import type { DocumentProcessJob } from '@repo/types';
-import pool from 'app/db/pool.js';
-import { processDocument } from 'app/processors/document-processor.js';
+import pool from 'app/database/pool.js';
+import { processDocument } from 'app/processors/processDocument.js';
 import type { Job } from 'bullmq';
 import { readFileSync } from 'fs';
 import path from 'path';
@@ -12,7 +12,7 @@ import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 
-const POLICY_FIXTURE = path.resolve(__dirname, 'fixtures/policy.txt');
+const POLICY_FIXTURE = path.resolve(__dirname, '../../__fixtures__/policy.txt');
 const EMBEDDING_DIM = 1536;
 const TEST_EMAIL = 'worker-processor@integration-test.invalid';
 const TEST_R2_KEY = 'test/worker-integration/policy.txt';
