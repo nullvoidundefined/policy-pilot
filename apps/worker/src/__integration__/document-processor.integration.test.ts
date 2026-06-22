@@ -2,7 +2,7 @@
 import * as embeddingClient from '@repo/clients/openai';
 import * as r2Client from '@repo/clients/r2';
 import type { DocumentProcessJob } from '@repo/types';
-import pool from 'app/db/pool.js';
+import pool from 'app/database/pool.js';
 import { processDocument } from 'app/processors/document-processor.js';
 import type { Job } from 'bullmq';
 import { readFileSync } from 'fs';

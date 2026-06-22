@@ -1,4 +1,4 @@
-import { logger } from 'app/utils/logger.js';
+import { logger } from '@repo/logger';
 import pg from 'pg';
 
 const { Pool } = pg;

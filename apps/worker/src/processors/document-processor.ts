@@ -3,7 +3,7 @@ import { chunkText } from '@repo/chunker';
 import { generateEmbeddings } from '@repo/clients/openai';
 import { downloadFile } from '@repo/clients/r2';
 import type { DocumentProcessJob } from '@repo/types';
-import { query } from 'app/db/pool.js';
+import { query } from 'app/database/pool.js';
 import * as textExtractor from 'app/services/text-extractor.service.js';
 import { logger } from 'app/utils/logger.js';
 import type { Job } from 'bullmq';
