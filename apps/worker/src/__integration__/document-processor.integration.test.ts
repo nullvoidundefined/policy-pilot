@@ -1,9 +1,9 @@
 /** Integration test for the document processing pipeline. Real DB, mocked R2/embeddings/Anthropic. */
+import * as embeddingClient from '@repo/clients/openai';
+import * as r2Client from '@repo/clients/r2';
 import type { DocumentProcessJob } from '@repo/types';
 import pool from 'app/db/pool.js';
 import { processDocument } from 'app/processors/document-processor.js';
-import * as embeddingService from 'app/services/embedding.service.js';
-import * as r2Service from 'app/services/r2.service.js';
 import type { Job } from 'bullmq';
 import { readFileSync } from 'fs';
 import path from 'path';
@@ -17,12 +17,12 @@ const EMBEDDING_DIM = 1536;
 const TEST_EMAIL = 'worker-processor@integration-test.invalid';
 const TEST_R2_KEY = 'test/worker-integration/policy.txt';
 
-vi.mock('app/services/r2.service.js', () => ({
+vi.mock('@repo/clients/r2', () => ({
   downloadFile: vi.fn(),
 }));
 
-vi.mock('app/services/embedding.service.js', () => ({
-  generateEmbeddingsBatch: vi.fn(),
+vi.mock('@repo/clients/openai', () => ({
+  generateEmbeddings: vi.fn(),
 }));
 
 const mockAnthropicCreate = vi.hoisted(() => vi.fn());
@@ -93,10 +93,10 @@ describe('processDocument', () => {
       ],
     });
 
-    vi.mocked(r2Service.downloadFile).mockResolvedValue(
+    vi.mocked(r2Client.downloadFile).mockResolvedValue(
       readFileSync(POLICY_FIXTURE),
     );
-    vi.mocked(embeddingService.generateEmbeddingsBatch).mockImplementation(
+    vi.mocked(embeddingClient.generateEmbeddings).mockImplementation(
       async (texts: string[]) => texts.map(() => Array(EMBEDDING_DIM).fill(0)),
     );
 
@@ -138,8 +138,8 @@ describe('processDocument', () => {
     expect(chunkCount).toBe(docRow.rows[0]!.total_chunks);
   });
 
-  it('calls r2Service.downloadFile with the r2Key', async () => {
-    const downloadSpy = vi.mocked(r2Service.downloadFile);
+  it('calls r2Client.downloadFile with the r2Key', async () => {
+    const downloadSpy = vi.mocked(r2Client.downloadFile);
 
     await processDocument(
       makeJob({
@@ -154,8 +154,8 @@ describe('processDocument', () => {
     expect(downloadSpy).toHaveBeenCalledWith(TEST_R2_KEY);
   });
 
-  it('calls generateEmbeddingsBatch with the chunk texts', async () => {
-    const embedSpy = vi.mocked(embeddingService.generateEmbeddingsBatch);
+  it('calls generateEmbeddings with the chunk texts', async () => {
+    const embedSpy = vi.mocked(embeddingClient.generateEmbeddings);
 
     await processDocument(
       makeJob({
@@ -174,7 +174,7 @@ describe('processDocument', () => {
   });
 
   it('sets status to failed when the document contains no extractable text', async () => {
-    vi.mocked(r2Service.downloadFile).mockResolvedValue(Buffer.from('   '));
+    vi.mocked(r2Client.downloadFile).mockResolvedValue(Buffer.from('   '));
 
     await processDocument(
       makeJob({

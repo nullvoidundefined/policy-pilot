@@ -1,8 +1,8 @@
 import { beforeEach, describe, expect, it, vi } from 'vitest';
 
-import { generateEmbedding, generateEmbeddings } from './embedding.service.js';
+import { generateEmbedding, generateEmbeddings } from '../../openai/index.js';
 
-vi.mock('app/utils/logs/logger.js', () => ({
+vi.mock('@repo/logger', () => ({
   logger: {
     info: vi.fn(),
     error: vi.fn(),
@@ -80,6 +80,47 @@ describe('embedding service', () => {
       await expect(generateEmbeddings(['test'])).rejects.toThrow(
         'Embedding API error (429)',
       );
+    });
+  });
+
+  describe('generateEmbeddings batching', () => {
+    it('splits texts into batches of 100 and concatenates results in order', async () => {
+      const totalTexts = 150;
+      const texts = Array.from({ length: totalTexts }, (_, i) => `text-${i}`);
+
+      let callCount = 0;
+
+      mockFetch.mockImplementation(
+        async (_url: string, options: RequestInit) => {
+          const body = JSON.parse(options.body as string) as {
+            input: string[];
+          };
+          const batchLength = body.input.length;
+          const batchOffset = callCount * 100;
+          callCount += 1;
+          const embeddings = Array.from({ length: batchLength }, (_, j) => ({
+            embedding: [batchOffset + j],
+          }));
+          return {
+            ok: true,
+            json: async () => ({
+              data: embeddings,
+              usage: { prompt_tokens: batchLength, total_tokens: batchLength },
+            }),
+          };
+        },
+      );
+
+      const result = await generateEmbeddings(texts);
+
+      expect(mockFetch).toHaveBeenCalledTimes(2);
+      expect(result).toHaveLength(150);
+      // batch 1: indices 0..99, each embedding is [index]
+      expect(result[0]).toEqual([0]);
+      expect(result[99]).toEqual([99]);
+      // batch 2: indices 100..149, each embedding is [index]
+      expect(result[100]).toEqual([100]);
+      expect(result[149]).toEqual([149]);
     });
   });
 

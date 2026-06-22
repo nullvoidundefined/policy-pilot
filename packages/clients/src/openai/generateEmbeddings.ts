@@ -1,27 +1,29 @@
-import { logger } from 'app/utils/logger.js';
+/** Generates OpenAI embeddings for many texts, batching to respect API limits. */
+import { logger } from '@repo/logger';
 
-const EMBEDDING_MODEL = process.env.EMBEDDING_MODEL ?? 'text-embedding-3-small';
-const EMBEDDING_DIMENSIONS = 1536;
-const BATCH_SIZE = 100;
+import {
+  BATCH_SIZE,
+  EMBEDDING_DIMENSIONS,
+  EMBEDDING_MODEL,
+} from './constants.js';
 
 interface EmbeddingResponse {
   data: Array<{ embedding: number[] }>;
   usage: { prompt_tokens: number; total_tokens: number };
 }
 
-export async function generateEmbeddingsBatch(
-  texts: string[],
-): Promise<number[][]> {
+const EMBEDDINGS_URL = 'https://api.openai.com/v1/embeddings';
+
+export async function generateEmbeddings(texts: string[]): Promise<number[][]> {
   const apiKey = process.env.OPEN_AI_API_KEY;
   if (!apiKey) throw new Error('OPEN_AI_API_KEY is not set');
 
   const allEmbeddings: number[][] = [];
 
-  // Process in batches to avoid API limits
   for (let i = 0; i < texts.length; i += BATCH_SIZE) {
     const batch = texts.slice(i, i + BATCH_SIZE);
 
-    const response = await fetch('https://api.openai.com/v1/embeddings', {
+    const response = await fetch(EMBEDDINGS_URL, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
@@ -54,5 +56,3 @@ export async function generateEmbeddingsBatch(
 
   return allEmbeddings;
 }
-
-export { EMBEDDING_DIMENSIONS };

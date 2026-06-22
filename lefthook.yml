@@ -13,4 +13,4 @@ pre-push:
     lint:
       run: pnpm lint
     build:
-      run: pnpm --filter @repo/types build && pnpm --filter @repo/chunker build && pnpm --filter policy-pilot-server build && pnpm --filter policy-pilot-worker build
+      run: pnpm --filter @repo/types build && pnpm --filter @repo/logger build && pnpm --filter @repo/chunker build && pnpm --filter @repo/clients build && pnpm --filter policy-pilot-server build && pnpm --filter policy-pilot-worker build

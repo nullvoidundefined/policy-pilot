@@ -5,13 +5,17 @@ WORKDIR /app
 COPY package.json pnpm-workspace.yaml pnpm-lock.yaml .npmrc ./
 COPY packages/types/package.json packages/types/
 COPY packages/chunker/package.json packages/chunker/
+COPY packages/logger/package.json packages/logger/
+COPY packages/clients/package.json packages/clients/
 COPY apps/server/package.json apps/server/
 COPY apps/worker/package.json apps/worker/
-RUN pnpm install --frozen-lockfile --filter @repo/types --filter @repo/chunker --filter policy-pilot-worker --ignore-scripts
+RUN pnpm install --frozen-lockfile --filter @repo/types --filter @repo/chunker --filter @repo/logger --filter @repo/clients --filter policy-pilot-worker --ignore-scripts
 
 COPY packages/types/ packages/types/
 COPY packages/chunker/ packages/chunker/
-RUN pnpm --filter @repo/types build && pnpm --filter @repo/chunker build
+COPY packages/logger/ packages/logger/
+COPY packages/clients/ packages/clients/
+RUN pnpm --filter @repo/types build && pnpm --filter @repo/logger build && pnpm --filter @repo/chunker build && pnpm --filter @repo/clients build
 
 COPY apps/worker/ apps/worker/
 RUN pnpm --filter policy-pilot-worker run build
@@ -24,11 +28,15 @@ WORKDIR /app
 COPY package.json pnpm-workspace.yaml pnpm-lock.yaml .npmrc ./
 COPY packages/types/package.json packages/types/
 COPY packages/chunker/package.json packages/chunker/
+COPY packages/logger/package.json packages/logger/
+COPY packages/clients/package.json packages/clients/
 COPY apps/worker/package.json apps/worker/
-RUN pnpm install --frozen-lockfile --filter @repo/types --filter @repo/chunker --filter policy-pilot-worker --prod --ignore-scripts
+RUN pnpm install --frozen-lockfile --filter @repo/types --filter @repo/chunker --filter @repo/logger --filter @repo/clients --filter policy-pilot-worker --prod --ignore-scripts
 
 COPY --from=base /app/packages/types/dist packages/types/dist
 COPY --from=base /app/packages/chunker/dist packages/chunker/dist
+COPY --from=base /app/packages/logger/dist packages/logger/dist
+COPY --from=base /app/packages/clients/dist packages/clients/dist
 COPY --from=base /app/apps/worker/dist apps/worker/dist
 
 ENV NODE_ENV=production

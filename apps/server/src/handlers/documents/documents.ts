@@ -1,7 +1,7 @@
+import { deleteFile, uploadFile } from '@repo/clients/r2';
 import type { DocumentProcessJob } from '@repo/types';
 import { documentProcessQueue } from 'app/config/queue.js';
 import * as docsRepo from 'app/repositories/documents/documents.js';
-import * as r2Service from 'app/services/r2.service.js';
 import { ApiError } from 'app/utils/ApiError.js';
 import { logger } from 'app/utils/logs/logger.js';
 import type { Request, Response } from 'express';
@@ -43,7 +43,7 @@ export async function uploadDocument(
 
   const r2Key = `documents/${user.id}/${crypto.randomUUID()}/${file.originalname}`;
 
-  await r2Service.uploadFile(r2Key, file.buffer, file.mimetype);
+  await uploadFile(r2Key, file.buffer, file.mimetype);
 
   const document = await docsRepo.createDocument(
     user.id,
@@ -119,7 +119,7 @@ export async function deleteDocument(
   }
 
   try {
-    await r2Service.deleteFile(document.r2_key);
+    await deleteFile(document.r2_key);
   } catch (err) {
     logger.warn(
       { err, r2Key: document.r2_key },

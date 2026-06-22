@@ -1,9 +1,9 @@
 import Anthropic from '@anthropic-ai/sdk';
 import { chunkText } from '@repo/chunker';
+import { generateEmbeddings } from '@repo/clients/openai';
+import { downloadFile } from '@repo/clients/r2';
 import type { DocumentProcessJob } from '@repo/types';
 import { query } from 'app/db/pool.js';
-import * as embeddingService from 'app/services/embedding.service.js';
-import * as r2Service from 'app/services/r2.service.js';
 import * as textExtractor from 'app/services/text-extractor.service.js';
 import { logger } from 'app/utils/logger.js';
 import type { Job } from 'bullmq';
@@ -42,7 +42,7 @@ export async function processDocument(
   try {
     // 1. Download from R2
     log.info('Downloading document from R2');
-    const fileBuffer = await r2Service.downloadFile(r2Key);
+    const fileBuffer = await downloadFile(r2Key);
 
     // 2. Extract text
     log.info('Extracting text');
@@ -112,8 +112,7 @@ export async function processDocument(
     log.info('Generating embeddings');
     await updateStatus(documentId, 'embedding');
     const chunkTexts = chunks.map((c) => c.content);
-    const embeddings =
-      await embeddingService.generateEmbeddingsBatch(chunkTexts);
+    const embeddings = await generateEmbeddings(chunkTexts);
 
     // 5. Store chunks + embeddings in pgvector
     log.info('Storing chunks in database');

@@ -1,6 +1,6 @@
+import * as r2Client from '@repo/clients/r2';
 import { documentProcessQueue } from 'app/config/queue.js';
 import * as docsRepo from 'app/repositories/documents/documents.js';
-import * as r2Service from 'app/services/r2.service.js';
 import { ApiError } from 'app/utils/ApiError.js';
 import { beforeEach, describe, expect, it, vi } from 'vitest';
 
@@ -18,7 +18,7 @@ vi.mock('app/repositories/documents/documents.js', () => ({
   deleteDocument: vi.fn(),
 }));
 
-vi.mock('app/services/r2.service.js', () => ({
+vi.mock('@repo/clients/r2', () => ({
   uploadFile: vi.fn(),
   deleteFile: vi.fn(),
 }));
@@ -45,8 +45,9 @@ vi.mock('app/utils/logs/logger.js', () => ({
 }));
 
 const mockDocsRepo = vi.mocked(docsRepo);
-const mockR2 = vi.mocked(r2Service);
 const mockQueue = vi.mocked(documentProcessQueue);
+
+const mockR2 = vi.mocked(r2Client);
 
 function mockReq(overrides: Record<string, unknown> = {}): any {
   return {

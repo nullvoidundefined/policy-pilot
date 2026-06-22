@@ -25,8 +25,8 @@
 | Order | Unit                          | Repo         | Plan file                                | Status                     |
 | ----- | ----------------------------- | ------------ | ---------------------------------------- | -------------------------- |
 | 1     | Track B: rules re-derivation  | `~/.claude`  | this file, section "Track B"             | Committed, pending push/PR |
-| 2     | A1: package split + rescope   | policy-pilot | `2026-06-21-trackA1-package-split.md`    | Plan written, pending exec |
-| 3     | A2: shared clients de-dup     | policy-pilot | `2026-06-21-trackA2-shared-clients.md`   | Pending                    |
+| 2     | A1: package split + rescope   | policy-pilot | `2026-06-21-trackA1-package-split.md`    | Shipped (#15, deployed)    |
+| 3     | A2: shared clients de-dup     | policy-pilot | `2026-06-21-trackA2-shared-clients.md`   | Plan written, pending exec |
 | 4     | A3: server internals          | policy-pilot | `2026-06-21-trackA3-server-internals.md` | Pending                    |
 | 5     | A4: worker internals          | policy-pilot | `2026-06-21-trackA4-worker-internals.md` | Pending                    |
 | 6     | A5: web client + tests        | policy-pilot | `2026-06-21-trackA5-web-client.md`       | Pending                    |
