@@ -39,14 +39,15 @@ export default defineConfig({
         'src/app/**/error.tsx',
         'src/app/**/not-found.tsx',
       ],
-      // Thresholds are locked in Task 9 from the measured run. Lines and
-      // statements target 60 (project minimum); branches/functions floor
-      // at 55. Never lower a threshold to mask a coverage gap (R-200).
+      // Locked from the measured run (stmts 95.4, branch 85.2, funcs 91.3,
+      // lines 95.4 as of 2026-06-23), calibrated below current with headroom
+      // so CI catches real regressions without flaking. Well above the 60%
+      // project minimum. Raise when adding tests; never lower to mask a gap.
       thresholds: {
-        branches: 55,
-        functions: 55,
-        lines: 60,
-        statements: 60,
+        branches: 80,
+        functions: 85,
+        lines: 90,
+        statements: 90,
       },
     },
   },
