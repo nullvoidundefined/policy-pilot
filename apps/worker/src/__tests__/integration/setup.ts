@@ -9,7 +9,7 @@ import { fileURLToPath } from 'url';
 import { afterAll, beforeAll } from 'vitest';
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
-config({ path: path.resolve(__dirname, '../../../../apps/server/.env') });
+config({ path: path.resolve(__dirname, '../../../../../apps/server/.env') });
 
 // Dynamic import runs after config() so DATABASE_URL is set before the pool constructor fires.
 const { default: pool } = await import('app/database/pool.js');

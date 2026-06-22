@@ -12,7 +12,7 @@ import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 
-const POLICY_FIXTURE = path.resolve(__dirname, 'fixtures/policy.txt');
+const POLICY_FIXTURE = path.resolve(__dirname, '../../__fixtures__/policy.txt');
 const EMBEDDING_DIM = 1536;
 const TEST_EMAIL = 'worker-processor@integration-test.invalid';
 const TEST_R2_KEY = 'test/worker-integration/policy.txt';
