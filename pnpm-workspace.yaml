@@ -4,3 +4,5 @@ packages:
   - 'apps/client/web'
   - 'packages/types'
   - 'packages/chunker'
+  - 'packages/logger'
+  - 'packages/clients'

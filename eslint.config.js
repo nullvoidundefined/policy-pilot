@@ -95,6 +95,8 @@ export default tseslint.config([
           './apps/worker/tsconfig.json',
           './packages/types/tsconfig.json',
           './packages/chunker/tsconfig.json',
+          './packages/logger/tsconfig.json',
+          './packages/clients/tsconfig.json',
         ],
         sourceType: 'module',
       },

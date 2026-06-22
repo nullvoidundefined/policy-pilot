@@ -1,8 +1,8 @@
 import Anthropic from '@anthropic-ai/sdk';
+import { generateEmbedding } from '@repo/clients/openai';
 import { QA_SYSTEM_PROMPT, buildContextPrompt } from 'app/prompts/qa-system.js';
 import * as collectionsRepo from 'app/repositories/collections/collections.js';
 import * as convRepo from 'app/repositories/conversations/conversations.js';
-import * as embeddingService from 'app/services/embedding.service.js';
 import * as retrievalService from 'app/services/retrieval.service.js';
 import { ApiError } from 'app/utils/ApiError.js';
 import { logger } from 'app/utils/logs/logger.js';
@@ -94,8 +94,7 @@ export async function streamQA(req: Request, res: Response): Promise<void> {
     }
 
     // 3. Embed the question
-    const questionEmbedding =
-      await embeddingService.generateEmbedding(question);
+    const questionEmbedding = await generateEmbedding(question);
 
     // 4. Vector similarity search
     // For demo collections, don't filter by user_id (demo chunks belong to sentinel user)

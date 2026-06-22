@@ -1,6 +1,6 @@
+import * as embeddingClient from '@repo/clients/openai';
 import * as collectionsRepo from 'app/repositories/collections/collections.js';
 import * as convRepo from 'app/repositories/conversations/conversations.js';
-import * as embeddingService from 'app/services/embedding.service.js';
 import * as retrievalService from 'app/services/retrieval.service.js';
 import { ApiError } from 'app/utils/ApiError.js';
 import { beforeEach, describe, expect, it, vi } from 'vitest';
@@ -33,7 +33,7 @@ vi.mock('app/repositories/collections/collections.js', () => ({
   getCollectionById: vi.fn(),
 }));
 
-vi.mock('app/services/embedding.service.js', () => ({
+vi.mock('@repo/clients/openai', () => ({
   generateEmbedding: vi.fn(),
 }));
 
@@ -54,7 +54,7 @@ vi.mock('app/utils/logs/logger.js', () => ({
 
 const mockCollections = vi.mocked(collectionsRepo);
 const mockConvRepo = vi.mocked(convRepo);
-const mockEmbedding = vi.mocked(embeddingService);
+const mockEmbedding = vi.mocked(embeddingClient);
 const mockRetrieval = vi.mocked(retrievalService);
 
 function mockReq(overrides: Record<string, unknown> = {}): any {

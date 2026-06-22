@@ -1,6 +1,10 @@
 import { beforeEach, describe, expect, it, vi } from 'vitest';
 
-import { deleteFile, getSignedDownloadUrl, uploadFile } from './r2.service.js';
+import {
+  deleteFile,
+  getSignedDownloadUrl,
+  uploadFile,
+} from '../../r2/index.js';
 
 const mockSend = vi.fn();
 const mockGetSignedUrl = vi.fn();
