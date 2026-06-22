@@ -2,32 +2,31 @@
 
 ## 1. Last commit
 
-`faae304` refactor(A1): split packages/common into @repo/types and @repo/chunker (#15) -- on `main`.
+`ce04098` refactor(A2): extract shared @repo/clients and @repo/logger (#16) -- on `main`.
 
-This handoff sits on branch `refactor/trackA2-shared-clients` (the A2 execution branch, off `main`), which also carries the unmerged A2 plan + index update. The working tree is left checked out here so the next session resumes A2 directly.
+Working tree is on `main`, clean except the untracked `docs/agentic-conversion-plan.md` (separate workstream, leave it). The A2 branch is merged and deleted (remote + local).
 
 ## 2. Production state
 
-A1 deployed and verified. Railway built both updated Dockerfiles; Post-Deploy Health Check green (`/health`, `/health/ready`, CSRF, CORS). No outstanding production issues.
+A1 and A2 deployed and verified. A2 main-push: CI success + Post-Deploy Health Check success (Railway built/deployed both server + worker; health endpoints green). No outstanding production issues.
 
-## 3. What shipped
+## 3. What shipped (this session)
 
-Convention refactor: planning landed on `main`, then Track A1 executed end-to-end.
+Track A2 of the convention refactor, executed via subagent-driven-development end-to-end.
 
-- **PR #14 (merged):** planning set on `main` -- spec, master index + locked decisions, rules-reconciliation audit, A1 plan.
-- **PR #15 (merged, deployed):** A1 -- split `packages/common` into `@repo/types` + `@repo/chunker` (R-236); 11 importers + all build refs (deps, workspace, root/lefthook/CI scripts, eslint project paths, both Dockerfiles) rewired; sources moved byte-identical. Task review caught + fixed two R-231 dep-sort violations; ghost `packages/common/` removed.
-- **A2 plan authored (this branch, uncommitted->committed here):** `docs/superpowers/plans/2026-06-21-trackA2-shared-clients.md`.
-
-Track B (rules) was merged in a prior session (`~/.claude` PR #1, `f0bd66a`).
+- **PR #16 (merged, deployed):** extracted duplicated OpenAI embedding + Cloudflare R2 impls into `@repo/clients` (one provider folder, one exported function per file, R-235 strict; `s3` singleton isolated); extracted byte-identical pino logger into `@repo/logger`; apps' loggers became re-exports. Adopted superset (batched `generateEmbeddings` + single-text convenience; full server R2 set; worker `generateEmbeddingsBatch`->`generateEmbeddings`). Migrated server + worker; rewired workspace/CI/Docker/eslint (logger built before clients).
+- **Dependency hygiene:** dropped unused `@aws-sdk/*` and orphaned `pino`/`pino-pretty` direct deps from both apps (server keeps `pino-http`); added `@types/node` to `@repo/logger`.
+- **Tests:** ported embedding + r2 tests into `@repo/clients`; retargeted 3 consumer test mocks; added a batching-loop test. Full suite 138 (chunker 13, clients 9, server 116).
+- **Two plan gaps found + fixed:** consumer tests mocked deleted service specifiers (not in plan's Deleted list); "Keep pino" was stale after the re-export conversion. Saved to project memory `refactor-plan-gap-patterns`.
+- PR doc: `docs/prs/2026-06-22-trackA2-shared-clients.md`.
 
 ## 4. Pending (by urgency)
 
-Each remaining unit is one PR off updated `main`, zero stacking (master index).
+A1 + A2 done. Each remaining unit is one PR off updated `main`, zero stacking (master index). No plans authored yet for these; author before executing.
 
-- **A2 (next, plan ready on this branch):** create `@repo/logger` + `@repo/clients` (OpenAI embedding + R2, strict R-235 one-fn-per-file); adopt batched-embedding + full-R2 supersets; migrate server + worker; app loggers become `@repo/logger` re-exports; drop unused `@aws-sdk` direct deps. Atomic, ~18 new files. Est: 1-2 hrs via SDD.
-- **A3 (server, path-disjoint):** `db/`->`database/`, kill `utils/` (ApiError->`errors/`, logger->`logging/`), repos+handlers one-fn-per-file, Anthropic call->`clients/`, split `prompts/qa-system.ts`, tests->`__tests__/` mirror.
-- **A4 (worker, path-disjoint):** `db/`->`database/`, decompose `document-processor.ts`, inline SQL->repository, `workers/` tree.
-- **A5 (web, path-disjoint):** `lib/api.ts`->`api/`+`errors/`, `context/`+`providers/`->`state/`, NET-NEW tests to 60%.
+- **A3 (server, path-disjoint):** `db/`->`database/`, kill `utils/` (ApiError->`errors/`, logger->`logging/`), repos+handlers one-fn-per-file, Anthropic call->`clients/`, split `prompts/qa-system.ts`, tests->`__tests__/` mirror. Est 2-3 hrs via SDD.
+- **A4 (worker, path-disjoint):** `db/`->`database/`, decompose `document-processor.ts`, inline SQL->repository, `workers/` tree. Est 2-3 hrs.
+- **A5 (web, path-disjoint):** `lib/api.ts`->`api/`+`errors/`, `context/`+`providers/`->`state/`, NET-NEW tests to 60%. Est 2-3 hrs.
 - **A6:** eslint `import/no-cycle`+`no-restricted-paths`, fix CLAUDE.md/README, smoke.
 - **Tracks C/D:** Doppelscript + Voyager cleanups (independent repos).
 
@@ -35,13 +34,14 @@ A3/A4/A5 are path-disjoint and order-independent.
 
 ## 5. Next session tasks
 
-1. You are on `refactor/trackA2-shared-clients`. Commit the staged A2 plan + index + this handoff if not already (see below), then execute A2 via subagent-driven-development.
-2. **Read first:** `docs/superpowers/plans/2026-06-21-trackA2-shared-clients.md` (the full A2 plan, no placeholders), then `docs/superpowers/plans/2026-06-21-convention-refactor-index.md` (locked decisions).
-3. A2 design decision already made: shared `@repo/logger` (clients import it; apps re-export it).
-4. Execute, task-review the full diff, fix, then PR + request review. Do NOT merge without per-turn authorization (R-516). Monitor Railway after merge.
+1. On `main`, clean. Pick the next track (A3 recommended; or A4/A5, any order).
+2. **Read first:** `docs/superpowers/plans/2026-06-21-convention-refactor-index.md` (locked decisions + master index), then the project memory `refactor-plan-gap-patterns` (the two A-phase blind spots to pre-empt).
+3. **Author the track plan** (no plan exists yet for A3-A6): use superpowers:writing-plans, mirror the A1/A2 plan structure (verbatim file contents, no placeholders, self-review section).
+4. **Pre-flight before dispatching:** grep `vi.mock(` for every to-be-deleted/moved specifier; after any re-export conversion, audit direct deps for orphans. (Both gaps bit A2.)
+5. Execute via subagent-driven-development: implementer -> task review -> fix -> final whole-branch review (Opus) -> PR + Copilot + user merge auth (R-516). Copilot reviewer is NOT API-addable in this repo; add via the PR Reviewers panel UI or skip.
 
-## Process notes for A-phase execution
+## Process notes (A-phase)
 
-- **`git add -A` is unsafe here:** an untracked `docs/agentic-conversion-plan.md` (separate workstream) lives in the tree and was swept into A1's first commit. Use scoped `git add` with a `':!docs/agentic-conversion-plan.md'` pathspec (the A2 plan's Task 4 Step 7 already does this).
-- **Pre-commit `format:check` is repo-wide** and trips on unformatted scratch under `.superpowers/` (git-excluded but prettier still scans it). Run `prettier --write` on any touched `.superpowers/*.md` before committing, or it blocks the commit AND the pre-push.
-- **SDD ledger:** `.superpowers/sdd/progress.md` (git-excluded via `.git/info/exclude`).
+- **`git add -A` is unsafe:** untracked `docs/agentic-conversion-plan.md` lives in the tree. Use `git add -A -- ':!docs/agentic-conversion-plan.md'`.
+- **Pre-commit `format:check` is repo-wide** and trips on unformatted `.superpowers/` scratch (Prettier reads `.gitignore`/`.prettierignore`, not `.git/info/exclude`). Run `prettier --write '.superpowers/**/*.md'` before committing.
+- **SDD ledger:** `.superpowers/sdd/progress.md` (git-excluded). A2 entries are all complete.

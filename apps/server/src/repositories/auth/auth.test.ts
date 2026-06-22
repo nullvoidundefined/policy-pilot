@@ -12,7 +12,7 @@ import {
 const mockQuery = vi.fn();
 const mockWithTransaction = vi.fn();
 
-vi.mock('app/db/pool/pool.js', () => ({
+vi.mock('app/database/pool.js', () => ({
   query: (...args: unknown[]) => mockQuery(...args),
   withTransaction: (fn: (client: unknown) => Promise<unknown>) =>
     mockWithTransaction(fn),

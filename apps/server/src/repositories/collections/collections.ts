@@ -1,5 +1,5 @@
 import type { Collection } from '@repo/types';
-import { query } from 'app/db/pool/pool.js';
+import { query } from 'app/database/pool.js';
 
 export async function createCollection(
   userId: string,

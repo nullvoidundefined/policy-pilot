@@ -1,5 +1,5 @@
 import type { CitedChunk } from '@repo/types';
-import { query } from 'app/db/pool/pool.js';
+import { query } from 'app/database/pool.js';
 
 interface ChunkRow {
   id: string;

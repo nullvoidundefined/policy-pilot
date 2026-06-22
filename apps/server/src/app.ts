@@ -2,7 +2,7 @@ import { checkConnection as checkR2 } from '@repo/clients/r2';
 import { corsConfig } from 'app/config/corsConfig.js';
 import { isProduction } from 'app/config/env.js';
 import { redisConnection } from 'app/config/queue.js';
-import pool, { query } from 'app/db/pool/pool.js';
+import pool, { query } from 'app/database/pool.js';
 import {
   csrfGuard,
   generateCsrfToken,

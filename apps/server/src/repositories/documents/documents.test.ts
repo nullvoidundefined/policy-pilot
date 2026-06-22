@@ -10,7 +10,7 @@ import {
 
 const mockQuery = vi.fn();
 
-vi.mock('app/db/pool/pool.js', () => ({
+vi.mock('app/database/pool.js', () => ({
   query: (...args: unknown[]) => mockQuery(...args),
   default: { query: vi.fn(), end: vi.fn(), on: vi.fn() },
 }));

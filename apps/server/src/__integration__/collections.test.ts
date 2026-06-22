@@ -1,5 +1,5 @@
 import { app } from 'app/app.js';
-import pool from 'app/db/pool/pool.js';
+import pool from 'app/database/pool.js';
 import type { Server } from 'http';
 import request from 'supertest';
 import { afterAll, beforeAll, describe, expect, it } from 'vitest';

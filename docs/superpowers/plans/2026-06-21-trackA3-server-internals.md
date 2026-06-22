@@ -81,12 +81,14 @@ These resolve the two A3 open items in `docs/superpowers/specs/2026-06-21-conven
 ### Task 1: Rename `db/` to `database/` and collapse the pool
 
 **Files:**
+
 - Create: `apps/server/src/database/pool.ts` (from `apps/server/src/db/pool/pool.ts`)
 - Delete: `apps/server/src/db/pool/pool.ts`, dir `apps/server/src/db/`
 - Modify (source): `app.ts`, `repositories/auth/auth.ts`, `repositories/collections/collections.ts`, `repositories/conversations/conversations.ts`, `repositories/documents/documents.ts`, `services/retrieval.service.ts`
 - Modify (tests, co-located): `repositories/auth/auth.test.ts`, `repositories/conversations/conversations.test.ts`, `repositories/documents/documents.test.ts`, `services/retrieval.service.test.ts`, `__integration__/setup.ts`, `__integration__/collections.test.ts`
 
 **Interfaces:**
+
 - Produces: `import { query, withTransaction } from 'app/database/pool.js'`, `import type { PoolClient } from 'app/database/pool.js'`, `import pool from 'app/database/pool.js'` (default). Same signatures as today.
 
 - [ ] **Step 1: Move the pool file with git, contents unchanged**
@@ -131,12 +133,14 @@ git commit -m "refactor(A3): rename db/ to database/, collapse pool"
 ### Task 2: Move `ApiError` to `errors/`
 
 **Files:**
+
 - Create: `apps/server/src/errors/ApiError.ts` (from `apps/server/src/utils/ApiError.ts`)
 - Delete: `apps/server/src/utils/ApiError.ts`
 - Modify (source): `handlers/auth/auth.ts:5`, `handlers/collections/collections.ts:3`, `handlers/documents/documents.ts:5`, `handlers/qa/qa.ts:7`, `middleware/errorHandler/errorHandler.ts:1`, `middleware/requireAuth/requireAuth.ts:3`, `routes/conversations.ts:3`
 - Modify (tests): `handlers/auth/auth.test.ts:2`, `handlers/documents/documents.test.ts:4`, `handlers/qa/qa.test.ts:5`, `middleware/errorHandler/errorHandler.test.ts:1`
 
 **Interfaces:**
+
 - Produces: `import { ApiError } from 'app/errors/ApiError.js'`, same class, same static factories.
 
 - [ ] **Step 1: Move the file (contents unchanged)**
@@ -174,11 +178,13 @@ git commit -m "refactor(A3): move ApiError to errors/"
 ### Task 3: Import `@repo/logger` directly and delete `utils/`
 
 **Files:**
+
 - Delete: `apps/server/src/utils/logs/logger.ts`, dirs `apps/server/src/utils/logs/`, `apps/server/src/utils/`
 - Modify (source): `app.ts:20`, `database/pool.ts:1`, `handlers/auth/auth.ts:6`, `handlers/documents/documents.ts:6`, `handlers/qa/qa.ts:8`, `middleware/errorHandler/errorHandler.ts:2`, `middleware/requestLogger/requestLogger.ts:1`
 - Modify (tests): every file with `vi.mock('app/utils/logs/logger.js', ...)`: `handlers/auth/auth.test.ts:19`, `handlers/documents/documents.test.ts:36`, `handlers/qa/qa.test.ts:44`, `middleware/errorHandler/errorHandler.test.ts:8`, `middleware/requireAuth/requireAuth.test.ts:14`, `repositories/auth/auth.test.ts:22`, `repositories/conversations/conversations.test.ts:19`, `repositories/documents/documents.test.ts:18`, `services/retrieval.service.test.ts:12`
 
 **Interfaces:**
+
 - Produces: `import { logger } from '@repo/logger'` at every former site.
 
 - [ ] **Step 1: Rewrite source imports**
@@ -204,6 +210,7 @@ grep -rn "app/utils/" apps/server/src   # expect: no matches
 grep -rn "from 'pino'\|from \"pino\"\|require('pino')" apps/server/src   # expect: no matches except pino-http in requestLogger
 grep -n "\"pino\"\|\"pino-pretty\"" apps/server/package.json              # expect: not present as direct deps (A2 already dropped them)
 ```
+
 No `package.json` change expected (the logger was already a re-export of `@repo/logger`; `pino-http` stays for `requestLogger`).
 
 - [ ] **Step 5: Format, test, build**
@@ -223,12 +230,14 @@ git commit -m "refactor(A3): import @repo/logger directly, remove utils/"
 ### Task 4: Split `repositories/auth` to one function per file
 
 **Files:**
+
 - Create: `apps/server/src/repositories/auth/{hashSessionToken,createUser,findUserByEmail,verifyPassword,createSession,getSessionWithUser,deleteSession,loginUser,createUserAndSession,index}.ts`
 - Delete: `apps/server/src/repositories/auth/auth.ts`
 - Modify (consumers): `handlers/auth/auth.ts:3`, `middleware/requireAuth/requireAuth.ts:2`
 - Modify (tests): `repositories/auth/auth.test.ts` (import plus mock specifiers), `handlers/auth/auth.test.ts:1,7`, `middleware/requireAuth/requireAuth.test.ts:2,10`
 
 **Interfaces:**
+
 - Produces: barrel `app/repositories/auth/index.js` re-exporting the 8 public functions (verbatim signatures from the current `auth.ts`). `hashSessionToken` is private (imported by `createSession`, `getSessionWithUser`, `deleteSession`; NOT re-exported).
 - Intra-folder deps: `createSession` imports `hashSessionToken`; `getSessionWithUser`/`deleteSession` import `hashSessionToken`; `loginUser` imports `createSession`; `createUserAndSession` imports `createUser` plus `createSession`.
 
@@ -288,6 +297,7 @@ git rm apps/server/src/repositories/auth/auth.ts
 grep -rn "repositories/auth/auth" apps/server/src   # expect: no matches
 pnpm --filter policy-pilot-server test && pnpm --filter policy-pilot-server build
 ```
+
 Expected: PASS, same count.
 
 - [ ] **Step 7: Commit**
@@ -302,12 +312,14 @@ git commit -m "refactor(A3): split auth repository to one function per file"
 ### Task 5: Split `repositories/collections` to one function per file
 
 **Files:**
+
 - Create: `apps/server/src/repositories/collections/{createCollection,listCollections,getCollectionById,getDemoCollection,getDemoCollections,deleteCollection,getCollectionDocumentCount,index}.ts`
 - Delete: `apps/server/src/repositories/collections/collections.ts`
 - Modify (consumers): `handlers/qa/qa.ts:4`, `handlers/collections/collections.ts:1`, `routes/collections.ts:3`, `handlers/qa/qa.test.ts:2,32`
 - (No `collections` repository unit test exists.)
 
 **Interfaces:**
+
 - Produces: barrel `app/repositories/collections/index.js` with the 7 functions (verbatim from current `collections.ts`). No intra-folder deps, no private helpers.
 
 - [ ] **Step 1: Create the 7 function files**
@@ -342,6 +354,7 @@ Change `'app/repositories/collections/collections.js'` to `'app/repositories/col
 grep -rn "repositories/collections/collections" apps/server/src   # expect: no matches
 pnpm --filter policy-pilot-server test && pnpm --filter policy-pilot-server build
 ```
+
 Expected: PASS, same count.
 
 - [ ] **Step 6: Commit**
@@ -356,11 +369,13 @@ git commit -m "refactor(A3): split collections repository to one function per fi
 ### Task 6: Split `repositories/conversations` to one function per file
 
 **Files:**
+
 - Create: `apps/server/src/repositories/conversations/{createConversation,getConversation,listConversations,createMessage,updateConversationTitle,getMessages,index}.ts`
 - Delete: `apps/server/src/repositories/conversations/conversations.ts`
 - Modify (consumers): `handlers/qa/qa.ts:5`, `routes/conversations.ts:2`, `handlers/qa/qa.test.ts:3,26`, `repositories/conversations/conversations.test.ts` (import)
 
 **Interfaces:**
+
 - Produces: barrel `app/repositories/conversations/index.js` with the 6 functions (verbatim). No helpers, no intra-folder deps. Every file imports `import { query } from 'app/database/pool.js';`; type imports per use (`createMessage`/`getMessages` use `Message`; the others use `Conversation`; `updateConversationTitle` returns `void` and needs no type import).
 
 - [ ] **Step 1: Create the 6 function files** (header plus imports plus verbatim bodies from `conversations.ts`).
@@ -392,6 +407,7 @@ Change `'app/repositories/conversations/conversations.js'` to `'.../index.js'` i
 grep -rn "repositories/conversations/conversations" apps/server/src   # expect: no matches
 pnpm --filter policy-pilot-server test && pnpm --filter policy-pilot-server build
 ```
+
 Expected: PASS, same count.
 
 - [ ] **Step 6: Commit**
@@ -406,11 +422,13 @@ git commit -m "refactor(A3): split conversations repository to one function per 
 ### Task 7: Split `repositories/documents` to one function per file
 
 **Files:**
+
 - Create: `apps/server/src/repositories/documents/{createDocument,getDocumentById,listDocuments,updateDocumentStatus,deleteDocument,index}.ts`
 - Delete: `apps/server/src/repositories/documents/documents.ts`
 - Modify (consumers): `handlers/documents/documents.ts:4`, `handlers/collections/collections.ts:2`, `handlers/documents/documents.test.ts:3,14`, `repositories/documents/documents.test.ts` (import)
 
 **Interfaces:**
+
 - Produces: barrel `app/repositories/documents/index.js` with the 5 functions (verbatim). No helpers, no intra-folder deps. Imports per file: `import { query } from 'app/database/pool.js';` in all; type imports per use (`createDocument`/`getDocumentById`/`listDocuments` use `Document`, and `createDocument` also needs `import type { PoolClient } from 'app/database/pool.js';`; `updateDocumentStatus` uses `DocumentStatus` and returns `void`; `deleteDocument` returns `boolean`, no type import).
 
 - [ ] **Step 1: Create the 5 function files** (header plus imports plus verbatim bodies from `documents.ts`).
@@ -441,6 +459,7 @@ Change `'app/repositories/documents/documents.js'` to `'.../index.js'` in: `hand
 grep -rn "repositories/documents/documents" apps/server/src   # expect: no matches
 pnpm --filter policy-pilot-server test && pnpm --filter policy-pilot-server build
 ```
+
 Expected: PASS, same count.
 
 - [ ] **Step 6: Commit**
@@ -455,11 +474,13 @@ git commit -m "refactor(A3): split documents repository to one function per file
 ### Task 8: Extract the Anthropic client and move `generateConversationTitle` to a service
 
 **Files:**
+
 - Create: `apps/server/src/clients/anthropic.ts`, `apps/server/src/services/generateConversationTitle.ts`
 - Modify: `apps/server/src/handlers/qa/qa.ts`, `apps/server/src/handlers/qa/qa.test.ts`
 - Create (test): `apps/server/src/services/generateConversationTitle.test.ts` (the `generateConversationTitle` describe block moved out of `qa.test.ts`)
 
 **Interfaces:**
+
 - Produces: `import { anthropic } from 'app/clients/anthropic.js'`, the configured SDK singleton (`anthropic.messages.create`, `anthropic.messages.stream`).
 - Produces: `import { generateConversationTitle } from 'app/services/generateConversationTitle.js'`, `(question: string) => Promise<string>`, same behavior as today (haiku call, trim, fallback to `question.slice(0, 100)`).
 
@@ -582,12 +603,14 @@ git commit -m "refactor(A3): extract Anthropic client, move generateConversation
 ### Task 9: Rename `retrieval.service.ts` to `services/searchChunks.ts`
 
 **Files:**
+
 - Create: `apps/server/src/services/searchChunks.ts` (from `retrieval.service.ts`)
 - Delete: `apps/server/src/services/retrieval.service.ts`
 - Rename test: `services/retrieval.service.test.ts` to `services/searchChunks.test.ts` (stays co-located until Task 11)
 - Modify: `handlers/qa/qa.ts` (import plus the `retrievalService.searchChunks` call site), `handlers/qa/qa.test.ts`
 
 **Interfaces:**
+
 - Produces: `import { searchChunks } from 'app/services/searchChunks.js'`, same signature `(embedding, userId, topK?, collectionId?) => Promise<CitedChunk[]>`.
 
 - [ ] **Step 1: Move source and test (contents unchanged except test import)**
@@ -614,6 +637,7 @@ Change `import * as retrievalService from 'app/services/retrieval.service.js'` t
 grep -rn "retrieval.service" apps/server/src   # expect: no matches
 pnpm --filter policy-pilot-server test && pnpm --filter policy-pilot-server build
 ```
+
 Expected: PASS, same count.
 
 - [ ] **Step 5: Commit**
@@ -628,12 +652,14 @@ git commit -m "refactor(A3): rename retrieval service to services/searchChunks"
 ### Task 10: Split `prompts/qa-system.ts`
 
 **Files:**
+
 - Create: `apps/server/src/prompts/qaSystemPrompt.ts`, `apps/server/src/prompts/buildContextPrompt.ts`
 - Delete: `apps/server/src/prompts/qa-system.ts`
 - Modify: `handlers/qa/qa.ts:3`
 - Split test: `prompts/qa-system.test.ts` into `prompts/qaSystemPrompt.test.ts` plus `prompts/buildContextPrompt.test.ts` (stay co-located until Task 11)
 
 **Interfaces:**
+
 - Produces: `import { QA_SYSTEM_PROMPT } from 'app/prompts/qaSystemPrompt.js'` and `import { buildContextPrompt } from 'app/prompts/buildContextPrompt.js'`.
 
 - [ ] **Step 1: Create `qaSystemPrompt.ts`** (single-constant file, header-exempt; copy the `QA_SYSTEM_PROMPT` string verbatim from `qa-system.ts`)
@@ -691,6 +717,7 @@ In `handlers/qa/qa.ts:3` replace `import { QA_SYSTEM_PROMPT, buildContextPrompt 
 grep -rn "qa-system" apps/server/src   # expect: no matches
 pnpm --filter policy-pilot-server test && pnpm --filter policy-pilot-server build
 ```
+
 Expected: PASS, same count.
 
 - [ ] **Step 6: Commit**
@@ -705,11 +732,13 @@ git commit -m "refactor(A3): split prompts/qa-system into constant + builder mod
 ### Task 11: Consolidate tests into `src/__tests__/` mirror and rename integration dir
 
 **Files:**
+
 - Move all remaining co-located `*.test.ts` under `src/__tests__/` mirroring source layout.
 - Rename `src/__integration__/` to `src/__tests__/integration/`.
 - Modify: `apps/server/vitest.config.ts`, `apps/server/vitest.integration.config.ts`.
 
 **Interfaces:**
+
 - After this task: no `*.test.ts` co-located beside source (R-221); one `src/__tests__/` tree (R-239); integration suite under `src/__tests__/integration/`.
 
 - [ ] **Step 1: Move unit tests to the mirror**
@@ -796,6 +825,7 @@ test -d apps/server/src/__integration__ && echo "STILL EXISTS" || echo "renamed 
 pnpm --filter policy-pilot-server test && pnpm --filter policy-pilot-server build
 pnpm --filter policy-pilot-server test:integration   # requires DB; run if creds present, else note skip
 ```
+
 Expected: unit PASS (same count); integration PASS or documented skip.
 
 - [ ] **Step 7: Commit**
@@ -857,6 +887,7 @@ In `docs/superpowers/plans/2026-06-21-convention-refactor-index.md`, set the A3 
 ## Self-Review
 
 **1. Spec coverage** (spec section "A3: Server internals"):
+
 - "`db/` becomes `database/`; collapse `database/pool.ts`": Task 1 (D4). Covered.
 - "Eliminate `utils/`: `ApiError` to `errors/`; logger to `logging/`": Tasks 2, 3. Logger resolution is direct `@repo/logger` import, not `logging/` (D2, documented divergence). Covered.
 - "Repositories: one function per file (R-235); verb-noun names": Tasks 4-7. Covered.
@@ -870,5 +901,6 @@ In `docs/superpowers/plans/2026-06-21-convention-refactor-index.md`, set the A3 
 **3. Type consistency:** `searchChunks` signature identical across Task 9 producer and the qa-handler consumer. `generateConversationTitle(question: string): Promise<string>` identical across Task 8 service, its test, and the qa-handler call. `anthropic` singleton shape (`messages.create`/`messages.stream`) matches both the handler/service usage and the test mocks. Barrel export names match each split function file name.
 
 **4. Gap-pattern pre-flight (project memory `refactor-plan-gap-patterns`):**
+
 - #1 (mock sites of moved modules): every `vi.mock(` of a moved specifier is enumerated in the owning task: pool (Task 1), logger (Task 3), each repo barrel (Tasks 4-7), `@anthropic-ai/sdk` to `app/clients/anthropic.js` (Task 8), retrieval to searchChunks (Task 9), prompts (Task 10). Covered.
 - #2 (orphaned deps after re-export change): A3 deletes a re-export (logger) but the deps (`pino`/`pino-pretty`) were already non-direct after A2; Task 3 Step 4 and Task 12 Step 2 verify `package.json` is unchanged. Covered.
