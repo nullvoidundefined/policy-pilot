@@ -7,7 +7,7 @@ import {
   getMessages,
   listConversations,
   updateConversationTitle,
-} from './conversations.js';
+} from './index.js';
 
 const mockQuery = vi.fn();
 
