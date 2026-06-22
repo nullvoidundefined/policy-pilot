@@ -119,7 +119,7 @@ export default function CollectionPage() {
           queryKey: ['collection-documents', id],
         });
       } catch {
-        // silent fail — will show on next poll
+        // silent fail, will show on next poll
       }
     },
     [id, queryClient],
