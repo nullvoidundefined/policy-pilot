@@ -47,6 +47,16 @@ const GITLAB_COLLECTION = {
 };
 
 // ---------------------------------------------------------------------------
+// Types
+// ---------------------------------------------------------------------------
+
+type TestDemoCollection = {
+  id: string;
+  name: string;
+  description: string | null;
+};
+
+// ---------------------------------------------------------------------------
 // Helpers
 // ---------------------------------------------------------------------------
 
@@ -66,7 +76,7 @@ function buildSseStream(events: object[]): ReadableStream<Uint8Array> {
 }
 
 function mockFetchWithStream(
-  collections: (typeof VALVE_COLLECTION)[],
+  collections: TestDemoCollection[],
   stream: ReadableStream<Uint8Array>,
 ) {
   vi.spyOn(globalThis, 'fetch').mockImplementation(async (input) => {
@@ -97,7 +107,7 @@ function mockFetchWithStream(
   });
 }
 
-function mockFetchCollectionsOnly(collections: (typeof VALVE_COLLECTION)[]) {
+function mockFetchCollectionsOnly(collections: TestDemoCollection[]) {
   vi.spyOn(globalThis, 'fetch').mockImplementation(async (input) => {
     const url = typeof input === 'string' ? input : (input as Request).url;
     if (url.includes('/collections/demo')) {
