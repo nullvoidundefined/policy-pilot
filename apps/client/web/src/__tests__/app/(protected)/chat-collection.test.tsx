@@ -314,7 +314,7 @@ describe('CollectionChatPage', () => {
       });
       const blockingStream = new ReadableStream<Uint8Array>({
         start(controller) {
-          releasePromise.then(() => {
+          void releasePromise.then(() => {
             controller.close();
           });
         },
