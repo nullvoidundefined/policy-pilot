@@ -1,7 +1,7 @@
 import * as r2Client from '@repo/clients/r2';
 import { documentProcessQueue } from 'app/config/queue.js';
 import { ApiError } from 'app/errors/ApiError.js';
-import * as docsRepo from 'app/repositories/documents/documents.js';
+import * as docsRepo from 'app/repositories/documents/index.js';
 import { beforeEach, describe, expect, it, vi } from 'vitest';
 
 import {
@@ -11,7 +11,7 @@ import {
   uploadDocument,
 } from './documents.js';
 
-vi.mock('app/repositories/documents/documents.js', () => ({
+vi.mock('app/repositories/documents/index.js', () => ({
   createDocument: vi.fn(),
   getDocumentById: vi.fn(),
   listDocuments: vi.fn(),

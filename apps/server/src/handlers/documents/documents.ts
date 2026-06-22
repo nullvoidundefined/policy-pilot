@@ -3,7 +3,7 @@ import { logger } from '@repo/logger';
 import type { DocumentProcessJob } from '@repo/types';
 import { documentProcessQueue } from 'app/config/queue.js';
 import { ApiError } from 'app/errors/ApiError.js';
-import * as docsRepo from 'app/repositories/documents/documents.js';
+import * as docsRepo from 'app/repositories/documents/index.js';
 import type { Request, Response } from 'express';
 
 export async function uploadDocument(

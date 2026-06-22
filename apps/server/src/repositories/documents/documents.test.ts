@@ -6,7 +6,7 @@ import {
   getDocumentById,
   listDocuments,
   updateDocumentStatus,
-} from './documents.js';
+} from './index.js';
 
 const mockQuery = vi.fn();
 
