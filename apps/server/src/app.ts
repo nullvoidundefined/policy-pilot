@@ -1,4 +1,5 @@
 import { checkConnection as checkR2 } from '@repo/clients/r2';
+import { logger } from '@repo/logger';
 import { corsConfig } from 'app/config/corsConfig.js';
 import { isProduction } from 'app/config/env.js';
 import { redisConnection } from 'app/config/queue.js';
@@ -17,7 +18,6 @@ import { collectionRouter } from 'app/routes/collections.js';
 import { conversationRouter } from 'app/routes/conversations.js';
 import { documentRouter } from 'app/routes/documents.js';
 import { qaRouter } from 'app/routes/qa.js';
-import { logger } from 'app/utils/logs/logger.js';
 import cookieParser from 'cookie-parser';
 import express from 'express';
 import helmet from 'helmet';

@@ -11,7 +11,7 @@ vi.mock('app/repositories/auth/auth.js', () => ({
   getSessionWithUser: vi.fn(),
 }));
 
-vi.mock('app/utils/logs/logger.js', () => ({
+vi.mock('@repo/logger', () => ({
   logger: {
     info: vi.fn(),
     error: vi.fn(),

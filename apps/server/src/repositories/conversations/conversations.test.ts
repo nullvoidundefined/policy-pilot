@@ -16,7 +16,7 @@ vi.mock('app/database/pool.js', () => ({
   default: { query: vi.fn(), end: vi.fn(), on: vi.fn() },
 }));
 
-vi.mock('app/utils/logs/logger.js', () => ({
+vi.mock('@repo/logger', () => ({
   logger: {
     info: vi.fn(),
     error: vi.fn(),

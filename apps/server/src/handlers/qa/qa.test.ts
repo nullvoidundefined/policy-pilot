@@ -41,7 +41,7 @@ vi.mock('app/services/retrieval.service.js', () => ({
   searchChunks: vi.fn(),
 }));
 
-vi.mock('app/utils/logs/logger.js', () => ({
+vi.mock('@repo/logger', () => ({
   logger: {
     info: vi.fn(),
     error: vi.fn(),

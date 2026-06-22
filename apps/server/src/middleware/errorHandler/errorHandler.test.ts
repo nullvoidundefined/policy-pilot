@@ -5,7 +5,7 @@ import { beforeEach, describe, expect, it, vi } from 'vitest';
 
 import { errorHandler } from './errorHandler.js';
 
-vi.mock('app/utils/logs/logger.js', () => ({
+vi.mock('@repo/logger', () => ({
   logger: {
     info: vi.fn(),
     error: vi.fn(),

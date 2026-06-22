@@ -16,7 +16,7 @@ vi.mock('app/config/env.js', () => ({
   isProduction: vi.fn().mockReturnValue(false),
 }));
 
-vi.mock('app/utils/logs/logger.js', () => ({
+vi.mock('@repo/logger', () => ({
   logger: {
     info: vi.fn(),
     error: vi.fn(),

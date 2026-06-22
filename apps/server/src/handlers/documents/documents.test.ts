@@ -33,7 +33,7 @@ vi.mock('app/config/queue.js', () => ({
   },
 }));
 
-vi.mock('app/utils/logs/logger.js', () => ({
+vi.mock('@repo/logger', () => ({
   logger: {
     info: vi.fn(),
     error: vi.fn(),
