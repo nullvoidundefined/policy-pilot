@@ -1,6 +1,6 @@
 import * as embeddingClient from '@repo/clients/openai';
 import { ApiError } from 'app/errors/ApiError.js';
-import * as collectionsRepo from 'app/repositories/collections/collections.js';
+import * as collectionsRepo from 'app/repositories/collections/index.js';
 import * as convRepo from 'app/repositories/conversations/conversations.js';
 import * as retrievalService from 'app/services/retrieval.service.js';
 import { beforeEach, describe, expect, it, vi } from 'vitest';
@@ -29,7 +29,7 @@ vi.mock('app/repositories/conversations/conversations.js', () => ({
   updateConversationTitle: vi.fn(),
 }));
 
-vi.mock('app/repositories/collections/collections.js', () => ({
+vi.mock('app/repositories/collections/index.js', () => ({
   getCollectionById: vi.fn(),
 }));
 

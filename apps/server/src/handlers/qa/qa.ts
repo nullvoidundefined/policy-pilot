@@ -3,7 +3,7 @@ import { generateEmbedding } from '@repo/clients/openai';
 import { logger } from '@repo/logger';
 import { ApiError } from 'app/errors/ApiError.js';
 import { QA_SYSTEM_PROMPT, buildContextPrompt } from 'app/prompts/qa-system.js';
-import * as collectionsRepo from 'app/repositories/collections/collections.js';
+import * as collectionsRepo from 'app/repositories/collections/index.js';
 import * as convRepo from 'app/repositories/conversations/conversations.js';
 import * as retrievalService from 'app/services/retrieval.service.js';
 import type { Request, Response } from 'express';

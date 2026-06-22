@@ -1,5 +1,5 @@
 import { ApiError } from 'app/errors/ApiError.js';
-import * as collectionsRepo from 'app/repositories/collections/collections.js';
+import * as collectionsRepo from 'app/repositories/collections/index.js';
 import * as docsRepo from 'app/repositories/documents/documents.js';
 import type { Request, Response } from 'express';
 

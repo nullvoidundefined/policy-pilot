@@ -1,6 +1,6 @@
 import * as collectionHandlers from 'app/handlers/collections/collections.js';
 import { requireAuth } from 'app/middleware/requireAuth/requireAuth.js';
-import * as collectionsRepo from 'app/repositories/collections/collections.js';
+import * as collectionsRepo from 'app/repositories/collections/index.js';
 import express from 'express';
 
 const collectionRouter = express.Router();
