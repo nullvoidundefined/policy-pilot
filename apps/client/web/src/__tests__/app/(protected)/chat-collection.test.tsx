@@ -307,6 +307,30 @@ describe('CollectionChatPage', () => {
       ).toBeInTheDocument();
     });
 
+    it('renders markdown in the streamed answer instead of raw syntax', async () => {
+      const stream = buildSseStream([
+        { type: 'token', token: '## Vacation Policy\n\n' },
+        { type: 'token', token: '- **Standard**: three weeks' },
+        { type: 'done', conversation_id: 'conv-new' },
+      ]);
+      mockFetchStream(stream);
+
+      const user = userEvent.setup();
+      renderChatPage();
+
+      await user.type(
+        await screen.findByRole('textbox', { name: /ask a question/i }),
+        'What is the vacation policy?',
+      );
+      await user.click(screen.getByRole('button', { name: /send/i }));
+
+      expect(
+        await screen.findByRole('heading', { name: /vacation policy/i }),
+      ).toBeInTheDocument();
+      expect(screen.getByRole('listitem')).toHaveTextContent('Standard');
+      expect(screen.queryByText(/##/)).toBeNull();
+    });
+
     it('shows the loading indicator while the stream is in flight', async () => {
       let releaseStream!: () => void;
       const releasePromise = new Promise<void>((resolve) => {
