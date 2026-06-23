@@ -155,4 +155,17 @@ describe('streamPost', () => {
 
     expect(new TextDecoder().decode(value)).toBe('hello');
   });
+
+  it('throws ApiError on a non-ok response instead of returning an empty stream', async () => {
+    const fetchMock = vi
+      .fn()
+      .mockResolvedValueOnce(jsonResponse({ token: 'csrf-1' }))
+      .mockResolvedValueOnce(jsonResponse({ message: 'server boom' }, 500));
+    vi.stubGlobal('fetch', fetchMock);
+    const { streamPost, ApiError } = await importApi();
+
+    await expect(
+      streamPost('/qa/stream', { question: 'hi' }),
+    ).rejects.toBeInstanceOf(ApiError);
+  });
 });
