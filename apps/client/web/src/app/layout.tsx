@@ -1,13 +1,11 @@
 /**
  * Root layout for the entire Next.js app: wraps every route in auth, query,
- * and error-boundary providers, loads global fonts, and injects analytics.
+ * and error-boundary providers and loads global fonts.
  */
 import { ErrorBoundary } from '@/components/ErrorBoundary/ErrorBoundary';
 import Header from '@/components/Header/Header';
 import { AuthProvider } from '@/state/AuthContext';
 import { QueryProvider } from '@/state/QueryProvider';
-import { Analytics } from '@vercel/analytics/next';
-import { SpeedInsights } from '@vercel/speed-insights/next';
 import type { Metadata } from 'next';
 import { Inter, Playfair_Display } from 'next/font/google';
 
@@ -48,8 +46,6 @@ export default function RootLayout({
             <ErrorBoundary>{children}</ErrorBoundary>
           </AuthProvider>
         </QueryProvider>
-        <Analytics />
-        <SpeedInsights />
       </body>
     </html>
   );

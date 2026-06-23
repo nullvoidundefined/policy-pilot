@@ -11,7 +11,7 @@ Upload PDFs and documents. A background pipeline chunks them, generates embeddin
 
 | Service      | Provider             | Notes                             |
 | ------------ | -------------------- | --------------------------------- |
-| Frontend     | Vercel               | Next.js                           |
+| Frontend     | Railway              | Next.js (Dockerfile.web)          |
 | API Server   | Railway              | Express + TypeScript              |
 | Worker       | Railway              | BullMQ document processing worker |
 | Database     | Neon                 | PostgreSQL + pgvector extension   |
@@ -41,7 +41,7 @@ Workspace packages: `apps/server/`, `apps/worker/`, `apps/client/web/`, `package
 
 ## Infrastructure
 
-**Frontend:** Next.js on Vercel
+**Frontend:** Next.js on Railway (Dockerfile.web)
 **API Server:** Express + TypeScript on Railway
 **Auth:** Custom session-based (cookie + DB hash)
 **Database:** Neon PostgreSQL + pgvector extension
@@ -51,7 +51,7 @@ Workspace packages: `apps/server/`, `apps/worker/`, `apps/client/web/`, `package
 ## System Design
 
 ```
-Next.js Frontend (Vercel)
+Next.js Frontend (Railway)
   |
   +-- Upload form (multipart) --> POST /api/documents
   +-- Document list --> GET /api/documents
@@ -115,7 +115,7 @@ Redis (Railway)
 
 ### POC (Days 1-3): Upload a doc, ask a question, get an answer
 
-Deliver the full RAG loop end-to-end: a user uploads a PDF via the frontend, the file is stored in R2, a BullMQ worker extracts text, chunks it, generates embeddings, and stores vectors in pgvector. The user then asks a natural language question through a chat input, the API embeds the question, performs vector similarity search, assembles a grounded prompt with retrieved chunks, and streams a cited answer back to the browser. Deploy API + worker on Railway, frontend on Vercel.
+Deliver the full RAG loop end-to-end: a user uploads a PDF via the frontend, the file is stored in R2, a BullMQ worker extracts text, chunks it, generates embeddings, and stores vectors in pgvector. The user then asks a natural language question through a chat input, the API embeds the question, performs vector similarity search, assembles a grounded prompt with retrieved chunks, and streams a cited answer back to the browser. Deploy API, worker, and frontend on Railway.
 
 - [ ] Scaffold from templates (API + worker + web)
 - [ ] Enable pgvector extension on Neon
@@ -125,7 +125,7 @@ Deliver the full RAG loop end-to-end: a user uploads a PDF via the frontend, the
 - [ ] Worker: download from R2, extract text, chunk, embed, store in pgvector
 - [ ] POST /qa: embed question, vector search, assemble prompt, stream answer
 - [ ] Frontend: upload form + basic chat input + streaming response
-- [ ] Deploy: API + worker on Railway, frontend on Vercel
+- [ ] Deploy: API, worker, and frontend on Railway
 
 ### Week 1 Remainder: Pipeline robustness
 

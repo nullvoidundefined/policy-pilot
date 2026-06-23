@@ -8,7 +8,7 @@ DocQA is App 4 in a portfolio of progressive fullstack AI applications. It intro
 
 ```mermaid
 flowchart TB
-    subgraph Frontend["Next.js Frontend (Vercel)"]
+    subgraph Frontend["Next.js Frontend (Railway)"]
         Upload[Upload Form]
         DocList[Document List]
         Chat[Q&A Chat]
