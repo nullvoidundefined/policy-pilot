@@ -1,35 +1,18 @@
 /**
- * Wires the /conversations HTTP routes to inline handlers; gates all routes behind
- * requireAuth and delegates list and message-fetch queries directly to the conversations repository.
+ * Wires the /conversations HTTP routes to their handlers; gates all routes behind
+ * requireAuth and delegates each verb to the conversations handler (R-224).
  */
-import { ApiError } from 'app/errors/ApiError.js';
+import * as conversationHandlers from 'app/handlers/conversations/conversations.js';
 import { requireAuth } from 'app/middleware/requireAuth/requireAuth.js';
-import * as convRepo from 'app/repositories/conversations/index.js';
 import express from 'express';
-import type { Request, Response } from 'express';
 
 const conversationRouter = express.Router();
 
 conversationRouter.use(requireAuth);
-
-conversationRouter.get('/', async (req: Request, res: Response) => {
-  const conversations = await convRepo.listConversations(req.user!.id);
-  res.json({ conversations });
-});
-
-conversationRouter.get('/:id/messages', async (req: Request, res: Response) => {
-  const id = req.params.id as string | undefined;
-  if (!id) {
-    throw ApiError.badRequest('Conversation ID required');
-  }
-
-  const conversation = await convRepo.getConversation(id, req.user!.id);
-  if (!conversation) {
-    throw ApiError.notFound('Conversation not found');
-  }
-
-  const messages = await convRepo.getMessages(id);
-  res.json({ conversation, messages });
-});
+conversationRouter.get('/', conversationHandlers.listConversations);
+conversationRouter.get(
+  '/:id/messages',
+  conversationHandlers.getConversationMessages,
+);
 
 export { conversationRouter };

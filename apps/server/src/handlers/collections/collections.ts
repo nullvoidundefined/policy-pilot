@@ -1,11 +1,24 @@
 /**
- * Handles create, list, get, listCollectionDocuments, and delete operations for
- * collections - validates ownership, enforces presence, and delegates persistence to the collections and documents repositories.
+ * Handles the public demo lookup plus create, list, get, listCollectionDocuments,
+ * and delete operations for collections - validates ownership, enforces presence, and
+ * delegates persistence to the collections and documents repositories.
  */
 import { ApiError } from 'app/errors/ApiError.js';
 import * as collectionsRepo from 'app/repositories/collections/index.js';
 import * as docsRepo from 'app/repositories/documents/index.js';
 import type { Request, Response } from 'express';
+
+export async function getDemoCollections(
+  _req: Request,
+  res: Response,
+): Promise<void> {
+  const collections = await collectionsRepo.getDemoCollections();
+  if (collections.length === 0) {
+    res.status(404).json({ error: 'No demo collections available' });
+    return;
+  }
+  res.json({ collections });
+}
 
 export async function createCollection(
   req: Request,
