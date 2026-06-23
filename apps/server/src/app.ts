@@ -5,14 +5,11 @@ import { isProduction } from 'app/config/env.js';
 import { redisConnection } from 'app/config/queue.js';
 import pool from 'app/database/pool.js';
 import { query } from 'app/database/query.js';
-import {
-  csrfGuard,
-  generateCsrfToken,
-} from 'app/middleware/csrfGuard/csrfGuard.js';
-import { errorHandler } from 'app/middleware/errorHandler/errorHandler.js';
-import { notFoundHandler } from 'app/middleware/notFoundHandler/notFoundHandler.js';
-import { rateLimiter } from 'app/middleware/rateLimiter/rateLimiter.js';
-import { requestLogger } from 'app/middleware/requestLogger/requestLogger.js';
+import { csrfGuard, generateCsrfToken } from 'app/middleware/csrfGuard.js';
+import { errorHandler } from 'app/middleware/errorHandler.js';
+import { notFoundHandler } from 'app/middleware/notFoundHandler.js';
+import { rateLimiter } from 'app/middleware/rateLimiter.js';
+import { requestLogger } from 'app/middleware/requestLogger.js';
 import { loadSession } from 'app/middleware/requireAuth/loadSession.js';
 import { authRouter } from 'app/routes/auth.js';
 import { collectionRouter } from 'app/routes/collections.js';
