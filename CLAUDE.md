@@ -4,11 +4,11 @@ Upload PDFs/documents. Background pipeline chunks, embeds, and stores vectors in
 
 ## Key AI pattern
 
-RAG: chunking → embedding → vector search → grounded prompt assembly → streaming answer with citations. The chunking module (`packages/common/chunker/`) is reused in apps 5 and 7.
+RAG: chunking → embedding → vector search → grounded prompt assembly → streaming answer with citations. The chunking module (`@repo/chunker`) is reused in apps 5 and 7.
 
 ## Stack
 
-- Monorepo: `packages/api`, `packages/worker`, `packages/web`, `packages/common`
+- Monorepo: `apps/server`, `apps/worker`, `apps/client/web`, and `packages/{chunker,clients,logger,types}` (`@repo/*` scope)
 - Next.js on Vercel, Express + BullMQ worker on Railway
 - PostgreSQL + pgvector on Neon, Redis on Railway
 - Cloudflare R2 for document storage
