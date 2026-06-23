@@ -1,8 +1,6 @@
 import { errorHandler } from 'app/middleware/errorHandler/errorHandler.js';
-import {
-  loadSession,
-  requireAuth,
-} from 'app/middleware/requireAuth/requireAuth.js';
+import { loadSession } from 'app/middleware/requireAuth/loadSession.js';
+import { requireAuth } from 'app/middleware/requireAuth/requireAuth.js';
 import * as authRepo from 'app/repositories/auth/index.js';
 import cookieParser from 'cookie-parser';
 import express from 'express';

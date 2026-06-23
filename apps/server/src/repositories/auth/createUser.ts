@@ -1,6 +1,6 @@
 /** Inserts a new user row with a bcrypt-hashed password and returns the created user. */
-import { query } from 'app/database/pool.js';
 import type { PoolClient } from 'app/database/pool.js';
+import { query } from 'app/database/query.js';
 import type { User } from 'app/schemas/auth.js';
 import bcrypt from 'bcrypt';
 

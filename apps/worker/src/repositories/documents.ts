@@ -1,5 +1,5 @@
 /** Worker-side document write: updates a document's processing status and optional chunk-count/error fields. */
-import { query } from 'app/database/pool.js';
+import { query } from 'app/database/query.js';
 
 interface StatusFields {
   error?: string;

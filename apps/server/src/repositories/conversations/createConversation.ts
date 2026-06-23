@@ -1,6 +1,6 @@
 /** Creates a new conversation row and returns the created record. */
 import type { Conversation } from '@repo/types';
-import { query } from 'app/database/pool.js';
+import { query } from 'app/database/query.js';
 
 export async function createConversation(
   userId: string,

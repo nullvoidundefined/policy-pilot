@@ -1,5 +1,5 @@
 /** Deletes a session row by its raw token and returns true if a row was removed. */
-import { query } from 'app/database/pool.js';
+import { query } from 'app/database/query.js';
 
 import { hashSessionToken } from './hashSessionToken.js';
 

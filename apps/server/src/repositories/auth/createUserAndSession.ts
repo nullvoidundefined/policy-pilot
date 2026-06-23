@@ -1,5 +1,5 @@
 /** Creates a new user and an initial session in a single transaction, returning both. */
-import { withTransaction } from 'app/database/pool.js';
+import { withTransaction } from 'app/database/withTransaction.js';
 import type { User } from 'app/schemas/auth.js';
 
 import { createSession } from './createSession.js';

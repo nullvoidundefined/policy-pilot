@@ -2,7 +2,7 @@
  * Updates a document's status and optionally total_chunks or error fields.
  */
 import type { DocumentStatus } from '@repo/types';
-import { query } from 'app/database/pool.js';
+import { query } from 'app/database/query.js';
 
 export async function updateDocumentStatus(
   documentId: string,

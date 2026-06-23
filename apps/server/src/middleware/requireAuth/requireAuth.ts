@@ -1,31 +1,9 @@
 /**
- * Provides session hydration and auth-gate middleware - loadSession resolves the session cookie
- * to a user record, requireAuth blocks unauthenticated requests, and optionalAuth passes through.
+ * Auth-gate middleware: blocks requests that loadSession did not authenticate by
+ * forwarding an unauthorized error, otherwise passes through to the route handler.
  */
-import { SESSION_COOKIE_NAME } from 'app/constants/session.js';
 import { ApiError } from 'app/errors/ApiError.js';
-import * as authRepo from 'app/repositories/auth/index.js';
 import type { NextFunction, Request, Response } from 'express';
-
-export async function loadSession(
-  req: Request,
-  res: Response,
-  next: NextFunction,
-): Promise<void> {
-  const token = req.cookies?.[SESSION_COOKIE_NAME];
-  if (!token || typeof token !== 'string') {
-    next();
-    return;
-  }
-  try {
-    const user = await authRepo.getSessionWithUser(token);
-    if (user) req.user = user;
-  } catch (err) {
-    next(err);
-    return;
-  }
-  next();
-}
 
 export function requireAuth(
   req: Request,
@@ -36,13 +14,5 @@ export function requireAuth(
     next(ApiError.unauthorized());
     return;
   }
-  next();
-}
-
-export function optionalAuth(
-  req: Request,
-  _res: Response,
-  next: NextFunction,
-): void {
   next();
 }

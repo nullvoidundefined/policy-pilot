@@ -1,6 +1,6 @@
 /** Inserts a new collection row for the given user and returns the created record. */
 import type { Collection } from '@repo/types';
-import { query } from 'app/database/pool.js';
+import { query } from 'app/database/query.js';
 
 export async function createCollection(
   userId: string,

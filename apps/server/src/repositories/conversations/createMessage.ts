@@ -1,6 +1,6 @@
 /** Inserts a new message into a conversation and returns the created record. */
 import type { Message } from '@repo/types';
-import { query } from 'app/database/pool.js';
+import { query } from 'app/database/query.js';
 
 export async function createMessage(
   conversationId: string,

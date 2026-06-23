@@ -11,11 +11,13 @@ import { beforeEach, describe, expect, it, vi } from 'vitest';
 const mockQuery = vi.fn();
 const mockWithTransaction = vi.fn();
 
-vi.mock('app/database/pool.js', () => ({
+vi.mock('app/database/query.js', () => ({
   query: (...args: unknown[]) => mockQuery(...args),
+}));
+
+vi.mock('app/database/withTransaction.js', () => ({
   withTransaction: (fn: (client: unknown) => Promise<unknown>) =>
     mockWithTransaction(fn),
-  default: { query: vi.fn(), end: vi.fn(), on: vi.fn() },
 }));
 
 vi.mock('@repo/logger', () => ({

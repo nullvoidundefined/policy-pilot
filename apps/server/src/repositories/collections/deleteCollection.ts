@@ -1,5 +1,5 @@
 /** Deletes a non-demo collection owned by the user; returns true if a row was removed. */
-import { query } from 'app/database/pool.js';
+import { query } from 'app/database/query.js';
 
 export async function deleteCollection(
   id: string,

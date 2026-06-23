@@ -2,7 +2,7 @@
  * Lists all documents for a user, optionally filtered by collection.
  */
 import type { Document } from '@repo/types';
-import { query } from 'app/database/pool.js';
+import { query } from 'app/database/query.js';
 
 export async function listDocuments(
   userId: string,

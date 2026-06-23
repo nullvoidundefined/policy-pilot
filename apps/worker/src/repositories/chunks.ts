@@ -1,6 +1,6 @@
 /** Worker-side chunk write: inserts a single embedded chunk row into the pgvector-backed chunks table. */
 import type { TextChunk } from '@repo/chunker';
-import { query } from 'app/database/pool.js';
+import { query } from 'app/database/query.js';
 
 export async function insertChunk(
   documentId: string,

@@ -1,6 +1,6 @@
 /** Fetches a single conversation by ID scoped to a user, or null if not found. */
 import type { Conversation } from '@repo/types';
-import { query } from 'app/database/pool.js';
+import { query } from 'app/database/query.js';
 
 export async function getConversation(
   conversationId: string,

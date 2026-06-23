@@ -1,6 +1,6 @@
 /** Returns all messages in a conversation, ordered by creation time ascending. */
 import type { Message } from '@repo/types';
-import { query } from 'app/database/pool.js';
+import { query } from 'app/database/query.js';
 
 export async function getMessages(conversationId: string): Promise<Message[]> {
   const result = await query<Message>(
