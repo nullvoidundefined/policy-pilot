@@ -18,28 +18,6 @@ drop `'embedding'` if the worker never sets it) so `PROCESSING_STATUSES` matches
 the real `DocumentStatus` union. Found during Track A6.2; the literals were
 preserved as-is there because that PR was a value-neutral extraction.
 
-## Flaky tests
-
-### `demo.test.tsx` QA-fetch-fail assertion times out under CI load (P2)
-
-**Why:** `apps/client/web/src/__tests__/app/demo.test.tsx` >
-`DemoPage > Q&A happy path > renders the turbulence error message when the QA
-fetch fails` asserts `await screen.findByText(/we've hit some turbulence/i)`,
-which uses Testing Library's default 1000ms timeout. That case does the most
-async work of the error-path tests (type + send + await the streamed 500 error
-state), and on the slower CI runner under full-suite load it occasionally
-exceeds 1000ms (observed: 1053ms), reding `main` CI. Passes locally 18/18 and
-5/5 in isolation; cleared on CI re-run with no code change. Surfaced by the
-A6.4a merge (`59d0313`), unrelated to the chunker (web does not import
-`@repo/chunker`).
-
-**How to apply:** Timing flake, so R-201's test-resistant path applies (no
-deterministic failing test). Raise the timeout on that assertion (and the
-sibling async-error `findBy*` calls if they show the same edge), e.g.
-`screen.findByText(/we've hit some turbulence/i, undefined, { timeout: 5000 })`,
-then verify with many local full-suite runs. Ship as its own `fix:` PR, not
-folded into Track A6.
-
 ## Deploy / Railway
 
 ### Convert `railway.toml` to per-service config files (e.g. `railway.server.toml`)
