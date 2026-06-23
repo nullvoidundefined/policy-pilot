@@ -4,7 +4,7 @@ import { useCallback, useState } from 'react';
 import type { FormEvent } from 'react';
 
 import Captain from '@/components/Captain/Captain';
-import { useAuth } from '@/context/AuthContext';
+import { useAuth } from '@/state/AuthContext';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 

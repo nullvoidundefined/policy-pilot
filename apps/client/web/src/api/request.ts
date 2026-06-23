@@ -1,14 +1,9 @@
+/** Thin fetch wrapper for the policy-pilot API: base URL, credentialed cookie auth, CSRF token handling with one retry, and JSON ApiError normalization, so callers never repeat fetch boilerplate. */
+import { ApiError } from '@/errors/ApiError';
+
 const API_BASE = process.env.NEXT_PUBLIC_API_URL ?? 'http://localhost:3001';
 
-export class ApiError extends Error {
-  constructor(
-    public status: number,
-    message: string,
-  ) {
-    super(message);
-    this.name = 'ApiError';
-  }
-}
+const STATE_CHANGING_METHODS = new Set(['POST', 'PUT', 'PATCH', 'DELETE']);
 
 let csrfToken: string | null = null;
 
@@ -22,8 +17,6 @@ export async function ensureCsrfToken(): Promise<string> {
   csrfToken = data.token as string;
   return csrfToken;
 }
-
-const STATE_CHANGING_METHODS = new Set(['POST', 'PUT', 'PATCH', 'DELETE']);
 
 async function request<T>(path: string, options: RequestInit = {}): Promise<T> {
   const method = options.method ?? 'GET';
@@ -154,20 +147,6 @@ export async function streamPost(
       controller.abort();
     },
   });
-}
-
-// ---- Collection API ----
-
-export function getCollections() {
-  return get<{ collections: any[] }>('/collections');
-}
-
-export function createCollectionApi(name: string, description?: string) {
-  return post<{ collection: any }>('/collections', { name, description });
-}
-
-export function deleteCollectionApi(id: string) {
-  return del<void>(`/collections/${id}`);
 }
 
 export { API_BASE };

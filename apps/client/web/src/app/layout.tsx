@@ -1,7 +1,7 @@
 import { ErrorBoundary } from '@/components/ErrorBoundary/ErrorBoundary';
 import Header from '@/components/Header/Header';
-import { AuthProvider } from '@/context/AuthContext';
-import { QueryProvider } from '@/providers/QueryProvider';
+import { AuthProvider } from '@/state/AuthContext';
+import { QueryProvider } from '@/state/QueryProvider';
 import { Analytics } from '@vercel/analytics/next';
 import { SpeedInsights } from '@vercel/speed-insights/next';
 import type { Metadata } from 'next';

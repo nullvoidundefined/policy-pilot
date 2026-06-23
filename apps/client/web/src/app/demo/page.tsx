@@ -3,9 +3,9 @@
 import { useCallback, useEffect, useRef, useState } from 'react';
 import type { FormEvent } from 'react';
 
+import { API_BASE } from '@/api/request';
 import Captain from '@/components/Captain/Captain';
 import CitationPanel from '@/components/CitationPanel/CitationPanel';
-import { API_BASE } from '@/lib/api';
 import Link from 'next/link';
 
 import styles from './demo.module.scss';

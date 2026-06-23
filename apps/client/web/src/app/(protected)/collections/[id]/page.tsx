@@ -2,8 +2,8 @@
 
 import { useCallback, useRef, useState } from 'react';
 
+import { del, get, post, uploadFile } from '@/api/request';
 import Captain from '@/components/Captain/Captain';
-import { del, get, post, uploadFile } from '@/lib/api';
 import { useQuery, useQueryClient } from '@tanstack/react-query';
 import Link from 'next/link';
 import { useParams, useRouter } from 'next/navigation';
@@ -119,7 +119,7 @@ export default function CollectionPage() {
           queryKey: ['collection-documents', id],
         });
       } catch {
-        // silent fail — will show on next poll
+        // silent fail, will show on next poll
       }
     },
     [id, queryClient],

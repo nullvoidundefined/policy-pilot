@@ -3,10 +3,10 @@
 import { useCallback, useEffect, useRef, useState } from 'react';
 import type { FormEvent } from 'react';
 
+import { API_BASE, get } from '@/api/request';
 import Captain from '@/components/Captain/Captain';
 import CitationPanel from '@/components/CitationPanel/CitationPanel';
-import { useAuth } from '@/context/AuthContext';
-import { API_BASE, get } from '@/lib/api';
+import { useAuth } from '@/state/AuthContext';
 import Link from 'next/link';
 import { useParams } from 'next/navigation';
 

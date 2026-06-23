@@ -23,7 +23,7 @@ export default function LandingPage() {
           <Captain
             diverse
             size='lg'
-            alt='Captain PolicyPilot — your co-pilot for company policy'
+            alt='Captain PolicyPilot, your co-pilot for company policy'
             className={styles.heroCaptain}
           />
 
@@ -56,7 +56,7 @@ export default function LandingPage() {
         <div className={styles.sectionInner}>
           <h2 className={styles.sectionTitle}>All systems go</h2>
           <p className={styles.sectionSubtitle}>
-            Everything you need to navigate company policy — fast, accurate, and
+            Everything you need to navigate company policy: fast, accurate, and
             citation-approved.
           </p>
 
@@ -79,7 +79,7 @@ export default function LandingPage() {
               <h3 className={styles.featureTitle}>Cited Sources</h3>
               <p className={styles.featureText}>
                 Every answer includes citations back to the source document.
-                Trust, but verify — flight-tested and citation-approved.
+                Trust, but verify: flight-tested and citation-approved.
               </p>
             </article>
 
@@ -90,7 +90,7 @@ export default function LandingPage() {
               <h3 className={styles.featureTitle}>Your Documents, Secured</h3>
               <p className={styles.featureText}>
                 Upload PDFs, DOCX, or any policy document format. Your data
-                stays private — no shared cabins here.
+                stays private, no shared cabins here.
               </p>
             </article>
           </div>
@@ -105,7 +105,7 @@ export default function LandingPage() {
           </h2>
           <p className={styles.sectionSubtitle}>
             We&apos;ve pre-loaded handbooks from three well-known companies.
-            Take PolicyPilot for a spin — no signup required.
+            Take PolicyPilot for a spin, no signup required.
           </p>
 
           <div className={styles.demoGrid}>
@@ -153,7 +153,7 @@ export default function LandingPage() {
           />
           <h2 className={styles.ctaTitle}>Ready for takeoff?</h2>
           <p className={styles.ctaText}>
-            Create your free account and start asking your handbook anything —
+            Create your free account and start asking your handbook anything:
             answers in seconds, sources included.
           </p>
           <Link href='/register' className={styles.btnPrimary}>

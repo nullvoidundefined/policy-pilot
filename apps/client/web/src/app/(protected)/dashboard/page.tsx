@@ -3,13 +3,11 @@
 import { useCallback, useState } from 'react';
 import type { FormEvent } from 'react';
 
+import { createCollection } from '@/api/createCollection';
+import { deleteCollection } from '@/api/deleteCollection';
+import { getCollections } from '@/api/getCollections';
 import Captain from '@/components/Captain/Captain';
-import { useAuth } from '@/context/AuthContext';
-import {
-  createCollectionApi,
-  deleteCollectionApi,
-  getCollections,
-} from '@/lib/api';
+import { useAuth } from '@/state/AuthContext';
 import { useQuery, useQueryClient } from '@tanstack/react-query';
 import Link from 'next/link';
 
@@ -49,7 +47,7 @@ export default function DashboardPage() {
       setCreateError('');
       setCreating(true);
       try {
-        await createCollectionApi(
+        await createCollection(
           newName.trim(),
           newDescription.trim() || undefined,
         );
@@ -81,7 +79,7 @@ export default function DashboardPage() {
         }),
       );
       try {
-        await deleteCollectionApi(id);
+        await deleteCollection(id);
       } catch {
         queryClient.setQueryData(['collections'], prev);
       }
