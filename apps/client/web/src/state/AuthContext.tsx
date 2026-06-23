@@ -1,5 +1,9 @@
 'use client';
 
+/**
+ * Provides authenticated user state, login, signup, and logout to the React
+ * tree via AuthContext, backed by a TanStack Query cache of the /auth/me endpoint.
+ */
 import { createContext, useCallback, useContext, useMemo } from 'react';
 
 import { get, post } from '@/api/request';

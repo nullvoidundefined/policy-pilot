@@ -1,5 +1,9 @@
 'use client';
 
+/**
+ * Renders the unauthenticated demo route: a streaming Q&A interface backed by
+ * pre-loaded public company handbooks, allowing visitors to try RAG without signing up.
+ */
 import { useCallback, useEffect, useRef, useState } from 'react';
 import type { FormEvent } from 'react';
 

@@ -1,5 +1,9 @@
 'use client';
 
+/**
+ * Renders the registration route: a sign-up form that creates a new account
+ * via the session API and redirects to the dashboard on success.
+ */
 import { useCallback, useState } from 'react';
 import type { FormEvent } from 'react';
 

@@ -1,5 +1,9 @@
 'use client';
 
+/**
+ * Instantiates a TanStack QueryClient with project-default stale times and
+ * wraps children in QueryClientProvider so all hooks have access to the cache.
+ */
 import { useState } from 'react';
 
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';

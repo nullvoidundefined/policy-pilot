@@ -1,3 +1,7 @@
+/**
+ * Builds the Express CORS middleware options from the CORS_ORIGIN env variable,
+ * centralizing cross-origin policy so every route shares one source of truth.
+ */
 import cors from 'cors';
 
 const allowedOrigins = (process.env.CORS_ORIGIN ?? 'http://localhost:3000')

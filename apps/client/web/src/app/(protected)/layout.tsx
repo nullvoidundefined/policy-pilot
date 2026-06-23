@@ -1,5 +1,9 @@
 'use client';
 
+/**
+ * Auth guard layout for all protected routes: redirects unauthenticated users
+ * to /login and renders a loading state while the auth check resolves.
+ */
 import { useEffect } from 'react';
 
 import { useAuth } from '@/state/AuthContext';

@@ -1,3 +1,7 @@
+/**
+ * Handles create, list, get, listCollectionDocuments, and delete operations for
+ * collections - validates ownership, enforces presence, and delegates persistence to the collections and documents repositories.
+ */
 import { ApiError } from 'app/errors/ApiError.js';
 import * as collectionsRepo from 'app/repositories/collections/index.js';
 import * as docsRepo from 'app/repositories/documents/index.js';

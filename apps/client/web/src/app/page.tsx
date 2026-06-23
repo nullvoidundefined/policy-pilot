@@ -1,3 +1,7 @@
+/**
+ * Renders the public landing page: hero, feature highlights, demo preview cards,
+ * and a CTA footer that drive visitors toward the demo and registration routes.
+ */
 import Captain from '@/components/Captain/Captain';
 import Image from 'next/image';
 import Link from 'next/link';

@@ -1,3 +1,7 @@
+/**
+ * Root layout for the entire Next.js app: wraps every route in auth, query,
+ * and error-boundary providers, loads global fonts, and injects analytics.
+ */
 import { ErrorBoundary } from '@/components/ErrorBoundary/ErrorBoundary';
 import Header from '@/components/Header/Header';
 import { AuthProvider } from '@/state/AuthContext';

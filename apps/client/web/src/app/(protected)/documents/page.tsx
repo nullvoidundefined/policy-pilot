@@ -1,5 +1,9 @@
 'use client';
 
+/**
+ * Renders the bare /documents route: immediately redirects to /dashboard because
+ * document management is scoped to a specific collection.
+ */
 import { useEffect } from 'react';
 
 import { useRouter } from 'next/navigation';

@@ -1,5 +1,9 @@
 'use client';
 
+/**
+ * Renders the dashboard route: lists the user's document collections and provides
+ * controls to create or delete collections, then navigate into each one.
+ */
 import { useCallback, useState } from 'react';
 import type { FormEvent } from 'react';
 

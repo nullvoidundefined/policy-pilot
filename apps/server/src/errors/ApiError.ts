@@ -1,3 +1,8 @@
+/**
+ * Defines the ApiError class used to represent structured HTTP errors throughout the server,
+ * providing typed status codes, error codes, and factory methods for each common failure case.
+ */
+
 export class ApiError extends Error {
   public readonly statusCode: number;
   public readonly code: string;

@@ -1,5 +1,11 @@
 'use client';
 
+/**
+ * Renders a streamed assistant answer as formatted markdown (headings, lists,
+ * bold, etc.) with inline `[N]` citation markers turned into clickable badges
+ * that open the source citation. User questions render as plain text elsewhere;
+ * this component is only for assistant answers.
+ */
 import { useMemo } from 'react';
 import type { ReactNode } from 'react';
 
@@ -8,13 +14,6 @@ import type { Components } from 'react-markdown';
 
 import styles from './ChatAnswer.module.scss';
 import { remarkCitations } from './remarkCitations';
-
-/**
- * Renders a streamed assistant answer as formatted markdown (headings, lists,
- * bold, etc.) with inline `[N]` citation markers turned into clickable badges
- * that open the source citation. User questions render as plain text elsewhere;
- * this component is only for assistant answers.
- */
 
 interface CitedChunk {
   id: string;

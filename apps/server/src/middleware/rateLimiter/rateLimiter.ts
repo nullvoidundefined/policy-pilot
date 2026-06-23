@@ -1,3 +1,7 @@
+/**
+ * Exports three pre-configured express-rate-limit instances - general, auth, and chat -
+ * with tiered request windows so each route family has an appropriate abuse ceiling.
+ */
 import rateLimit from 'express-rate-limit';
 
 const RATE_LIMITED_MESSAGE = {

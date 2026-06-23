@@ -1,3 +1,7 @@
+/**
+ * Handles register, login, logout, and me operations - validates input, manages
+ * session cookies, and delegates credential and session persistence to the auth repository.
+ */
 import { logger } from '@repo/logger';
 import { isProduction } from 'app/config/env.js';
 import { SESSION_COOKIE_NAME, SESSION_TTL_MS } from 'app/constants/session.js';

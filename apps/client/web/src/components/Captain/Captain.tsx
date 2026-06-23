@@ -1,5 +1,9 @@
 'use client';
 
+/**
+ * Renders the Captain PolicyPilot mascot image in one of several named poses
+ * or as a randomly selected diverse pilot variant, at a configurable size.
+ */
 import { useState } from 'react';
 
 import Image from 'next/image';

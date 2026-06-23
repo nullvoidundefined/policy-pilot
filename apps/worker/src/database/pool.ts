@@ -1,3 +1,7 @@
+/**
+ * Owns the worker's PostgreSQL connection pool and the query helper, forming the
+ * single data-access boundary between the document-processing worker and Neon.
+ */
 import { logger } from '@repo/logger';
 import pg from 'pg';
 

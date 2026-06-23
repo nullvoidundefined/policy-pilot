@@ -1,5 +1,9 @@
 'use client';
 
+/**
+ * Site-wide navigation header with the PolicyPilot logo, main nav links, and
+ * an auth control that toggles between Sign In and Log Out based on session state.
+ */
 import { useAuth } from '@/state/AuthContext';
 import Image from 'next/image';
 import Link from 'next/link';

@@ -1,3 +1,7 @@
+/**
+ * Configures the pino-http request logger middleware with a stable request ID strategy
+ * and trimmed request/response serializers to produce consistent structured log entries.
+ */
 import { logger } from '@repo/logger';
 import { randomUUID } from 'crypto';
 import { pinoHttp } from 'pino-http';
