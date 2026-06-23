@@ -3,7 +3,7 @@
  * path, and guard for each auth operation without holding any business logic.
  */
 import * as authHandlers from 'app/handlers/auth/auth.js';
-import { authRateLimiter } from 'app/middleware/rateLimiter/rateLimiter.js';
+import { authRateLimiter } from 'app/middleware/rateLimiter.js';
 import { requireAuth } from 'app/middleware/requireAuth/requireAuth.js';
 import express from 'express';
 

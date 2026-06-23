@@ -1,4 +1,4 @@
-import { errorHandler } from 'app/middleware/errorHandler/errorHandler.js';
+import { errorHandler } from 'app/middleware/errorHandler.js';
 import { loadSession } from 'app/middleware/requireAuth/loadSession.js';
 import { requireAuth } from 'app/middleware/requireAuth/requireAuth.js';
 import * as authRepo from 'app/repositories/auth/index.js';
