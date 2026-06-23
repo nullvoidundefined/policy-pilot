@@ -9,19 +9,12 @@
 import { useMemo } from 'react';
 import type { ReactNode } from 'react';
 
+import type { CitedChunk } from '@/types';
 import Markdown from 'react-markdown';
 import type { Components } from 'react-markdown';
 
 import styles from './ChatAnswer.module.scss';
 import { remarkCitations } from './remarkCitations';
-
-interface CitedChunk {
-  id: string;
-  document_id: string;
-  chunk_index: number;
-  content: string;
-  filename: string;
-}
 
 interface ChatAnswerProps {
   content: string;
@@ -71,5 +64,3 @@ export default function ChatAnswer({
 function parseCitationIndex(children: ReactNode): number {
   return Number(String(children).replace(/\D/g, ''));
 }
-
-export type { CitedChunk };

@@ -5,8 +5,8 @@
  * own only their component state (R-227/R-234).
  */
 import { streamPost } from '@/api/request';
-import type { CitedChunk } from '@/components/ChatAnswer/ChatAnswer';
 import { SSE_DATA_PREFIX } from '@/constants/sse';
+import type { CitedChunk } from '@/types';
 
 export interface StreamAnswerEvent {
   citations?: CitedChunk[];

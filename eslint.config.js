@@ -1,6 +1,7 @@
 import babelParser from '@babel/eslint-parser';
 import tsEslintParser from '@typescript-eslint/parser';
 import eslintConfigPrettier from 'eslint-config-prettier';
+import importPlugin from 'eslint-plugin-import';
 import jsxA11y from 'eslint-plugin-jsx-a11y';
 import react from 'eslint-plugin-react';
 import reactHooks from 'eslint-plugin-react-hooks';
@@ -8,6 +9,63 @@ import security from 'eslint-plugin-security';
 import unusedImports from 'eslint-plugin-unused-imports';
 import globals from 'globals';
 import tseslint from 'typescript-eslint';
+
+const TSCONFIG_PROJECTS = [
+  './apps/server/tsconfig.json',
+  './apps/client/web/tsconfig.json',
+  './apps/worker/tsconfig.json',
+  './packages/types/tsconfig.json',
+  './packages/chunker/tsconfig.json',
+  './packages/logger/tsconfig.json',
+  './packages/clients/tsconfig.json',
+];
+
+// R-224 layer flow: higher layers import lower, never the reverse. Paths resolve
+// from the repo root, where every lint gate (CI, pre-commit, pre-push) runs.
+const LAYER_CONTRACT_ZONES = [
+  {
+    target: './apps/server/src/routes',
+    from: './apps/server/src/repositories',
+    message:
+      'Routes must delegate to handlers, not import repositories directly (R-224).',
+  },
+  {
+    target: './apps/server/src/services',
+    from: ['./apps/server/src/handlers', './apps/server/src/routes'],
+    message: 'Services must not import handlers or routes (R-224).',
+  },
+  {
+    target: './apps/server/src/repositories',
+    from: [
+      './apps/server/src/handlers',
+      './apps/server/src/routes',
+      './apps/server/src/services',
+    ],
+    message:
+      'Repositories are the lowest application layer and must not import upward (R-224).',
+  },
+  {
+    target: './apps/server/src/clients',
+    from: [
+      './apps/server/src/handlers',
+      './apps/server/src/repositories',
+      './apps/server/src/routes',
+      './apps/server/src/services',
+    ],
+    message:
+      'Clients wrap third-party SDKs and must not import application layers (R-224).',
+  },
+  {
+    target: [
+      './apps/client/web/src/api',
+      './apps/client/web/src/services',
+      './apps/client/web/src/state',
+    ],
+    from: ['./apps/client/web/src/app', './apps/client/web/src/components'],
+    message:
+      'Lower web layers must not import routes or components; data flows components -> state -> services/api (R-224).',
+  },
+];
 
 export default tseslint.config([
   {
@@ -89,19 +147,26 @@ export default tseslint.config([
       parserOptions: {
         ecmaFeatures: { jsx: true },
         ecmaVersion: 'latest',
-        project: [
-          './apps/server/tsconfig.json',
-          './apps/client/web/tsconfig.json',
-          './apps/worker/tsconfig.json',
-          './packages/types/tsconfig.json',
-          './packages/chunker/tsconfig.json',
-          './packages/logger/tsconfig.json',
-          './packages/clients/tsconfig.json',
-        ],
+        project: TSCONFIG_PROJECTS,
         sourceType: 'module',
       },
     },
+    plugins: {
+      import: importPlugin,
+    },
+    settings: {
+      'import/parsers': {
+        '@typescript-eslint/parser': ['.ts', '.tsx'],
+      },
+      'import/resolver': {
+        typescript: {
+          project: TSCONFIG_PROJECTS,
+        },
+      },
+    },
     rules: {
+      'import/no-cycle': ['error', { ignoreExternal: true }],
+      'import/no-restricted-paths': ['error', { zones: LAYER_CONTRACT_ZONES }],
       '@typescript-eslint/ban-ts-comment': [
         'warn',
         { 'ts-ignore': 'allow-with-description' },

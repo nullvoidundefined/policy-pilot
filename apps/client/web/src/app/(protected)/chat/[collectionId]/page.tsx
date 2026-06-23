@@ -10,11 +10,11 @@ import type { FormEvent } from 'react';
 import { get } from '@/api/request';
 import Captain from '@/components/Captain/Captain';
 import ChatAnswer from '@/components/ChatAnswer/ChatAnswer';
-import type { CitedChunk } from '@/components/ChatAnswer/ChatAnswer';
 import CitationPanel from '@/components/CitationPanel/CitationPanel';
 import { QA_STREAM_PATH } from '@/constants/apiPaths';
 import { streamAnswer } from '@/services/streamAnswer';
 import { useAuth } from '@/state/AuthContext';
+import type { CitedChunk } from '@/types';
 import Link from 'next/link';
 import { useParams } from 'next/navigation';
 
