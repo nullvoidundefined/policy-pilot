@@ -1,6 +1,6 @@
 import { describe, expect, it } from 'vitest';
 
-import { chunkText } from './index.js';
+import { chunkText } from '../index.js';
 
 describe('chunkText', () => {
   describe('basic chunking', () => {
@@ -60,11 +60,9 @@ describe('chunkText', () => {
         const prev = chunks[i - 1]!.content;
         const curr = chunks[i]!.content;
         // The end of the previous chunk should appear at the start of the current chunk
-        const prevEnd = prev.slice(-40); // last ~10 tokens worth
-        // At least some portion of prevEnd should be in curr
-        const hasOverlap = curr.includes(prevEnd.trim().slice(0, 20));
-        // Note: overlap is best-effort due to separator-based splitting
-        // We just verify multiple chunks are produced
+        // Overlap is best-effort due to separator-based splitting; we verify
+        // that multiple non-empty chunks are produced rather than exact overlap.
+        expect(prev.length).toBeGreaterThan(0);
         expect(curr.length).toBeGreaterThan(0);
       }
     });
