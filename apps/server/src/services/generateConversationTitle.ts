@@ -1,6 +1,7 @@
 /** Generates a short AI title for a new conversation; falls back to the truncated question on any failure. */
 import { logger } from '@repo/logger';
 import { anthropic } from 'app/clients/anthropic.js';
+import { MAX_TITLE_LENGTH } from 'app/constants/conversationTitle.js';
 
 const TITLE_MODEL = 'claude-haiku-4-5-20251001';
 const TITLE_MAX_TOKENS = 30;
@@ -23,9 +24,9 @@ export async function generateConversationTitle(
     if (block?.type === 'text' && block.text.trim().length > 0) {
       return block.text.trim();
     }
-    return question.slice(0, 100);
+    return question.slice(0, MAX_TITLE_LENGTH);
   } catch (err) {
     logger.warn({ err }, 'Title generation failed, using fallback');
-    return question.slice(0, 100);
+    return question.slice(0, MAX_TITLE_LENGTH);
   }
 }

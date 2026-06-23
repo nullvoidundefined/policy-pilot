@@ -2,6 +2,7 @@
 import { generateEmbedding } from '@repo/clients/openai';
 import { logger } from '@repo/logger';
 import { anthropic } from 'app/clients/anthropic.js';
+import { MAX_TITLE_LENGTH } from 'app/constants/conversationTitle.js';
 import { ApiError } from 'app/errors/ApiError.js';
 import { buildContextPrompt } from 'app/prompts/buildContextPrompt.js';
 import { QA_SYSTEM_PROMPT } from 'app/prompts/qaSystemPrompt.js';
@@ -11,6 +12,7 @@ import { generateConversationTitle } from 'app/services/generateConversationTitl
 import { searchChunks } from 'app/services/searchChunks.js';
 import type { Request, Response } from 'express';
 
+const DEFAULT_TOP_K = 6;
 const QA_MODEL = 'claude-sonnet-4-6';
 const QA_MAX_TOKENS = 2048;
 
@@ -51,7 +53,7 @@ export async function streamQA(req: Request, res: Response): Promise<void> {
     let conversationId = conversation_id;
     let isNewConversation = false;
     if (!conversationId && user) {
-      const title = question.slice(0, 100);
+      const title = question.slice(0, MAX_TITLE_LENGTH);
       const conversation = await convRepo.createConversation(user.id, title);
       conversationId = conversation.id;
       isNewConversation = true;
@@ -91,7 +93,7 @@ export async function streamQA(req: Request, res: Response): Promise<void> {
     const chunks = await searchChunks(
       questionEmbedding,
       searchUserId,
-      6,
+      DEFAULT_TOP_K,
       collection_id,
     );
 

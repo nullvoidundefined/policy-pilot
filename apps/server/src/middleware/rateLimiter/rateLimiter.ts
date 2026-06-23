@@ -4,9 +4,16 @@
  */
 import rateLimit from 'express-rate-limit';
 
+const RATE_LIMITED_ERROR = 'RATE_LIMITED';
+
 const RATE_LIMITED_MESSAGE = {
-  error: 'RATE_LIMITED',
+  error: RATE_LIMITED_ERROR,
   message: 'Too many requests, please try again later',
+};
+
+const AUTH_RATE_LIMITED_MESSAGE = {
+  error: RATE_LIMITED_ERROR,
+  message: 'Too many authentication attempts, please try again later',
 };
 
 export const rateLimiter = rateLimit({
@@ -22,10 +29,7 @@ export const authRateLimiter = rateLimit({
   max: 20,
   standardHeaders: true,
   legacyHeaders: false,
-  message: {
-    error: 'RATE_LIMITED',
-    message: 'Too many authentication attempts, please try again later',
-  },
+  message: AUTH_RATE_LIMITED_MESSAGE,
 });
 
 export const chatLimiter = rateLimit({

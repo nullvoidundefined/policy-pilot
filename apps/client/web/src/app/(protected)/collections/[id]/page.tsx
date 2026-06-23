@@ -34,6 +34,12 @@ interface CollectionDetail {
   created_at: string;
 }
 
+const DOCUMENT_POLL_INTERVAL_MS = 5000;
+const PROCESSING_STATUSES = ['pending', 'chunking', 'embedding'];
+const STATUS_FAILED = 'failed';
+const STATUS_READY = 'ready';
+const STATUS_REJECTED = 'rejected';
+
 export default function CollectionPage() {
   const { id } = useParams<{ id: string }>();
   const router = useRouter();
@@ -56,9 +62,9 @@ export default function CollectionPage() {
     refetchInterval: (query) => {
       const docs = query.state.data?.documents ?? [];
       const hasProcessing = docs.some((d) =>
-        ['pending', 'chunking', 'embedding'].includes(d.status),
+        PROCESSING_STATUSES.includes(d.status),
       );
-      return hasProcessing ? 5000 : false;
+      return hasProcessing ? DOCUMENT_POLL_INTERVAL_MS : false;
     },
   });
 
@@ -131,11 +137,11 @@ export default function CollectionPage() {
 
   const getStatusLabel = (status: string) => {
     switch (status) {
-      case 'ready':
+      case STATUS_READY:
         return 'Cleared for takeoff';
-      case 'failed':
+      case STATUS_FAILED:
         return 'Turbulence encountered';
-      case 'rejected':
+      case STATUS_REJECTED:
         return 'Redirected to another gate';
       default:
         return 'Preparing for takeoff...';
@@ -144,11 +150,11 @@ export default function CollectionPage() {
 
   const getStatusClass = (status: string) => {
     switch (status) {
-      case 'ready':
+      case STATUS_READY:
         return styles.statusReady;
-      case 'failed':
+      case STATUS_FAILED:
         return styles.statusFailed;
-      case 'rejected':
+      case STATUS_REJECTED:
         return styles.statusRejected;
       default:
         return styles.statusProcessing;
@@ -278,13 +284,13 @@ export default function CollectionPage() {
                   {getStatusLabel(doc.status)}
                 </span>
 
-                {doc.status === 'failed' && doc.error && (
+                {doc.status === STATUS_FAILED && doc.error && (
                   <span className={styles.errorMessage} title={doc.error}>
                     {doc.error}
                   </span>
                 )}
 
-                {doc.status === 'rejected' && (
+                {doc.status === STATUS_REJECTED && (
                   <>
                     {doc.rejection_reason && (
                       <span

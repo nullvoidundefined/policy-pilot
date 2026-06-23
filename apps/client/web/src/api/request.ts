@@ -1,4 +1,5 @@
 /** Thin fetch wrapper for the policy-pilot API: base URL, credentialed cookie auth, CSRF token handling with one retry, and JSON ApiError normalization, so callers never repeat fetch boilerplate. */
+import { CSRF_TOKEN_PATH } from '@/constants/apiPaths';
 import { ApiError } from '@/errors/ApiError';
 
 const API_BASE = process.env.NEXT_PUBLIC_API_URL ?? 'http://localhost:3001';
@@ -9,7 +10,7 @@ let csrfToken: string | null = null;
 
 export async function ensureCsrfToken(): Promise<string> {
   if (csrfToken) return csrfToken;
-  const res = await fetch(`${API_BASE}/api/csrf-token`, {
+  const res = await fetch(`${API_BASE}${CSRF_TOKEN_PATH}`, {
     credentials: 'include',
   });
   if (!res.ok) throw new ApiError(res.status, 'Failed to fetch CSRF token');
