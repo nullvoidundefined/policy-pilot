@@ -12,8 +12,8 @@ import Captain from '@/components/Captain/Captain';
 import ChatAnswer from '@/components/ChatAnswer/ChatAnswer';
 import type { CitedChunk } from '@/components/ChatAnswer/ChatAnswer';
 import CitationPanel from '@/components/CitationPanel/CitationPanel';
-import { CSRF_TOKEN_PATH, QA_STREAM_PATH } from '@/constants/apiPaths';
-import { SSE_DATA_PREFIX } from '@/constants/sse';
+import { QA_STREAM_PATH } from '@/constants/apiPaths';
+import { streamAnswer } from '@/services/streamAnswer';
 import Link from 'next/link';
 
 import styles from './demo.module.scss';
@@ -55,6 +55,19 @@ function getExampleQuestions(collectionName: string): string[] {
     if (collectionName.includes(key)) return questions;
   }
   return [];
+}
+
+function updateLastAssistant(
+  messages: Message[],
+  content: string,
+  citations: CitedChunk[],
+): Message[] {
+  const updated = [...messages];
+  const last = updated[updated.length - 1];
+  if (last && last.role === 'assistant') {
+    updated[updated.length - 1] = { ...last, content, citations };
+  }
+  return updated;
 }
 
 export default function DemoPage() {
@@ -101,120 +114,38 @@ export default function DemoPage() {
       let assistantContent = '';
 
       try {
-        // Fetch CSRF token for the demo request
-        const tokenRes = await fetch(`${API_BASE}${CSRF_TOKEN_PATH}`, {
-          credentials: 'include',
-        });
-        const { token: csrfToken } = (await tokenRes.json()) as {
-          token: string;
-        };
-
-        const response = await fetch(`${API_BASE}${QA_STREAM_PATH}`, {
-          method: 'POST',
-          credentials: 'include',
-          headers: {
-            'Content-Type': 'application/json',
-            'X-Requested-With': 'XMLHttpRequest',
-            'X-CSRF-Token': csrfToken,
-          },
-          body: JSON.stringify({
-            question,
-            collection_id: selectedCollection.id,
-          }),
-        });
-
-        if (!response.ok || !response.body) {
-          throw new Error(`Failed to get response (${response.status})`);
-        }
-
-        const reader = response.body.getReader();
-        const decoder = new TextDecoder();
-        let buffer = '';
-
-        setMessages((prev) => [
-          ...prev,
-          { role: 'assistant', content: '', citations: [] },
-        ]);
-
-        while (true) {
-          const { done, value } = await reader.read();
-          if (done) break;
-
-          buffer += decoder.decode(value, { stream: true });
-          const lines = buffer.split('\n');
-          buffer = lines.pop() ?? '';
-
-          for (const line of lines) {
-            if (!line.startsWith(SSE_DATA_PREFIX)) continue;
-            const jsonStr = line.slice(SSE_DATA_PREFIX.length);
-            if (!jsonStr) continue;
-
-            try {
-              const event = JSON.parse(jsonStr) as {
-                type: string;
-                token?: string;
-                citations?: CitedChunk[];
-                message?: string;
-              };
-
-              console.log(
-                '[PolicyPilot] SSE event:',
-                event.type,
-                event.type === 'citations'
-                  ? `(${event.citations?.length} citations)`
-                  : '',
+        await streamAnswer(
+          QA_STREAM_PATH,
+          { question, collection_id: selectedCollection.id },
+          {
+            onStart: () =>
+              setMessages((prev) => [
+                ...prev,
+                { role: 'assistant', content: '', citations: [] },
+              ]),
+            onToken: (token) => {
+              assistantContent += token;
+              setMessages((prev) =>
+                updateLastAssistant(prev, assistantContent, currentCitations),
               );
-
-              if (event.type === 'token') {
-                assistantContent += event.token;
-                setMessages((prev) => {
-                  const updated = [...prev];
-                  const last = updated[updated.length - 1];
-                  if (last && last.role === 'assistant') {
-                    updated[updated.length - 1] = {
-                      ...last,
-                      content: assistantContent,
-                      citations: currentCitations,
-                    };
-                  }
-                  return updated;
-                });
-                scrollToBottom();
-              } else if (event.type === 'citations') {
-                currentCitations = event.citations ?? [];
-              } else if (event.type === 'error') {
-                assistantContent += `\n\n${event.message ?? 'An error occurred'}`;
-                setMessages((prev) => {
-                  const updated = [...prev];
-                  const last = updated[updated.length - 1];
-                  if (last && last.role === 'assistant') {
-                    updated[updated.length - 1] = {
-                      ...last,
-                      content: assistantContent,
-                    };
-                  }
-                  return updated;
-                });
-              }
-            } catch {
-              // skip invalid JSON
-            }
-          }
-        }
+              scrollToBottom();
+            },
+            onCitations: (citations) => {
+              currentCitations = citations;
+            },
+            onError: (message) => {
+              assistantContent += `\n\n${message ?? 'An error occurred'}`;
+              setMessages((prev) =>
+                updateLastAssistant(prev, assistantContent, currentCitations),
+              );
+            },
+          },
+        );
 
         // Final update
-        setMessages((prev) => {
-          const updated = [...prev];
-          const last = updated[updated.length - 1];
-          if (last && last.role === 'assistant') {
-            updated[updated.length - 1] = {
-              ...last,
-              content: assistantContent,
-              citations: currentCitations,
-            };
-          }
-          return updated;
-        });
+        setMessages((prev) =>
+          updateLastAssistant(prev, assistantContent, currentCitations),
+        );
       } catch (err) {
         setMessages((prev) => [
           ...prev.filter((m) => m.role !== 'assistant' || m.content !== ''),

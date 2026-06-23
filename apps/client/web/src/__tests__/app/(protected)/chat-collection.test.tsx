@@ -8,9 +8,10 @@ import { beforeEach, describe, expect, it, vi } from 'vitest';
 // Hoisted mocks
 // ---------------------------------------------------------------------------
 
-const { mockGet, mockLogout, mockUseAuth } = vi.hoisted(() => ({
+const { mockGet, mockLogout, mockStreamPost, mockUseAuth } = vi.hoisted(() => ({
   mockGet: vi.fn(),
   mockLogout: vi.fn(),
+  mockStreamPost: vi.fn(),
   mockUseAuth: vi.fn(),
 }));
 
@@ -18,6 +19,7 @@ vi.mock('@/state/AuthContext', () => ({ useAuth: mockUseAuth }));
 
 vi.mock('@/api/request', () => ({
   get: mockGet,
+  streamPost: mockStreamPost,
   API_BASE: 'http://localhost:3001',
 }));
 
@@ -75,10 +77,10 @@ function setupDefaultGet() {
 }
 
 /**
- * Build a ReadableStream that emits SSE-formatted lines exactly as the chat
- * page parser expects: each line is "data: <JSON>\n", followed by a blank
- * line. The page splits on "\n", skips non-"data: " lines, and slices off
- * "data: " before JSON.parse.
+ * Build a ReadableStream that emits SSE-formatted lines exactly as the
+ * streamAnswer parser expects: each event is "data: <JSON>\n\n". The parser
+ * splits on "\n", skips non-"data: " lines, and slices off "data: " before
+ * JSON.parse.
  */
 function buildSseStream(events: object[]): ReadableStream<Uint8Array> {
   const encoder = new TextEncoder();
@@ -91,31 +93,8 @@ function buildSseStream(events: object[]): ReadableStream<Uint8Array> {
   });
 }
 
-function mockFetchStream(stream: ReadableStream<Uint8Array>) {
-  vi.spyOn(globalThis, 'fetch').mockImplementation(async (input) => {
-    const url =
-      typeof input === 'string'
-        ? input
-        : input instanceof URL
-          ? input.toString()
-          : (input as Request).url;
-
-    // CSRF token endpoint
-    if (url.includes('/api/csrf-token')) {
-      return new Response(JSON.stringify({ token: 'test-csrf' }), {
-        status: 200,
-        headers: { 'Content-Type': 'application/json' },
-      });
-    }
-    // QA streaming endpoint
-    if (url.includes('/qa')) {
-      return new Response(stream, {
-        status: 200,
-        headers: { 'Content-Type': 'text/event-stream' },
-      });
-    }
-    return new Response('Not found', { status: 404 });
-  });
+function mockAnswerStream(stream: ReadableStream<Uint8Array>) {
+  mockStreamPost.mockResolvedValue(stream);
 }
 
 function renderChatPage() {
@@ -271,7 +250,7 @@ describe('CollectionChatPage', () => {
         { type: 'token', token: 'world.' },
         { type: 'done', conversation_id: 'conv-new' },
       ]);
-      mockFetchStream(stream);
+      mockAnswerStream(stream);
 
       const user = userEvent.setup();
       renderChatPage();
@@ -291,7 +270,7 @@ describe('CollectionChatPage', () => {
         { type: 'token', token: '20 days.' },
         { type: 'done', conversation_id: 'conv-new' },
       ]);
-      mockFetchStream(stream);
+      mockAnswerStream(stream);
 
       const user = userEvent.setup();
       renderChatPage();
@@ -313,7 +292,7 @@ describe('CollectionChatPage', () => {
         { type: 'token', token: '- **Standard**: three weeks' },
         { type: 'done', conversation_id: 'conv-new' },
       ]);
-      mockFetchStream(stream);
+      mockAnswerStream(stream);
 
       const user = userEvent.setup();
       renderChatPage();
@@ -344,15 +323,7 @@ describe('CollectionChatPage', () => {
         },
       });
 
-      vi.spyOn(globalThis, 'fetch').mockImplementation(async (input) => {
-        const url = typeof input === 'string' ? input : (input as Request).url;
-        if (url.includes('/api/csrf-token')) {
-          return new Response(JSON.stringify({ token: 'test-csrf' }), {
-            status: 200,
-          });
-        }
-        return new Response(blockingStream, { status: 200 });
-      });
+      mockAnswerStream(blockingStream);
 
       const user = userEvent.setup();
       renderChatPage();
@@ -377,7 +348,7 @@ describe('CollectionChatPage', () => {
       const stream = buildSseStream([
         { type: 'done', conversation_id: 'conv-new' },
       ]);
-      mockFetchStream(stream);
+      mockAnswerStream(stream);
 
       const user = userEvent.setup();
       renderChatPage();
@@ -393,16 +364,8 @@ describe('CollectionChatPage', () => {
       });
     });
 
-    it('renders an error message when the fetch call fails', async () => {
-      vi.spyOn(globalThis, 'fetch').mockImplementation(async (input) => {
-        const url = typeof input === 'string' ? input : (input as Request).url;
-        if (url.includes('/api/csrf-token')) {
-          return new Response(JSON.stringify({ token: 'test-csrf' }), {
-            status: 200,
-          });
-        }
-        return new Response('Internal Server Error', { status: 500 });
-      });
+    it('renders an error message when the streaming request fails', async () => {
+      mockStreamPost.mockRejectedValue(new Error('Request failed (500)'));
 
       const user = userEvent.setup();
       renderChatPage();
@@ -439,7 +402,7 @@ describe('CollectionChatPage', () => {
         { type: 'token', token: 'See policy [1] for details.' },
         { type: 'done', conversation_id: 'conv-new' },
       ]);
-      mockFetchStream(stream);
+      mockAnswerStream(stream);
 
       const user = userEvent.setup();
       renderChatPage();
@@ -470,7 +433,7 @@ describe('CollectionChatPage', () => {
         { type: 'token', token: 'See policy [1] here.' },
         { type: 'done', conversation_id: 'conv-new' },
       ]);
-      mockFetchStream(stream);
+      mockAnswerStream(stream);
 
       const user = userEvent.setup();
       renderChatPage();

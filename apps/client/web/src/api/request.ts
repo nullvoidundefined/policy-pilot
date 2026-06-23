@@ -109,11 +109,11 @@ export async function uploadFile<T>(
 export async function streamPost(
   path: string,
   body: unknown,
-): Promise<ReadableStream<Uint8Array> | null> {
+): Promise<ReadableStream<Uint8Array>> {
   const controller = new AbortController();
   const token = await ensureCsrfToken();
 
-  const responsePromise = fetch(`${API_BASE}${path}`, {
+  const res = await fetch(`${API_BASE}${path}`, {
     method: 'POST',
     credentials: 'include',
     headers: {
@@ -125,15 +125,20 @@ export async function streamPost(
     signal: controller.signal,
   });
 
+  if (!res.ok || !res.body) {
+    const errorBody = await res.json().catch(() => ({}));
+    throw new ApiError(
+      res.status,
+      errorBody?.message ??
+        errorBody?.error?.message ??
+        `Request failed (${res.status})`,
+    );
+  }
+
+  const reader = res.body.getReader();
   return new ReadableStream({
     async start(streamController) {
       try {
-        const res = await responsePromise;
-        if (!res.ok || !res.body) {
-          streamController.close();
-          return;
-        }
-        const reader = res.body.getReader();
         while (true) {
           const { done, value } = await reader.read();
           if (done) break;
