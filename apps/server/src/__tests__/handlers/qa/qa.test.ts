@@ -232,6 +232,9 @@ describe('qa handler', () => {
       );
       const written = res._written.join('');
       expect(written).toContain('"type":"citations"');
+      expect(mockMessagesStream.mock.calls[0]?.[0]).toMatchObject({
+        model: 'claude-sonnet-4-6',
+      });
     });
 
     it('uses existing conversation_id when provided', async () => {
