@@ -1,5 +1,9 @@
 'use client';
 
+/**
+ * React class-based error boundary that catches uncaught render errors anywhere
+ * in its subtree and shows a recovery UI instead of crashing the page.
+ */
 import { Component } from 'react';
 import type { ErrorInfo, ReactNode } from 'react';
 

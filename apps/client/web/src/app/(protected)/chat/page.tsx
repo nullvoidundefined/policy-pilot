@@ -1,5 +1,9 @@
 'use client';
 
+/**
+ * Renders the bare /chat route: immediately redirects to /dashboard because
+ * chat requires a specific collection selected via /chat/[collectionId].
+ */
 import { useEffect } from 'react';
 
 import { useRouter } from 'next/navigation';

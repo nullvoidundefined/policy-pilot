@@ -1,3 +1,7 @@
+/**
+ * Declares Zod validation schemas and inferred TypeScript types for auth request bodies and user records,
+ * serving as the single source of truth for auth input shapes across handlers and repositories.
+ */
 import { z } from 'zod';
 
 export const registerSchema = z.object({

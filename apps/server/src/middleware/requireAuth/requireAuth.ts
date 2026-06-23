@@ -1,3 +1,7 @@
+/**
+ * Provides session hydration and auth-gate middleware - loadSession resolves the session cookie
+ * to a user record, requireAuth blocks unauthenticated requests, and optionalAuth passes through.
+ */
 import { SESSION_COOKIE_NAME } from 'app/constants/session.js';
 import { ApiError } from 'app/errors/ApiError.js';
 import * as authRepo from 'app/repositories/auth/index.js';

@@ -1,3 +1,7 @@
+/**
+ * Express four-argument error handler that normalizes ApiError, CSRF failures, and unexpected
+ * errors into consistent JSON responses, logging each at the appropriate severity level.
+ */
 import { logger } from '@repo/logger';
 import { ApiError } from 'app/errors/ApiError.js';
 import type { NextFunction, Request, Response } from 'express';

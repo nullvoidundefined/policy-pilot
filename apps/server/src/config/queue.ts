@@ -1,3 +1,7 @@
+/**
+ * Initializes the shared Redis connection and the BullMQ document-processing queue,
+ * owning the queue-layer boundary so every producer imports one pre-configured instance.
+ */
 import { Queue } from 'bullmq';
 import IORedis from 'ioredis';
 

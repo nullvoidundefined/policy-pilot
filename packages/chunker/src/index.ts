@@ -1,3 +1,9 @@
+/**
+ * Recursive-character text chunker for the RAG pipeline: splits document text on
+ * a separator hierarchy into token-bounded, overlapping chunks. Shared via
+ * @repo/chunker and reused across apps so embedding input stays consistent.
+ */
+
 export interface ChunkOptions {
   maxTokens?: number;
   overlapTokens?: number;

@@ -1,3 +1,8 @@
+/**
+ * Handles upload, list, get, and delete operations for documents - validates file
+ * type and size, stores files in R2, records metadata via the documents repository,
+ * and enqueues the processing job for the RAG pipeline.
+ */
 import { deleteFile, uploadFile } from '@repo/clients/r2';
 import { logger } from '@repo/logger';
 import type { DocumentProcessJob } from '@repo/types';

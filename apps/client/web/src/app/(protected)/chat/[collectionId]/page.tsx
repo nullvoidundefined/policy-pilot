@@ -1,5 +1,9 @@
 'use client';
 
+/**
+ * Renders the per-collection chat route: a streaming Q&A interface that sends
+ * questions to the RAG pipeline for a specific collection and displays cited answers.
+ */
 import { useCallback, useEffect, useRef, useState } from 'react';
 import type { FormEvent } from 'react';
 

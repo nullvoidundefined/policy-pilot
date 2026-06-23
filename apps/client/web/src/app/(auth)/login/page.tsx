@@ -1,5 +1,9 @@
 'use client';
 
+/**
+ * Renders the login route: an email/password form that authenticates against
+ * the session API and redirects to the dashboard on success.
+ */
 import { useCallback, useState } from 'react';
 import type { FormEvent } from 'react';
 

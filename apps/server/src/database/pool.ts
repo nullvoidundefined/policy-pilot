@@ -1,3 +1,7 @@
+/**
+ * Owns the PostgreSQL connection pool and exposes query and transaction helpers,
+ * forming the single data-access boundary between the application and the database.
+ */
 import { logger } from '@repo/logger';
 import pg from 'pg';
 

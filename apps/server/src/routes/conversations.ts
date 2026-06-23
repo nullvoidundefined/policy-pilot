@@ -1,3 +1,7 @@
+/**
+ * Wires the /conversations HTTP routes to inline handlers; gates all routes behind
+ * requireAuth and delegates list and message-fetch queries directly to the conversations repository.
+ */
 import { ApiError } from 'app/errors/ApiError.js';
 import { requireAuth } from 'app/middleware/requireAuth/requireAuth.js';
 import * as convRepo from 'app/repositories/conversations/index.js';

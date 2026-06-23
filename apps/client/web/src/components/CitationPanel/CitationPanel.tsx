@@ -1,5 +1,9 @@
 'use client';
 
+/**
+ * Aside panel that displays the full text and source metadata for a selected
+ * citation chunk, with a close button to dismiss it.
+ */
 import styles from './CitationPanel.module.scss';
 
 interface Citation {

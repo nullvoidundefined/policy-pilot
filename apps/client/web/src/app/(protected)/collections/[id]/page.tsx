@@ -1,5 +1,9 @@
 'use client';
 
+/**
+ * Renders the collection detail route: manages documents within a single collection,
+ * supporting upload, deletion, and navigation to the collection's chat interface.
+ */
 import { useCallback, useRef, useState } from 'react';
 
 import { del, get, post, uploadFile } from '@/api/request';
