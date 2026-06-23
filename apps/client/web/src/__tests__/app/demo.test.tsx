@@ -423,8 +423,14 @@ describe('DemoPage', () => {
       );
       await user.click(screen.getByRole('button', { name: /send/i }));
 
+      // This case does the most async work of the error-path tests (type + send
+      // + await the streamed 500 error state) and occasionally exceeds Testing
+      // Library's default 1000ms findBy timeout on the CI runner under full-suite
+      // load. Raise the timeout to deflake; see ISSUES.md.
       expect(
-        await screen.findByText(/we've hit some turbulence/i),
+        await screen.findByText(/we've hit some turbulence/i, undefined, {
+          timeout: 5000,
+        }),
       ).toBeInTheDocument();
     });
   });
