@@ -10,6 +10,8 @@ import { checkDocumentRelevance } from 'app/services/checkDocumentRelevance.js';
 import { extractText } from 'app/services/extractText.js';
 import type { Job } from 'bullmq';
 
+const CHUNK_MAX_TOKENS = 500;
+const CHUNK_OVERLAP_TOKENS = 50;
 const NO_TEXT_ERROR = 'No text content found in document';
 
 export async function processDocument(
@@ -55,7 +57,10 @@ export async function processDocument(
 
     // 3. Chunk text
     log.info({ textLength: text.length }, 'Chunking text');
-    const chunks = chunkText(text, { maxTokens: 500, overlapTokens: 50 });
+    const chunks = chunkText(text, {
+      maxTokens: CHUNK_MAX_TOKENS,
+      overlapTokens: CHUNK_OVERLAP_TOKENS,
+    });
     log.info({ chunkCount: chunks.length }, 'Text chunked');
 
     // 4. Generate embeddings

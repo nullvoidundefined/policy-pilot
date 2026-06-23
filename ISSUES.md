@@ -1,5 +1,23 @@
 # Issues / Deferred Work
 
+## Frontend bugs
+
+### Uploaded documents do not poll until the worker starts processing (P2)
+
+**Why:** `apps/client/web/src/app/(protected)/collections/[id]/page.tsx` only
+enables the document-list `refetchInterval` when a document's status is in
+`['pending', 'chunking', 'embedding']`. The database default for
+`documents.status` is `'uploaded'` (migration `1711900000002`), and `'pending'`
+is not a value in the `@repo/types` `DocumentStatus` union at all. A freshly
+uploaded document therefore sits at `'uploaded'` with no polling until the
+worker flips it to `'chunking'`, so the UI can stall on the just-uploaded state.
+
+**How to apply:** Fix test-first (R-201): assert that an `'uploaded'` document
+triggers polling, then replace the `'pending'` literal with `'uploaded'` (and
+drop `'embedding'` if the worker never sets it) so `PROCESSING_STATUSES` matches
+the real `DocumentStatus` union. Found during Track A6.2; the literals were
+preserved as-is there because that PR was a value-neutral extraction.
+
 ## Deploy / Railway
 
 ### Convert `railway.toml` to per-service config files (e.g. `railway.server.toml`)

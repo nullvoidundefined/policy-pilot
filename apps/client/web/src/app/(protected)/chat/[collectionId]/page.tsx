@@ -12,6 +12,8 @@ import Captain from '@/components/Captain/Captain';
 import ChatAnswer from '@/components/ChatAnswer/ChatAnswer';
 import type { CitedChunk } from '@/components/ChatAnswer/ChatAnswer';
 import CitationPanel from '@/components/CitationPanel/CitationPanel';
+import { CSRF_TOKEN_PATH, QA_STREAM_PATH } from '@/constants/apiPaths';
+import { SSE_DATA_PREFIX } from '@/constants/sse';
 import { useAuth } from '@/state/AuthContext';
 import Link from 'next/link';
 import { useParams } from 'next/navigation';
@@ -102,12 +104,12 @@ export default function CollectionChatPage() {
 
       try {
         // Fetch fresh CSRF token for streaming request
-        const tokenRes = await fetch(`${API_BASE}/api/csrf-token`, {
+        const tokenRes = await fetch(`${API_BASE}${CSRF_TOKEN_PATH}`, {
           credentials: 'include',
         });
         const { token: csrfToken } = await tokenRes.json();
 
-        const response = await fetch(`${API_BASE}/qa`, {
+        const response = await fetch(`${API_BASE}${QA_STREAM_PATH}`, {
           method: 'POST',
           credentials: 'include',
           headers: {
@@ -145,8 +147,8 @@ export default function CollectionChatPage() {
           buffer = lines.pop() ?? '';
 
           for (const line of lines) {
-            if (!line.startsWith('data: ')) continue;
-            const jsonStr = line.slice(6);
+            if (!line.startsWith(SSE_DATA_PREFIX)) continue;
+            const jsonStr = line.slice(SSE_DATA_PREFIX.length);
             if (!jsonStr) continue;
 
             try {

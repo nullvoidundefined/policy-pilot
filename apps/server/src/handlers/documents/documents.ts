@@ -7,6 +7,7 @@ import { deleteFile, uploadFile } from '@repo/clients/r2';
 import { logger } from '@repo/logger';
 import type { DocumentProcessJob } from '@repo/types';
 import { documentProcessQueue } from 'app/config/queue.js';
+import { MAX_UPLOAD_BYTES } from 'app/constants/uploadLimits.js';
 import { ApiError } from 'app/errors/ApiError.js';
 import * as docsRepo from 'app/repositories/documents/index.js';
 import type { Request, Response } from 'express';
@@ -41,8 +42,7 @@ export async function uploadDocument(
     );
   }
 
-  const maxSize = 10 * 1024 * 1024; // 10MB
-  if (file.size > maxSize) {
+  if (file.size > MAX_UPLOAD_BYTES) {
     throw ApiError.badRequest('File too large. Maximum size is 10MB.');
   }
 

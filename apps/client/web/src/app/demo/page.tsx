@@ -12,6 +12,8 @@ import Captain from '@/components/Captain/Captain';
 import ChatAnswer from '@/components/ChatAnswer/ChatAnswer';
 import type { CitedChunk } from '@/components/ChatAnswer/ChatAnswer';
 import CitationPanel from '@/components/CitationPanel/CitationPanel';
+import { CSRF_TOKEN_PATH, QA_STREAM_PATH } from '@/constants/apiPaths';
+import { SSE_DATA_PREFIX } from '@/constants/sse';
 import Link from 'next/link';
 
 import styles from './demo.module.scss';
@@ -27,6 +29,8 @@ interface DemoCollection {
   name: string;
   description: string | null;
 }
+
+const DEMO_COLLECTIONS_PATH = '/collections/demo';
 
 const EXAMPLE_QUESTIONS: Record<string, string[]> = {
   Valve: [
@@ -70,7 +74,7 @@ export default function DemoPage() {
 
   // Fetch demo collections on mount
   useEffect(() => {
-    fetch(`${API_BASE}/collections/demo`, { credentials: 'include' })
+    fetch(`${API_BASE}${DEMO_COLLECTIONS_PATH}`, { credentials: 'include' })
       .then((res) => {
         if (!res.ok) throw new Error('Demo not available');
         return res.json();
@@ -98,14 +102,14 @@ export default function DemoPage() {
 
       try {
         // Fetch CSRF token for the demo request
-        const tokenRes = await fetch(`${API_BASE}/api/csrf-token`, {
+        const tokenRes = await fetch(`${API_BASE}${CSRF_TOKEN_PATH}`, {
           credentials: 'include',
         });
         const { token: csrfToken } = (await tokenRes.json()) as {
           token: string;
         };
 
-        const response = await fetch(`${API_BASE}/qa`, {
+        const response = await fetch(`${API_BASE}${QA_STREAM_PATH}`, {
           method: 'POST',
           credentials: 'include',
           headers: {
@@ -141,8 +145,8 @@ export default function DemoPage() {
           buffer = lines.pop() ?? '';
 
           for (const line of lines) {
-            if (!line.startsWith('data: ')) continue;
-            const jsonStr = line.slice(6);
+            if (!line.startsWith(SSE_DATA_PREFIX)) continue;
+            const jsonStr = line.slice(SSE_DATA_PREFIX.length);
             if (!jsonStr) continue;
 
             try {
