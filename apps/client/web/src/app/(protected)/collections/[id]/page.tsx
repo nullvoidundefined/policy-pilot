@@ -8,6 +8,7 @@ import { useCallback, useRef, useState } from 'react';
 
 import { del, get, post, uploadFile } from '@/api/request';
 import Captain from '@/components/Captain/Captain';
+import { shouldPollDocuments } from '@/services/shouldPollDocuments';
 import { useQuery, useQueryClient } from '@tanstack/react-query';
 import Link from 'next/link';
 import { useParams, useRouter } from 'next/navigation';
@@ -35,7 +36,6 @@ interface CollectionDetail {
 }
 
 const DOCUMENT_POLL_INTERVAL_MS = 5000;
-const PROCESSING_STATUSES = ['pending', 'chunking', 'embedding'];
 const STATUS_FAILED = 'failed';
 const STATUS_READY = 'ready';
 const STATUS_REJECTED = 'rejected';
@@ -60,11 +60,8 @@ export default function CollectionPage() {
     queryFn: () =>
       get<{ documents: Document[] }>(`/collections/${id}/documents`),
     refetchInterval: (query) => {
-      const docs = query.state.data?.documents ?? [];
-      const hasProcessing = docs.some((d) =>
-        PROCESSING_STATUSES.includes(d.status),
-      );
-      return hasProcessing ? DOCUMENT_POLL_INTERVAL_MS : false;
+      const documents = query.state.data?.documents ?? [];
+      return shouldPollDocuments(documents) ? DOCUMENT_POLL_INTERVAL_MS : false;
     },
   });
 
