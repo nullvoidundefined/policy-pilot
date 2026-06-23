@@ -350,7 +350,7 @@
 
 ? How long do browsers cache preflight OPTIONS responses?
 
-> The CORS config sets maxAge: 7200 (2 hours). This means browsers cache preflight responses for 2 hours, reducing the number of OPTIONS requests for cross-origin API calls from the Vercel frontend to the Railway backend.
+> The CORS config sets maxAge: 7200 (2 hours). This means browsers cache preflight responses for 2 hours, reducing the number of OPTIONS requests for cross-origin API calls from the frontend to the backend (separate Railway services on different domains).
 
 **33. What are the PostgreSQL connection pool settings?**
 
@@ -493,7 +493,7 @@
 
 ? Why is sameSite: none required in production?
 
-> In production, the frontend (Vercel) and backend (Railway) are on different domains. Cross-origin requests require sameSite: none combined with secure: true for cookies to be sent. Using strict or lax would block the session cookie on cross-origin requests.
+> In production, the frontend and backend run as separate Railway services on different domains. Cross-origin requests require sameSite: none combined with secure: true for cookies to be sent. Using strict or lax would block the session cookie on cross-origin requests.
 
 **46. How is the conversation title generated?**
 

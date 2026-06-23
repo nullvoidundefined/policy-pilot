@@ -9,7 +9,7 @@ RAG: chunking → embedding → vector search → grounded prompt assembly → s
 ## Stack
 
 - Monorepo: `apps/server`, `apps/worker`, `apps/client/web`, and `packages/{chunker,clients,logger,types}` (`@repo/*` scope)
-- Next.js on Vercel, Express + BullMQ worker on Railway
+- Next.js web, Express 5 API, and BullMQ worker all on Railway (separate services)
 - PostgreSQL + pgvector on Neon, Redis on Railway
 - Cloudflare R2 for document storage
 - Voyage AI or OpenAI for embeddings, Anthropic Claude for completions

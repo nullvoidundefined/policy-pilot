@@ -186,7 +186,7 @@ Custom session-based auth (no Supabase Auth in this app):
 
 | Component    | Platform      | URL/Details                               |
 | ------------ | ------------- | ----------------------------------------- |
-| Frontend     | Vercel        | `doc-qa-rag-web.vercel.app`               |
+| Frontend     | Railway       | Docker container from `Dockerfile.web`    |
 | API Server   | Railway       | Docker container from `Dockerfile.server` |
 | Worker       | Railway       | Docker container from `Dockerfile.worker` |
 | Database     | Neon          | PostgreSQL + pgvector                     |
@@ -195,8 +195,7 @@ Custom session-based auth (no Supabase Auth in this app):
 
 ### How do I deploy changes?
 
-- **Frontend**: Push to `main` branch → Vercel auto-deploys
-- **Server/Worker**: Push to `main` → Railway auto-deploys from Dockerfiles
+- **Frontend/Server/Worker**: Push to `main` → Railway auto-deploys each service from its Dockerfile (`Dockerfile.web`, `Dockerfile.server`, `Dockerfile.worker`)
 - **Migrations**: Run manually via `DATABASE_URL=... pnpm run migrate up`
 
 ### How do the Docker builds work?
@@ -232,9 +231,9 @@ Both `Dockerfile.server` and `Dockerfile.worker` use multi-stage builds:
 - Check that credentials are included in fetch requests (`credentials: 'include'`)
 - The server's CORS config allows the frontend origin with credentials
 
-### Vercel build fails?
+### Web build fails on Railway?
 
-The web-client uses `npm install --legacy-peer-deps` (not pnpm) on Vercel due to compatibility issues with pnpm v10 in the monorepo setup. Check `web-client/vercel.json` for the build configuration.
+The web service builds from `Dockerfile.web` on Railway, the same multi-stage pattern as the server and worker. Check the Railway build logs for the `web` service, and confirm its "config file path" and Dockerfile path are set correctly in the service settings.
 
 ---
 
