@@ -5,18 +5,12 @@ import type { FormEvent } from 'react';
 
 import { API_BASE } from '@/api/request';
 import Captain from '@/components/Captain/Captain';
+import ChatAnswer from '@/components/ChatAnswer/ChatAnswer';
+import type { CitedChunk } from '@/components/ChatAnswer/ChatAnswer';
 import CitationPanel from '@/components/CitationPanel/CitationPanel';
 import Link from 'next/link';
 
 import styles from './demo.module.scss';
-
-interface CitedChunk {
-  id: string;
-  document_id: string;
-  chunk_index: number;
-  content: string;
-  filename: string;
-}
 
 interface Message {
   role: 'user' | 'assistant';
@@ -251,41 +245,6 @@ export default function DemoPage() {
     [activeCitation],
   );
 
-  const renderContent = useCallback(
-    (content: string, citations?: CitedChunk[]) => {
-      if (!citations || citations.length === 0) {
-        return <p>{content}</p>;
-      }
-
-      const parts = content.split(/(\[\d+\])/g);
-      return (
-        <p>
-          {parts.map((part, i) => {
-            const match = part.match(/^\[(\d+)\]$/);
-            if (match) {
-              const idx = parseInt(match[1]!, 10) - 1;
-              const chunk = citations[idx];
-              if (chunk) {
-                return (
-                  <button
-                    key={i}
-                    className={styles.citationBadge}
-                    aria-label={`View source ${match[1]}`}
-                    onClick={() => handleCitationClick(chunk)}
-                  >
-                    {match[1]}
-                  </button>
-                );
-              }
-            }
-            return <span key={i}>{part}</span>;
-          })}
-        </p>
-      );
-    },
-    [handleCitationClick],
-  );
-
   return (
     <div className={styles.page}>
       {/* Signup Banner */}
@@ -388,7 +347,15 @@ export default function DemoPage() {
             className={`${styles.message} ${msg.role === 'user' ? styles.user : styles.assistant}`}
           >
             <div className={styles.bubble}>
-              {renderContent(msg.content, msg.citations)}
+              {msg.role === 'user' ? (
+                <p>{msg.content}</p>
+              ) : (
+                <ChatAnswer
+                  content={msg.content}
+                  citations={msg.citations}
+                  onCitationClick={handleCitationClick}
+                />
+              )}
             </div>
           </div>
         ))}

@@ -280,35 +280,6 @@
   box-shadow: $shadow-card;
 }
 
-// ---- Citations ----
-
-.citationBadge {
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  min-width: 22px;
-  height: 22px;
-  padding: 0 6px;
-  border: 2px solid $amber;
-  border-radius: 4px;
-  background: rgba($amber, 0.1);
-  color: $amber;
-  font-size: 11px;
-  font-weight: 700;
-  font-family: var(--font-display), $font-display;
-  cursor: pointer;
-  vertical-align: super;
-  margin: 0 2px;
-  transition:
-    background 0.15s,
-    color 0.15s;
-
-  &:hover {
-    background: $amber;
-    color: $white;
-  }
-}
-
 // ---- Loading / Streaming ----
 
 .loading {
