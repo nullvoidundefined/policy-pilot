@@ -1,5 +1,6 @@
 /** Deletes all existing sessions for the user and creates a new one, returning the raw session token. */
-import { query, withTransaction } from 'app/database/pool.js';
+import { query } from 'app/database/query.js';
+import { withTransaction } from 'app/database/withTransaction.js';
 
 import { createSession } from './createSession.js';
 

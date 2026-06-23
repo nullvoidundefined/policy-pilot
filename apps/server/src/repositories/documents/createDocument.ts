@@ -2,8 +2,8 @@
  * Inserts a new document row and returns the created record.
  */
 import type { Document } from '@repo/types';
-import { query } from 'app/database/pool.js';
 import type { PoolClient } from 'app/database/pool.js';
+import { query } from 'app/database/query.js';
 
 export async function createDocument(
   userId: string,

@@ -1,6 +1,6 @@
 /** Returns all collections visible to the given user (own + demo), newest first. */
 import type { Collection } from '@repo/types';
-import { query } from 'app/database/pool.js';
+import { query } from 'app/database/query.js';
 
 export async function listCollections(userId: string): Promise<Collection[]> {
   const result = await query<Collection>(

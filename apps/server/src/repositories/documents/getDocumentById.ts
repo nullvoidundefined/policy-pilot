@@ -2,7 +2,7 @@
  * Fetches a single document by id scoped to a user; returns null when not found.
  */
 import type { Document } from '@repo/types';
-import { query } from 'app/database/pool.js';
+import { query } from 'app/database/query.js';
 
 export async function getDocumentById(
   documentId: string,

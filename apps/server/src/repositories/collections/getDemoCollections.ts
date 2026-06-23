@@ -1,6 +1,6 @@
 /** Returns all demo collections ordered by name. */
 import type { Collection } from '@repo/types';
-import { query } from 'app/database/pool.js';
+import { query } from 'app/database/query.js';
 
 export async function getDemoCollections(): Promise<Collection[]> {
   const result = await query<Collection>(

@@ -1,6 +1,6 @@
 /** Fetches a single collection by id, accessible to the user or marked as demo. */
 import type { Collection } from '@repo/types';
-import { query } from 'app/database/pool.js';
+import { query } from 'app/database/query.js';
 
 export async function getCollectionById(
   id: string,

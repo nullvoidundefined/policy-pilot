@@ -1,8 +1,7 @@
 /**
- * Owns the worker's PostgreSQL connection pool and the query helper, forming the
- * single data-access boundary between the document-processing worker and Neon.
+ * Owns the worker's PostgreSQL connection pool singleton, the shared stateful
+ * handle that the query helper imports to talk to Neon.
  */
-import { logger } from '@repo/logger';
 import pg from 'pg';
 
 const { Pool } = pg;
@@ -25,21 +24,5 @@ const pool = new Pool({
               process.env.DATABASE_SSL_REJECT_UNAUTHORIZED === 'true',
           },
 });
-
-export async function query<T extends pg.QueryResultRow>(
-  text: string,
-  values?: unknown[],
-): Promise<pg.QueryResult<T>> {
-  const start = Date.now();
-  const result =
-    values !== undefined
-      ? await pool.query<T>(text, values)
-      : await pool.query<T>(text);
-  const duration = Date.now() - start;
-  if (process.env.NODE_ENV !== 'production') {
-    logger.debug({ query: text, duration_ms: duration }, 'db query');
-  }
-  return result;
-}
 
 export default pool;

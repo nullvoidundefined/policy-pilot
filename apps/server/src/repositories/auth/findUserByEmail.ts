@@ -1,5 +1,5 @@
 /** Looks up a user row by email address, returning the user with password hash or null if not found. */
-import { query } from 'app/database/pool.js';
+import { query } from 'app/database/query.js';
 import type { User } from 'app/schemas/auth.js';
 
 export async function findUserByEmail(

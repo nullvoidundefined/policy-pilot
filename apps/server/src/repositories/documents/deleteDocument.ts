@@ -1,7 +1,7 @@
 /**
  * Deletes a document owned by the given user; returns true when a row was removed.
  */
-import { query } from 'app/database/pool.js';
+import { query } from 'app/database/query.js';
 
 export async function deleteDocument(
   documentId: string,

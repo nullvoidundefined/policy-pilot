@@ -1,5 +1,5 @@
 /** Returns the number of documents belonging to the given collection. */
-import { query } from 'app/database/pool.js';
+import { query } from 'app/database/query.js';
 
 export async function getCollectionDocumentCount(id: string): Promise<number> {
   const result = await query<{ count: string }>(

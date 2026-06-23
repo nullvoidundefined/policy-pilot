@@ -1,5 +1,5 @@
 /** Looks up a non-expired session by its raw token and returns the associated user, or null. */
-import { query } from 'app/database/pool.js';
+import { query } from 'app/database/query.js';
 import type { User } from 'app/schemas/auth.js';
 
 import { hashSessionToken } from './hashSessionToken.js';

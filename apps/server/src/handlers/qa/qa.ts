@@ -1,6 +1,7 @@
 /** SSE handler for the Q&A endpoint: embeds the user question, retrieves relevant chunks via vector search, streams a grounded Anthropic completion, and persists the resulting conversation message. */
 import { generateEmbedding } from '@repo/clients/openai';
 import { logger } from '@repo/logger';
+import type { CitedChunk } from '@repo/types';
 import { anthropic } from 'app/clients/anthropic.js';
 import { MAX_TITLE_LENGTH } from 'app/constants/conversationTitle.js';
 import { ApiError } from 'app/errors/ApiError.js';
@@ -13,8 +14,10 @@ import { searchChunks } from 'app/services/searchChunks.js';
 import type { Request, Response } from 'express';
 
 const DEFAULT_TOP_K = 6;
-const QA_MODEL = 'claude-sonnet-4-6';
+const NO_CONTEXT_MESSAGE =
+  "I couldn't find any relevant information for your question in the available documents. Try rephrasing your question or uploading additional policy documents.";
 const QA_MAX_TOKENS = 2048;
+const QA_MODEL = 'claude-sonnet-4-6';
 
 export async function streamQA(req: Request, res: Response): Promise<void> {
   const user = req.user;
@@ -98,30 +101,10 @@ export async function streamQA(req: Request, res: Response): Promise<void> {
     );
 
     // 5. Send citations
-    res.write(
-      `data: ${JSON.stringify({ type: 'citations', citations: chunks })}\n\n`,
-    );
+    writeSseEvent(res, { type: 'citations', citations: chunks });
 
     if (chunks.length === 0) {
-      const noContextMsg =
-        "I couldn't find any relevant information for your question in the available documents. Try rephrasing your question or uploading additional policy documents.";
-      res.write(
-        `data: ${JSON.stringify({ type: 'token', token: noContextMsg })}\n\n`,
-      );
-
-      let messageId: string | undefined;
-      if (conversationId) {
-        const assistantMsg = await convRepo.createMessage(
-          conversationId,
-          'assistant',
-          noContextMsg,
-        );
-        messageId = assistantMsg.id;
-      }
-      res.write(
-        `data: ${JSON.stringify({ type: 'done', conversation_id: conversationId ?? null, message_id: messageId ?? null })}\n\n`,
-      );
-      res.end();
+      await respondWithNoContext(res, conversationId);
       return;
     }
 
@@ -141,16 +124,13 @@ export async function streamQA(req: Request, res: Response): Promise<void> {
 
     stream.on('text', (text) => {
       fullText += text;
-      res.write(`data: ${JSON.stringify({ type: 'token', token: text })}\n\n`);
+      writeSseEvent(res, { type: 'token', token: text });
     });
 
     const finalMessage = await stream.finalMessage();
 
     // 7. Extract cited chunk IDs from the response
-    const citedIndices = [...fullText.matchAll(/\[(\d+)\]/g)]
-      .map((m) => parseInt(m[1]!, 10) - 1)
-      .filter((i) => i >= 0 && i < chunks.length);
-    const citedChunkIds = [...new Set(citedIndices)].map((i) => chunks[i]!.id);
+    const citedChunkIds = extractCitedChunkIds(fullText, chunks);
 
     // 8. Persist assistant message
     let messageId: string | undefined;
@@ -176,9 +156,11 @@ export async function streamQA(req: Request, res: Response): Promise<void> {
       'Q&A response streamed',
     );
 
-    res.write(
-      `data: ${JSON.stringify({ type: 'done', conversation_id: conversationId ?? null, message_id: messageId ?? null })}\n\n`,
-    );
+    writeSseEvent(res, {
+      type: 'done',
+      conversation_id: conversationId ?? null,
+      message_id: messageId ?? null,
+    });
     res.end();
   } catch (err) {
     // Inline error handling for stream errors (headers already sent)
@@ -187,9 +169,45 @@ export async function streamQA(req: Request, res: Response): Promise<void> {
       return;
     }
     logger.error({ err }, 'Q&A streaming error');
-    res.write(
-      `data: ${JSON.stringify({ type: 'error', message: err instanceof Error ? err.message : 'Internal error' })}\n\n`,
-    );
+    writeSseEvent(res, {
+      type: 'error',
+      message: err instanceof Error ? err.message : 'Internal error',
+    });
     res.end();
   }
+}
+
+function extractCitedChunkIds(text: string, chunks: CitedChunk[]): string[] {
+  const citedIndices = [...text.matchAll(/\[(\d+)\]/g)]
+    .map((m) => parseInt(m[1]!, 10) - 1)
+    .filter((i) => i >= 0 && i < chunks.length);
+  return [...new Set(citedIndices)].map((i) => chunks[i]!.id);
+}
+
+async function respondWithNoContext(
+  res: Response,
+  conversationId: string | undefined,
+): Promise<void> {
+  writeSseEvent(res, { type: 'token', token: NO_CONTEXT_MESSAGE });
+
+  let messageId: string | undefined;
+  if (conversationId) {
+    const assistantMsg = await convRepo.createMessage(
+      conversationId,
+      'assistant',
+      NO_CONTEXT_MESSAGE,
+    );
+    messageId = assistantMsg.id;
+  }
+
+  writeSseEvent(res, {
+    type: 'done',
+    conversation_id: conversationId ?? null,
+    message_id: messageId ?? null,
+  });
+  res.end();
+}
+
+function writeSseEvent(res: Response, payload: Record<string, unknown>): void {
+  res.write(`data: ${JSON.stringify(payload)}\n\n`);
 }

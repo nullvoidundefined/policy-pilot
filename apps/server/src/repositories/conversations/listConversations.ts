@@ -1,6 +1,6 @@
 /** Returns all conversations for a user, ordered by most recently updated. */
 import type { Conversation } from '@repo/types';
-import { query } from 'app/database/pool.js';
+import { query } from 'app/database/query.js';
 
 export async function listConversations(
   userId: string,

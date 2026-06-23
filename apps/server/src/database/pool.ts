@@ -1,8 +1,7 @@
 /**
- * Owns the PostgreSQL connection pool and exposes query and transaction helpers,
- * forming the single data-access boundary between the application and the database.
+ * Owns the server's PostgreSQL connection pool singleton and the PoolClient type,
+ * the shared stateful handle that the query and withTransaction helpers import.
  */
-import { logger } from '@repo/logger';
 import pg from 'pg';
 
 const { Pool } = pg;
@@ -28,40 +27,5 @@ const pool = new Pool({
               process.env.DATABASE_SSL_REJECT_UNAUTHORIZED === 'true',
           },
 });
-
-export async function query<T extends pg.QueryResultRow>(
-  text: string,
-  values?: unknown[],
-  client?: PoolClient,
-): Promise<pg.QueryResult<T>> {
-  const start = Date.now();
-  const target = client ?? pool;
-  const result =
-    values !== undefined
-      ? await target.query<T>(text, values)
-      : await target.query<T>(text);
-  const duration = Date.now() - start;
-  if (process.env.NODE_ENV !== 'production') {
-    logger.debug({ query: text, duration_ms: duration }, 'db query');
-  }
-  return result;
-}
-
-export async function withTransaction<T>(
-  fn: (client: PoolClient) => Promise<T>,
-): Promise<T> {
-  const client = await pool.connect();
-  try {
-    await query('BEGIN', undefined, client);
-    const result = await fn(client);
-    await query('COMMIT', undefined, client);
-    return result;
-  } catch (err) {
-    await query('ROLLBACK', undefined, client);
-    throw err;
-  } finally {
-    client.release();
-  }
-}
 
 export default pool;

@@ -1,7 +1,7 @@
 /** Creates a new session row for the given user and returns the raw session token. */
 import { SESSION_TTL_MS } from 'app/constants/session.js';
-import { query } from 'app/database/pool.js';
 import type { PoolClient } from 'app/database/pool.js';
+import { query } from 'app/database/query.js';
 import crypto from 'node:crypto';
 
 import { hashSessionToken } from './hashSessionToken.js';

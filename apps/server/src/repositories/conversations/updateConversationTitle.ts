@@ -1,5 +1,5 @@
 /** Updates the title and updated_at timestamp of a conversation. */
-import { query } from 'app/database/pool.js';
+import { query } from 'app/database/query.js';
 
 export async function updateConversationTitle(
   conversationId: string,
