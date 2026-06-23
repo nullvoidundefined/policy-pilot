@@ -11,7 +11,7 @@ import { generateConversationTitle } from 'app/services/generateConversationTitl
 import { searchChunks } from 'app/services/searchChunks.js';
 import type { Request, Response } from 'express';
 
-const QA_MODEL = 'claude-sonnet-4-20250514';
+const QA_MODEL = 'claude-sonnet-4-6';
 const QA_MAX_TOKENS = 2048;
 
 export async function streamQA(req: Request, res: Response): Promise<void> {
