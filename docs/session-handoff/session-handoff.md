@@ -2,45 +2,39 @@
 
 ## 1. Last commit
 
-`main` is at `f571c88` fix(web): render markdown in chat answers (#21).
+`main` is at `73e5369` refactor(A6.3): route bodies into handlers; routes only wire (R-224) (#25).
 
-Active branch `docs/convention-compliance-audit` (off `main`), 2 commits ahead, NOT pushed:
-
-- `4599abc` docs(A6): author track A6 sweep + enforcement plan
-- `d0458f5` docs: convention-compliance audit + A6 sweep repair spec
-
-(This handoff commit lands on top of `4599abc`.)
+Working tree clean except the intentionally-untracked `docs/agentic-conversion-plan.md`.
 
 ## 2. Production state
 
-A1+A2+A3+A4+A5 deployed and verified (prior session). No code shipped this session; docs-only branch, unpushed. No outstanding production issues.
+A1+A5 deployed and verified (prior sessions). A6.3 merged and deployed this session: the Post-Deploy Health Check workflow passed (Railway server `/health`, `/health/ready`, `/api/csrf-token` all green). Behavior-preserving refactor, no functional change shipped. One open production blocker unchanged: R2 credentials + custom domain (see `ISSUES.md`).
 
 ## 3. What shipped (this session)
 
-Engineering convention-compliance audit of policy-pilot's own code (the prior `2026-06-21-rules-reconciliation.md` only covered the reference repos, never this codebase), plus the repair plan that feeds A6.
-
-- **Audit** `docs/audits/2026-06-23-convention-compliance.md`: 4 read-only subagents, one per surface, against R-001..R-241. Totals 0 P0, 4 P1, ~36 P2, ~22 P3. Codebase is structurally sound; `@repo/clients` is the exemplar. Clusters: ~30 missing R-230 headers; R-219 magic literals; R-226/R-227 oversized/duplicated functions (web SSE x2 P1, chunker, streamQA); R-224 route->repository skips (P1); R-223/R-235/R-239 structural nits.
-- **CLAUDE.md reconciliation** (audit section 3): the only hard conflicts are `policy-pilot/CLAUDE.md` lines 7+11 (stale `packages/api|worker|web|common` layout vs reality + R-236). Category file `personal/.claude/CLAUDE.md` has no hard conflict; its `Auth` override is sanctioned; two soft drifts noted (frontend "Railway" should be Vercel; stale 60% coverage floor).
-- **Repair spec** `docs/superpowers/specs/2026-06-23-trackA6-sweep-design.md`: 8 sequential single-scope PRs.
-- **A6 plan** `docs/superpowers/plans/2026-06-21-trackA6-enforcement.md`: full task-by-task plan mirroring A1-A5, the filename the master index already references.
+- **PR #25** `refactor(A6.3): route bodies into handlers; routes only wire (R-224)` (`73e5369`), CI-green, Copilot skipped (A6-series authorization), squash-merged.
+  - New `apps/server/src/handlers/conversations/conversations.ts` (`listConversations`, `getConversationMessages`).
+  - Added `getDemoCollections` to `handlers/collections/collections.ts`; its bare `{ error: string }` `404` preserved exactly (NOT normalized to `ApiError`).
+  - `routes/conversations.ts` + `routes/collections.ts` reduced to wiring; no route imports a repository (`grep repositories/ routes` clean). `/demo` stays public.
+  - Test-first (R-201): 6 handler unit tests confirmed RED then GREEN. Server suite 116 -> 122 passing.
 
 ## 4. Pending (by urgency)
 
-- **Decide docs branch disposition:** push + open PR for the two/three docs, or fold into the first A6 execution PR. Not pushed yet.
-- **A6 execution (the sweep, larger than the original 1-2h estimate):** 8 PRs A6.1..A6.6 in `2026-06-21-trackA6-enforcement.md`. Start with A6.1 (R-230 header sweep, ~30 files, mechanical, low-risk).
-- **Two open decisions before their PRs:** D2 (collapse single-file `handlers/<domain>/` folders? recommend KEEP) blocks A6.5; D5 (category-file Vercel fix is a separate-repo commit in the `personal/` tree) in A6.6.
-- **A5 deferred minors (non-blocking):** see `docs/prs/2026-06-23-trackA5-web-client.md` "Deferred".
-- **Tracks C/D:** Doppelscript + Voyager cleanups (independent repos).
+- **A6.4a (next PR):** chunker decomposition into one-function modules; output must be byte-identical (reused by apps 5/7). Medium. ~30-45m after the 3-5x divide. Guarded by the existing fixture test.
+- **A6.4b/c, A6.5, A6.6:** A6.4b (web SSE `streamAnswer` service, behavior-sensitive: run streaming E2E baseline first; D4 reuse existing `streamPost`). A6.4c (qa/pool/requireAuth splits, D3 pool-state carve-out). A6.5 (collapse 6 single-file middleware folders; **blocking D2 user check** before executing: also collapse single-file `handlers/<domain>/` folders? recommend KEEP). A6.6 (ESLint `import/no-cycle` + `import/no-restricted-paths` contracts, doc fixes; **D5** Railway->Vercel fix is a separate commit in the `personal/.claude/CLAUDE.md` repo).
+- **ISSUES.md backlog:** uploaded-status polling bug (P2, test-first fix); Railway per-service config; duplicate Redis services; R2 + custom domain (blocked on Cloudflare token).
 
 ## 5. Next session tasks
 
-1. Read `docs/superpowers/plans/2026-06-21-trackA6-enforcement.md` (the plan) and `docs/audits/2026-06-23-convention-compliance.md` (the evidence) first.
-2. Decide the docs branch: push/PR or roll into A6.1.
-3. Execute A6.1 off a fresh `refactor/a6-module-headers` branch via subagent-driven-development; per-PR gates then squash merge (R-516, no merge without per-turn auth).
+1. Read `docs/superpowers/plans/2026-06-21-trackA6-enforcement.md` (PR A6.4a section) and `docs/audits/2026-06-23-convention-compliance.md` (chunker R-218/R-227/R-235/R-239 findings).
+2. Branch `refactor/a6-chunker-decomposition` off `main`. Confirm the captured-fixture chunk test is the byte-identical guard before splitting.
+3. Per-PR gates (changed-package test + build), PR doc before opening, push, CI green, deploy health check, then merge only with explicit per-turn auth. Copilot stays skipped for the A6 series.
 
 ## Process notes
 
-- `git add -A` is UNSAFE: untracked `docs/agentic-conversion-plan.md` in tree. Use `git add -A -- ':!docs/agentic-conversion-plan.md'` or scoped adds.
-- Pre-commit `format:check` is repo-wide; `npx prettier --config prettier.config.mjs --write` new markdown before committing if the gate trips. Lint passes with 26 pre-existing warnings (0 errors).
-- Never `git commit --no-verify` without per-turn approval (R-101); slipped once this session, reverted and re-committed through the hook.
-- Copilot reviewer is NOT API-addable; add via Reviewers panel UI or skip with user auth.
+- `git add -A` is UNSAFE: always `git add -A -- ':!docs/agentic-conversion-plan.md'`.
+- Pre-commit `format:check` is repo-wide and is a CHECK: run `npx prettier --config prettier.config.mjs --write <files>` before committing.
+- Per-package `test` gate EXCLUDES `__tests__/integration/**` (real-DB, runs via `test:integration`). Characterize moved behavior with handler unit tests that mock the repo, not integration tests.
+- Copilot reviewer is NOT API-addable in this repo; user authorized skipping it for the entire A6 series.
+- Land the handoff via a branch + PR so it reaches `main`: the prior A6.1/A6.2 handoff (`7fdf566`) was orphaned on an unpushed `docs/session-handoff-a6` branch and never landed; that branch was deleted this session.
+- Never merge a PR without explicit per-turn authorization (R-516).
